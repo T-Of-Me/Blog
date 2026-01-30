@@ -272,159 +272,117 @@ img:hover {
 
 
 
-/* Con rắn chườn trên header - Hacker style */
+/* --- CON RẮN (BODY) --- */
 body::after {
     content: "🐍";
     position: fixed;
-    font-size: 40px; /* To hơn */
-    filter: hue-rotate(90deg) brightness(1.5) drop-shadow(0 0 15px #00ff00);
-    animation: snakeCrawl 20s linear infinite;
+    top: 50px; /* Vị trí cơ bản */
+    font-size: 45px;
     z-index: 9999;
-    pointer-events: none;
+    
+    /* Hiệu ứng Hacker Neon */
+    filter: hue-rotate(90deg) drop-shadow(0 0 5px #00ff00);
+    
+    /* Animation kết hợp: Chạy ngang (run) + Uốn lượn (slither) */
+    animation: 
+        snakeRun 15s linear infinite,
+        snakeSlither 0.8s ease-in-out infinite alternate;
+        
+    /* QUAN TRỌNG: Để chuột có thể tương tác */
+    cursor: grab;
+    pointer-events: auto;
+    transition: all 0.3s ease;
 }
 
-@keyframes snakeCrawl {
-    0% {
-        left: -100px;
-        top: 50px; /* Chườn thấp hơn */
-        transform: scaleX(1) rotate(-5deg);
-    }
-    5% {
-        top: 48px;
-        transform: scaleX(1) rotate(0deg);
-    }
-    10% {
-        top: 52px;
-        transform: scaleX(1) rotate(5deg);
-    }
-    15% {
-        top: 50px;
-        transform: scaleX(1) rotate(-3deg);
-    }
-    20% {
-        top: 51px;
-        transform: scaleX(1) rotate(2deg);
-    }
-    25% {
-        top: 49px;
-        transform: scaleX(1) rotate(-2deg);
-    }
-    30% {
-        top: 50px;
-        transform: scaleX(1) rotate(1deg);
-    }
-    35% {
-        top: 51px;
-        transform: scaleX(1) rotate(-1deg);
-    }
-    40% {
-        top: 50px;
-        transform: scaleX(1) rotate(3deg);
-    }
-    45% {
-        top: 49px;
-        transform: scaleX(1) rotate(-4deg);
-    }
-    48% {
-        left: calc(100% + 100px);
-        top: 50px;
-        transform: scaleX(1) rotate(0deg);
-    }
-    50% {
-        left: calc(100% + 100px);
-        transform: scaleX(-1) rotate(0deg);
-    }
-    55% {
-        top: 48px;
-        transform: scaleX(-1) rotate(5deg);
-    }
-    60% {
-        top: 52px;
-        transform: scaleX(-1) rotate(-5deg);
-    }
-    65% {
-        top: 50px;
-        transform: scaleX(-1) rotate(3deg);
-    }
-    70% {
-        top: 51px;
-        transform: scaleX(-1) rotate(-2deg);
-    }
-    75% {
-        top: 49px;
-        transform: scaleX(-1) rotate(2deg);
-    }
-    80% {
-        top: 50px;
-        transform: scaleX(-1) rotate(-1deg);
-    }
-    85% {
-        top: 51px;
-        transform: scaleX(-1) rotate(1deg);
-    }
-    90% {
-        top: 50px;
-        transform: scaleX(-1) rotate(-3deg);
-    }
-    95% {
-        top: 49px;
-        transform: scaleX(-1) rotate(4deg);
-    }
-    98% {
-        left: -100px;
-        top: 50px;
-        transform: scaleX(-1) rotate(0deg);
-    }
-    100% {
-        left: -100px;
-        transform: scaleX(1) rotate(0deg);
-    }
+/* --- TƯƠNG TÁC KHI DI CHUỘT VÀO --- */
+body::after:hover {
+    /* Rắn dừng lại khi bị bắt */
+    animation-play-state: paused;
+    
+    /* Rắn "phồng" lên và đổi màu cảnh báo */
+    transform: scale(1.5) rotate(0deg) !important; 
+    filter: hue-rotate(0deg) drop-shadow(0 0 20px red) brightness(1.2);
+    content: "🐉"; /* (Tuỳ chọn) Biến thành rồng hoặc rắn há mồm */
+    cursor: grabbing;
 }
 
-/* Thêm dấu vết phát sáng theo sau rắn */
+/* --- HIỆU ỨNG VẾT TRƯỜN (TRAIL) --- */
 body::before {
     content: "";
     position: fixed;
-    width: 60px;
-    height: 4px;
+    top: 75px; /* Canh chỉnh lại cho khớp bụng rắn */
+    height: 6px;
+    width: 80px;
     background: linear-gradient(90deg, 
         transparent, 
-        rgba(0, 255, 0, 0.6), 
-        rgba(0, 255, 0, 0.3), 
+        rgba(0, 255, 0, 0.8), 
         transparent
     );
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-    animation: snakeTrail 20s linear infinite;
+    border-radius: 50%;
+    filter: blur(4px);
     z-index: 9998;
     pointer-events: none;
-    top: 65px;
+    
+    /* Animation chạy theo rắn */
+    animation: 
+        trailRun 15s linear infinite,
+        trailFade 0.8s ease-in-out infinite alternate;
 }
 
-@keyframes snakeTrail {
+/* --- CÁC KEYFRAMES (CHUYỂN ĐỘNG) --- */
+
+/* 1. Chạy từ trái qua phải màn hình */
+@keyframes snakeRun {
     0% {
-        left: -140px;
-        opacity: 0;
+        left: -100px;
+        transform: scaleX(1); /* Hướng mặt sang phải */
     }
-    3% {
-        opacity: 1;
-    }
-    47% {
-        left: calc(100% + 60px);
-        opacity: 1;
+    48% {
+        left: 105vw; /* Chạy tít ra ngoài màn hình */
+        transform: scaleX(1);
     }
     50% {
-        opacity: 0;
-        left: calc(100% + 140px);
+        left: 105vw;
+        transform: scaleX(-1); /* Quay đầu lại */
     }
-    53% {
-        opacity: 1;
-    }
-    97% {
-        left: -60px;
-        opacity: 1;
+    98% {
+        left: -100px;
+        transform: scaleX(-1);
     }
     100% {
-        left: -140px;
-        opacity: 0;
+        left: -100px;
+        transform: scaleX(1); /* Reset vòng lặp */
     }
+}
+
+/* 2. Mô phỏng động tác trườn (Lên xuống + Lắc đầu) */
+/* Tách riêng animation này giúp rắn trườn rất mượt mà không cần keyframe dài */
+@keyframes snakeSlither {
+    0% {
+        margin-top: -8px; /* Trườn lên */
+        transform: rotate(-10deg); /* Ngóc đầu lên */
+    }
+    100% {
+        margin-top: 8px; /* Trườn xuống */
+        transform: rotate(5deg); /* Chúi đầu xuống */
+    }
+    /* Lưu ý: transform rotate ở đây sẽ cộng dồn với scaleX ở snakeRun nhờ cơ chế CSS hiện đại, 
+       nhưng để an toàn nhất ta dùng margin-top để tạo độ nhún Y */
+}
+
+/* 3. Vết trườn chạy theo */
+@keyframes trailRun {
+    0% { left: -140px; opacity: 0; }
+    2% { opacity: 1; }
+    48% { left: calc(105vw - 40px); opacity: 1; }
+    50% { left: calc(105vw - 40px); opacity: 0; }
+    52% { opacity: 1; }
+    98% { left: -140px; opacity: 1; }
+    100% { left: -140px; opacity: 0; }
+}
+
+/* 4. Vết trườn đậm nhạt theo nhịp thở */
+@keyframes trailFade {
+    0% { opacity: 0.3; width: 60px; }
+    100% { opacity: 0.8; width: 90px; }
 }

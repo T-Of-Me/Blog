@@ -560,7 +560,6 @@ while True:
 # Smol Web
 ![image](https://hackmd.io/_uploads/SyeNttP8bx.png)
 
-
 ![image](https://hackmd.io/_uploads/r1nQ0FvLWl.png)
 
 

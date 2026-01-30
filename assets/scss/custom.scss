@@ -1,27 +1,17 @@
 /*
-    Hacker Theme - Matrix Style
+    Hacker Theme - Giữ style mushroom.cat nhưng thêm cyber elements
 */
 
-/* Main background - Terminal black */
+/* Override màu chính sang hacker green */
 :root {
     --primary-color: #00ff00;
-    --secondary-color: #0f0;
-    --bg-dark: #0d0208;
-    --bg-darker: #000000;
-    --text-primary: #00ff00;
-    --text-secondary: #00cc00;
-    --accent: #39ff14;
     --terminal-green: #00ff41;
+    --accent: #39ff14;
+    --bg-dark: #000000;
+    --text-glow: 0 0 5px rgba(0, 255, 0, 0.5);
 }
 
-body {
-    background-color: var(--bg-dark);
-    color: var(--text-primary);
-    font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
-}
-
-/* Matrix-style animated background */
+/* Background với matrix grid effect */
 body::before {
     content: "";
     position: fixed;
@@ -30,36 +20,59 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent),
-        linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent);
-    background-size: 50px 50px;
+        linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, 0.03) 25%, rgba(0, 255, 0, 0.03) 26%, transparent 27%),
+        linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, 0.03) 25%, rgba(0, 255, 0, 0.03) 26%, transparent 27%);
+    background-size: 40px 40px;
     pointer-events: none;
     z-index: -1;
+    opacity: 0.5;
 }
 
-/* Headers - Cyberpunk style */
-h1, h2, h3, h4, h5, h6 {
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-weight: bold;
-    text-shadow: 
-        0 0 10px rgba(57, 255, 20, 0.8),
-        0 0 20px rgba(57, 255, 20, 0.5),
-        0 0 30px rgba(57, 255, 20, 0.3);
+/* Thêm scanline effect */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 999;
+    animation: scanline 8s linear infinite;
 }
 
-h1::before, h2::before, h3::before {
-    content: "Tiwza@blog:~$ ";
-    color: var(--secondary-color);
+@keyframes scanline {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100%); }
 }
 
-/* Links - Terminal style */
+/* Terminal prompt cho headers */
+h1::before, h2::before {
+    content: "root@mushroom:~$ ";
+    color: var(--terminal-green);
+    font-family: 'Courier New', monospace;
+    text-shadow: var(--text-glow);
+}
+
+/* Giữ style nyancat nhưng thêm glow */
+.animate-cat {
+    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.6));
+}
+
+/* Links với hacker style */
 a {
     color: var(--terminal-green);
     text-decoration: none;
     border-bottom: 1px dashed var(--terminal-green);
     transition: all 0.3s ease;
+    text-shadow: var(--text-glow);
 }
 
 a:hover {
@@ -68,40 +81,73 @@ a:hover {
     border-bottom-color: var(--accent);
 }
 
-/* Code blocks - Enhanced terminal */
+/* Code blocks - Terminal style */
 code {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     color: var(--accent);
-    padding: 2px 6px;
-    border-radius: 3px;
-    border: 1px solid var(--primary-color);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--terminal-green);
     font-family: 'Courier New', monospace;
+    text-shadow: var(--text-glow);
 }
 
 pre {
     background-color: #000000;
-    border: 2px solid var(--primary-color);
-    border-radius: 5px;
-    padding: 15px;
+    border: 2px solid var(--terminal-green);
+    border-radius: 6px;
+    padding: 20px;
     overflow-x: auto;
     box-shadow: 
-        0 0 10px rgba(0, 255, 0, 0.3),
-        inset 0 0 10px rgba(0, 255, 0, 0.1);
+        0 0 15px rgba(0, 255, 0, 0.3),
+        inset 0 0 15px rgba(0, 255, 0, 0.1);
 }
 
-pre code {
-    background-color: transparent;
-    border: none;
-    padding: 0;
+/* Articles/Posts - Cyber frame */
+article, .article-content {
+    border: 1px solid var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    position: relative;
 }
 
-/* Blockquotes - Terminal output style */
+article::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+        transparent 48%, 
+        var(--terminal-green) 49%, 
+        var(--terminal-green) 51%, 
+        transparent 52%
+    );
+    background-size: 20px 20px;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Images - Scanline effect */
+img:not(.animate-cat) {
+    border: 2px solid var(--terminal-green);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    filter: contrast(1.1) brightness(0.95);
+    position: relative;
+}
+
+img:not(.animate-cat):hover {
+    box-shadow: 0 0 25px rgba(0, 255, 0, 0.5);
+    filter: contrast(1.15) brightness(1);
+}
+
+/* Blockquotes - Terminal output */
 blockquote {
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--terminal-green);
     background-color: rgba(0, 255, 0, 0.05);
-    padding: 10px 20px;
+    padding: 15px 25px;
     margin: 20px 0;
-    font-style: italic;
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
 }
 
@@ -109,24 +155,44 @@ blockquote::before {
     content: ">>> ";
     color: var(--accent);
     font-weight: bold;
+    font-family: monospace;
 }
 
-/* Navigation/Menu - Command line style */
-nav, .menu {
-    background-color: rgba(0, 0, 0, 0.9);
-    border: 1px solid var(--primary-color);
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-}
-
-/* Buttons - Terminal buttons */
-button, .button {
-    background-color: transparent;
-    color: var(--terminal-green);
+/* Tables - Data terminal */
+table {
     border: 2px solid var(--terminal-green);
-    padding: 10px 20px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+}
+
+th {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+tr:hover {
+    background-color: rgba(0, 255, 0, 0.05);
+}
+
+td, th {
+    border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+/* Navigation với cyber border */
+nav {
+    border-bottom: 1px solid var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+/* Buttons - Cyber style */
+button, .button {
+    border: 2px solid var(--terminal-green);
+    background: transparent;
+    color: var(--terminal-green);
     font-family: 'Courier New', monospace;
     text-transform: uppercase;
-    cursor: pointer;
+    letter-spacing: 2px;
     transition: all 0.3s ease;
 }
 
@@ -137,27 +203,19 @@ button:hover, .button:hover {
     text-shadow: none;
 }
 
-/* Articles/Posts - Terminal window */
-article, .post {
-    background-color: rgba(0, 0, 0, 0.7);
-    border: 1px solid var(--primary-color);
-    padding: 20px;
-    margin: 20px 0;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
-}
-
-/* Scrollbar - Hacker style */
+/* Scrollbar hacker style */
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
+    height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-darker);
-    border: 1px solid var(--primary-color);
+    background: #000;
+    border: 1px solid var(--terminal-green);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
+    background: var(--terminal-green);
     box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
@@ -165,266 +223,61 @@ article, .post {
     background: var(--accent);
 }
 
-/* Selection */
+/* Selection color */
 ::selection {
     background-color: var(--terminal-green);
     color: #000;
+    text-shadow: none;
 }
 
-/* Typing cursor effect for headers */
-@keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+/* Text glow cho các element quan trọng */
+.text-primary, .font-upheavtt {
+    text-shadow: var(--text-glow);
 }
 
-h1::after {
-    content: "_";
-    animation: blink 1s infinite;
+/* Glitch effect cho title khi hover */
+h1:hover {
+    animation: glitch 0.3s infinite;
 }
 
-/* Glitch effect for main title */
-.glitch {
-    position: relative;
-}
-
-.glitch::before,
-.glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.glitch::before {
-    animation: glitch-1 0.3s infinite;
-    color: #ff00de;
-    z-index: -1;
-}
-
-.glitch::after {
-    animation: glitch-2 0.3s infinite;
-    color: #00ffff;
-    z-index: -2;
-}
-
-@keyframes glitch-1 {
+@keyframes glitch {
     0%, 100% { transform: translate(0); }
-    33% { transform: translate(-2px, 2px); }
-    66% { transform: translate(2px, -2px); }
+    25% { transform: translate(-2px, 2px); }
+    50% { transform: translate(2px, -2px); }
+    75% { transform: translate(-2px, -2px); }
 }
 
-@keyframes glitch-2 {
-    0%, 100% { transform: translate(0); }
-    33% { transform: translate(2px, -2px); }
-    66% { transform: translate(-2px, 2px); }
-}
-
-/* Tables - Terminal data display */
-table {
-    border-collapse: collapse;
-    width: 100%;
-    border: 2px solid var(--primary-color);
-}
-
-th, td {
-    border: 1px solid var(--primary-color);
-    padding: 10px;
-    text-align: left;
-}
-
-th {
-    background-color: rgba(0, 255, 0, 0.1);
-    color: var(--accent);
-    text-transform: uppercase;
-}
-
-tr:hover {
-    background-color: rgba(0, 255, 0, 0.05);
-}
-
-/* Footer - System info style */
+/* Footer cyber style */
 footer {
-    border-top: 2px solid var(--primary-color);
-    padding: 20px;
-    margin-top: 40px;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.5);
+    border-top: 2px solid var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
 }
 
 footer::before {
     content: "[SYSTEM] ";
     color: var(--accent);
     font-weight: bold;
+    font-family: monospace;
 }
 
-/* Images - Scan line effect */
-img {
-    border: 2px solid var(--primary-color);
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-    filter: contrast(1.1) brightness(0.9);
+/* Đảm bảo text có màu xanh terminal */
+.text-white, .text-gray-100, .text-gray-200 {
+    color: rgba(0, 255, 0, 0.9) !important;
 }
 
-img:hover {
-    box-shadow: 0 0 25px rgba(0, 255, 0, 0.5);
+/* Loading screen với hacker vibe */
+.loading-overlay {
+    background: radial-gradient(circle, rgba(0,0,0,0.9) 0%, rgba(0,0,0,1) 100%);
 }
 
-
-
-/* Con rắn chườn trên header - Hacker style */
-body::after {
-    content: "🐍";
-    position: fixed;
-    font-size: 40px; /* To hơn */
-    filter: hue-rotate(90deg) brightness(1.5) drop-shadow(0 0 15px #00ff00);
-    animation: snakeCrawl 20s linear infinite;
-    z-index: 9999;
-    pointer-events: none;
-}
-
-@keyframes snakeCrawl {
-    0% {
-        left: -100px;
-        top: 50px; /* Chườn thấp hơn */
-        transform: scaleX(1) rotate(-5deg);
+/* Animate shine giữ nguyên nhưng màu xanh */
+@keyframes shine {
+    0%, 100% { 
+        color: rgba(0, 255, 0, 0.6);
+        text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
     }
-    5% {
-        top: 48px;
-        transform: scaleX(1) rotate(0deg);
-    }
-    10% {
-        top: 52px;
-        transform: scaleX(1) rotate(5deg);
-    }
-    15% {
-        top: 50px;
-        transform: scaleX(1) rotate(-3deg);
-    }
-    20% {
-        top: 51px;
-        transform: scaleX(1) rotate(2deg);
-    }
-    25% {
-        top: 49px;
-        transform: scaleX(1) rotate(-2deg);
-    }
-    30% {
-        top: 50px;
-        transform: scaleX(1) rotate(1deg);
-    }
-    35% {
-        top: 51px;
-        transform: scaleX(1) rotate(-1deg);
-    }
-    40% {
-        top: 50px;
-        transform: scaleX(1) rotate(3deg);
-    }
-    45% {
-        top: 49px;
-        transform: scaleX(1) rotate(-4deg);
-    }
-    48% {
-        left: calc(100% + 100px);
-        top: 50px;
-        transform: scaleX(1) rotate(0deg);
-    }
-    50% {
-        left: calc(100% + 100px);
-        transform: scaleX(-1) rotate(0deg);
-    }
-    55% {
-        top: 48px;
-        transform: scaleX(-1) rotate(5deg);
-    }
-    60% {
-        top: 52px;
-        transform: scaleX(-1) rotate(-5deg);
-    }
-    65% {
-        top: 50px;
-        transform: scaleX(-1) rotate(3deg);
-    }
-    70% {
-        top: 51px;
-        transform: scaleX(-1) rotate(-2deg);
-    }
-    75% {
-        top: 49px;
-        transform: scaleX(-1) rotate(2deg);
-    }
-    80% {
-        top: 50px;
-        transform: scaleX(-1) rotate(-1deg);
-    }
-    85% {
-        top: 51px;
-        transform: scaleX(-1) rotate(1deg);
-    }
-    90% {
-        top: 50px;
-        transform: scaleX(-1) rotate(-3deg);
-    }
-    95% {
-        top: 49px;
-        transform: scaleX(-1) rotate(4deg);
-    }
-    98% {
-        left: -100px;
-        top: 50px;
-        transform: scaleX(-1) rotate(0deg);
-    }
-    100% {
-        left: -100px;
-        transform: scaleX(1) rotate(0deg);
-    }
-}
-
-/* Thêm dấu vết phát sáng theo sau rắn */
-body::before {
-    content: "";
-    position: fixed;
-    width: 60px;
-    height: 4px;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(0, 255, 0, 0.6), 
-        rgba(0, 255, 0, 0.3), 
-        transparent
-    );
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-    animation: snakeTrail 20s linear infinite;
-    z-index: 9998;
-    pointer-events: none;
-    top: 65px;
-}
-
-@keyframes snakeTrail {
-    0% {
-        left: -140px;
-        opacity: 0;
-    }
-    3% {
-        opacity: 1;
-    }
-    47% {
-        left: calc(100% + 60px);
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-        left: calc(100% + 140px);
-    }
-    53% {
-        opacity: 1;
-    }
-    97% {
-        left: -60px;
-        opacity: 1;
-    }
-    100% {
-        left: -140px;
-        opacity: 0;
+    50% { 
+        color: rgba(57, 255, 20, 1);
+        text-shadow: 0 0 15px rgba(57, 255, 20, 0.8);
     }
 }

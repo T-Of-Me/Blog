@@ -887,3 +887,151 @@ h1::before, h2::before {
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+/* Rainbow colors cho Table of Contents */
+
+/* "TABLE OF CONTENTS" title */
+.table-of-contents-title,
+h2:contains("TABLE OF CONTENTS"),
+.toc-title {
+    color: #00ffff !important;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+/* Hoặc nếu là text thường */
+/* Style cho từng item trong TOC */
+
+/* Item 1 - 0xNote - Cyan */
+.table-of-contents > ul > li:nth-child(1) > a,
+nav li:nth-child(1) a {
+    color: #00ffff !important;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
+}
+
+/* Item 1.1, 1.2, 1.3 - Green variants */
+.table-of-contents > ul > li:nth-child(1) ul li:nth-child(1) a {
+    color: #00ff00 !important;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
+}
+
+.table-of-contents > ul > li:nth-child(1) ul li:nth-child(2) a {
+    color: #33ff33 !important;
+    text-shadow: 0 0 8px rgba(51, 255, 51, 0.7);
+}
+
+.table-of-contents > ul > li:nth-child(1) ul li:nth-child(3) a {
+    color: #66ff66 !important;
+    text-shadow: 0 0 8px rgba(102, 255, 102, 0.7);
+}
+
+/* Item 2 - pdf.exe - Yellow */
+.table-of-contents > ul > li:nth-child(2) > a,
+nav li:nth-child(2) a {
+    color: #ffff00 !important;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+}
+
+/* Item 2.1, 2.2, 2.3, 2.4, 2.5 - Yellow to Orange gradient */
+.table-of-contents > ul > li:nth-child(2) ul li:nth-child(1) a {
+    color: #ffff00 !important;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+}
+
+.table-of-contents > ul > li:nth-child(2) ul li:nth-child(2) a {
+    color: #ffcc00 !important;
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.7);
+}
+
+.table-of-contents > ul > li:nth-child(2) ul li:nth-child(3) a {
+    color: #ff9900 !important;
+    text-shadow: 0 0 8px rgba(255, 153, 0, 0.7);
+}
+
+.table-of-contents > ul > li:nth-child(2) ul li:nth-child(4) a {
+    color: #ff6600 !important;
+    text-shadow: 0 0 8px rgba(255, 102, 0, 0.7);
+}
+
+.table-of-contents > ul > li:nth-child(2) ul li:nth-child(5) a {
+    color: #ff3300 !important;
+    text-shadow: 0 0 8px rgba(255, 51, 0, 0.7);
+}
+
+/* Item 3 - Smol Web - Magenta */
+.table-of-contents > ul > li:nth-child(3) > a,
+nav li:nth-child(3) a {
+    color: #ff00ff !important;
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
+}
+
+/* Item 3.1 - Pink */
+.table-of-contents > ul > li:nth-child(3) ul li:nth-child(1) a {
+    color: #ff0099 !important;
+    text-shadow: 0 0 8px rgba(255, 0, 153, 0.7);
+}
+
+/* Hover effects */
+.table-of-contents a:hover {
+    filter: brightness(1.5);
+    text-shadow: 0 0 20px currentColor !important;
+    transform: translateX(5px);
+}
+
+/* Nếu không biết class cụ thể, dùng universal selector */
+/* Mỗi số thứ tự một màu */
+[href="#0xnote"] {
+    color: #00ffff !important;
+}
+
+[href="#overview"] {
+    color: #00ff00 !important;
+}
+
+[href="#solve"] {
+    color: #33ff33 !important;
+}
+
+[href="#exploit"] {
+    color: #66ff66 !important;
+}
+
+[href="#pdf-exe"],
+[href="#pdfexe"] {
+    color: #ffff00 !important;
+}
+
+[href*="next-js"] {
+    color: #ffcc00 !important;
+}
+
+[href*="python"] {
+    color: #ff9900 !important;
+}
+
+[href*="pdfkit"] {
+    color: #ff6600 !important;
+}
+
+[href*="final"] {
+    color: #ff3300 !important;
+}
+
+[href*="smol"] {
+    color: #ff00ff !important;
+}
+
+/* Hoặc style theo attribute starts with */
+a[href^="#1"] {
+    color: #00ffff !important;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
+}
+
+a[href^="#2"] {
+    color: #ffff00 !important;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+}
+
+a[href^="#3"] {
+    color: #ff00ff !important;
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
+}

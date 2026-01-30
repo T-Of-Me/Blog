@@ -50,7 +50,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1::before, h2::before, h3::before {
-    content: "root@blog:~$ ";
+    content: "Tiwza@blog:~$ ";
     color: var(--secondary-color);
 }
 
@@ -268,4 +268,143 @@ img {
 
 img:hover {
     box-shadow: 0 0 25px rgba(0, 255, 0, 0.5);
+}
+
+/* Animated cat running on header */
+.header, header, .site-header, nav {
+    position: relative;
+    overflow: hidden;
+}
+
+.header::after, header::after, .site-header::after, nav::after {
+    content: "ฅ^•ﻌ•^ฅ";
+    position: absolute;
+    top: 10px;
+    font-size: 24px;
+    color: var(--accent, #00ff00);
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    animation: catRun 15s linear infinite;
+    z-index: 1000;
+}
+
+@keyframes catRun {
+    0% {
+        left: -50px;
+        transform: scaleX(1);
+    }
+    48% {
+        left: calc(100% + 50px);
+        transform: scaleX(1);
+    }
+    50% {
+        left: calc(100% + 50px);
+        transform: scaleX(-1);
+    }
+    98% {
+        left: -50px;
+        transform: scaleX(-1);
+    }
+    100% {
+        left: -50px;
+        transform: scaleX(1);
+    }
+}
+
+/* Hoặc dùng con rắn cyber */
+.snake-runner {
+    position: fixed;
+    top: 5px;
+    font-size: 20px;
+    color: #00ff00;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    animation: snakeMove 20s linear infinite;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.snake-runner::before {
+    content: "🐍";
+    filter: hue-rotate(90deg) brightness(1.5);
+}
+
+@keyframes snakeMove {
+    0% { left: -100px; }
+    100% { left: calc(100% + 100px); }
+}
+
+/* Hoặc con chuột hacker */
+.hacker-mouse {
+    position: fixed;
+    top: 20px;
+    font-size: 18px;
+    animation: mouseRun 12s ease-in-out infinite;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.hacker-mouse::before {
+    content: "🐁";
+    filter: drop-shadow(0 0 5px #00ff00);
+}
+
+@keyframes mouseRun {
+    0%, 100% {
+        left: -50px;
+        transform: scaleX(1) rotate(0deg);
+    }
+    25% {
+        top: 40px;
+        transform: scaleX(1) rotate(10deg);
+    }
+    50% {
+        left: calc(100% + 50px);
+        top: 20px;
+        transform: scaleX(-1) rotate(0deg);
+    }
+    75% {
+        top: 40px;
+        transform: scaleX(-1) rotate(-10deg);
+    }
+}
+
+/* Con bug chạy (phù hợp với hacker theme) */
+body::after {
+    content: "🐛";
+    position: fixed;
+    top: 15px;
+    font-size: 20px;
+    filter: hue-rotate(270deg) brightness(1.5) drop-shadow(0 0 10px #00ff00);
+    animation: bugCrawl 18s linear infinite;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+@keyframes bugCrawl {
+    0% {
+        left: -60px;
+        transform: scaleX(1) rotate(0deg);
+    }
+    10% {
+        transform: scaleX(1) rotate(5deg);
+    }
+    20% {
+        transform: scaleX(1) rotate(-5deg);
+    }
+    48% {
+        left: calc(100% + 60px);
+        transform: scaleX(1) rotate(0deg);
+    }
+    50% {
+        transform: scaleX(-1);
+    }
+    60% {
+        transform: scaleX(-1) rotate(5deg);
+    }
+    70% {
+        transform: scaleX(-1) rotate(-5deg);
+    }
+    100% {
+        left: -60px;
+        transform: scaleX(-1) rotate(0deg);
+    }
 }

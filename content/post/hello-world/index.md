@@ -12,10 +12,10 @@ tags:
 weight: 100
 ---
 
-# 0xNote
+## 0xNote
 
 ![image](https://hackmd.io/_uploads/ryOk1sVIWx.png)
-## Overview 
+### Overview 
 - Backend : **fpm**
 ![image](https://hackmd.io/_uploads/SJSBJj4U-l.png)
 - Proxy : **nginx** 
@@ -23,7 +23,7 @@ weight: 100
 - Giao diện 
 ![image](https://hackmd.io/_uploads/SkCqlsE8be.png)
 - Tuy nhiên bị chặn ở `/premium.php` 
-## Solve 
+### Solve 
 
 - Với cách viết proxy như sau ta có thể bypass bằng việc thêm `index.php` ngay sau thư mục mà ta bị chặn (`premium.php`)
 ![image](https://hackmd.io/_uploads/BkGVeoVI-x.png)
@@ -32,7 +32,7 @@ weight: 100
 - Như đoạn code sau nếu có thể kiểm soát được `color` và `note` thì có thể tạo ra 1 object mới : 
 ![image](https://hackmd.io/_uploads/rkKAWiNL-e.png)
 
-## Exploit 
+### Exploit 
 - CHúng ta sẽ dùng SPLFileObject để đọc 1 file bất kì 
 - Set path : `php://filter/convert.base64-encode/resource=/etc/passwd`
 ![image](https://hackmd.io/_uploads/Sy_7VjNUZx.png)
@@ -42,7 +42,7 @@ weight: 100
 ![image](https://hackmd.io/_uploads/rkbq4sV8Wx.png)
 - Auket lấy được `etc/passwd` tuy nhiên flag có quyền Owner vậy nên chưa đủ quyền để đọc 
 ![image](https://hackmd.io/_uploads/rJzRNiVUZg.png)
-### Nâng quyền 
+#### Nâng quyền 
 - Ngay khi thực hiện được `SPLFileObject` như ở trên ta cũng có thể biến thể để nâng lên từ đọc file thành RCE từ [đoạn tài liệu sau](https://github.com/ambionics/cnext-exploits/blob/main/cnext-exploit.py) và [cái này](https://blog.lexfo.fr/iconv-cve-2024-2961-p1.html)
 ![image](https://hackmd.io/_uploads/SJfsHsVIZl.png)
 - Sau đây sẽ là PWN CORE , mình đéo biết giải thích như nào nên chạy code thôi ; Vào `http://localhost:5000/` để check id 
@@ -447,16 +447,16 @@ if __name__ == "__main__":
 
 **Flag: 0xL4ugh{1think_y0u_l0ved_my_pHp_n0te_e1bfd312v_dc754541a1d6a4fd}**
 
-# pdf.exe
+## pdf.exe
 
 ![image](https://hackmd.io/_uploads/Sy8Srer8-e.png)
 
-## Overview 
+### Overview 
 - **DNS Rebinding SSRF** in Next.js Image Optimizer để chạm tới dịch vụ nội bộ 
 - **CRLF Injection** in Python's `urllib.request` `data:` URI handler để chèn header độc hại vào gói tin 
 - **pdfkit Argument Injection** via **injected HTML meta tags** để lấy được nội dung của flag từ dịch vụ nội bộ 
 
-## Next.js Image Optimizer SSRF
+### Next.js Image Optimizer SSRF
 - Trước tiên ta sẽ gặp được cấu hình file `next.config.ts` như sau : 
 ![image](https://hackmd.io/_uploads/r1IpmXdU-g.png)
 =>  Willcard `hostname: "**"` cho phép tối ưu hình ảnh từ việc lấy ảnh từ bất kì host `HTTP` nào 
@@ -494,7 +494,7 @@ if __name__ == "__main__":
 - URl sẽ như sau `GET /_next/image?url=http://7f000001.8efab5ae.rbndr.us:5000/generate?data=...&w=640&q=75`
 ![image](https://hackmd.io/_uploads/SJpe1LdLZl.png)
 
-## Python urllib CRLF Injection in (`data:`) URIs
+### Python urllib CRLF Injection in (`data:`) URIs
 - Như ta thấy dataURI được ta kiểm soát hoàn toàn và nó chỉ fillter đơn giản bới `data_uri.startswith("data:plain/text"):` kiểm tra xem có bắt đầu chuỗi bằng `data:plain/text` không . 
 ![image](https://hackmd.io/_uploads/rySheLdIbe.png)
 
@@ -516,7 +516,7 @@ Content-Disposition: malicious-header
 
 - Chúng ta sẽ chèn vào header `Content-Disposition` bới nó sẽ được đưa vào pdfkit lúc sau 
 
-## pdfkit Argument Injection (The Flag Exfiltration)
+### pdfkit Argument Injection (The Flag Exfiltration)
 
 - pdfkit là tool để chuyển từ HTML sang pdf 
 - Chúng ta có thể inject vào 1 đoạn html để lợi dụng 1 số chức năng để đọc flag
@@ -532,7 +532,7 @@ Content-Disposition: malicious-header
 - Payload sẽ được hình dung như sau : 
 ![image](https://hackmd.io/_uploads/S1HmdI_IWx.png)
 - Double encode url ta được payload ⬇️
-## Final exploit 
+### Final exploit 
 ```code=
 import requests
 import time
@@ -557,21 +557,21 @@ while True:
 
 
 
-# Smol Web
+## Smol Web
 ![image](https://hackmd.io/_uploads/SyeNttP8bx.png)
 
 ![image](https://hackmd.io/_uploads/r1nQ0FvLWl.png)
 
 
-## Phân tích
+### Phân tích
 - web service (port 5000): xem và đánh giá sản phẩm
 - bot service (port 3000): admin bot sử dụng puppeteer để visit URL được report
 
-### `app/Dockerfile`
+#### `app/Dockerfile`
 
 - Flag nằm trong biến môi trường, chỉ có thể đọc qua binary `/readflagbinary` (được set quyền SUID) => RCE
 
-### `app/main.py`
+#### `app/main.py`
 
 - endpoint `/ratings` lấy tham số `quantity` và đưa trực tiếp vào lệnh SQL qua `f-string`
 ![image](https://hackmd.io/_uploads/H1PEk5v8Wg.png)
@@ -586,13 +586,13 @@ while True:
 
 => Chain: inject payload vào cột `user_id` ở query 1 -> payload đó trở thành câu SQL query 2 -> trả về XSS payload vào biến `name` -> render ra HTML
 
-### Endpoint /search (chỉ access được từ localhost (từ phía bot)
+#### Endpoint /search (chỉ access được từ localhost (từ phía bot)
 ![image](https://hackmd.io/_uploads/SkgxZcwLWx.png)
 
 - Hàm `sanitize_input` chặn nhiều ký tự và các lệnh ![image](https://hackmd.io/_uploads/ryxSbcwIWe.png)
 - Nhưng `find` command có tuỳ chọn `-exec` => cần bypass filter để chạy `/readflagbinary`
 
-## Vuln
+### Vuln
 1. **SQL Injection (stage 1)**: inject còn `quantity` để control cột `user_id` trả về
 2. **SQLi (stage 2)**: sử dụng giá trị `user_id` độc hại để Union Select ra payload XSS
 3. **Reflected XSS**: payload XSS hiển trị trên trang `/ratings`
@@ -600,11 +600,11 @@ while True:
 5. **SSRF/local access**: dùng bot để trigger request tới `/search` (endpoint nội bộ)
 6. **Command Injection**: inject tham số cho lẹnh `find` để thực thi `/readflagbinary`
 
-## Exploit
-### Bypass filter và payload encoding
+### Exploit
+#### Bypass filter và payload encoding
 - Do `quantity` chặn dấu nháy `'` nên không thể viết string trực tiếp => Dùng hàm `CHAR(ascii_code)` của SQLite và nối chuỗi bằng `||`
 
-### Tạo payload XSS để bypass CSP
+#### Tạo payload XSS để bypass CSP
 - không thể dùng `<script>alert(1)</script>` => dùng gadget youtube
 `<script src="https://www.youtube.com/oembed?callback=...Javascript..."></script>`
 - Đoạn JS trong callback sẽ:
@@ -613,7 +613,7 @@ while True:
     - Đọc response (output của lệnh `find`)
     - Gửi flag về webhook qua `location`
 
-### Bypass filter tại `/search`
+#### Bypass filter tại `/search`
 - Lệnh cần chạy: `/readflagbinary`. Filter block: `r, l, f, a, d...` . Filter allow: `e, b, y, *, /` Payload: `/*e*b*y` 
     - `/` : Root
     - `*` : match `readflag`
@@ -621,7 +621,7 @@ while True:
     - `*` : match `inar`
     - `y` : match `y` => find sẽ execute: `/readflagbinary`
 
-### Chain SQLi
+#### Chain SQLi
 - Ta cần nhúng XSS payload vào `user_name`
     - query 2 (inner): `0 UNION SELECT 1, '<script...XSS...>'`
     - query 1 (outer): `quantity = 0 UNION SELECT 1, 2, 3, (payload query 2 đã encode CHAR)`
@@ -632,7 +632,7 @@ while True:
     - User name là đoạn script
     - HTML render đoạn script -> Bot chạy script -> RCE -> Lấy Flag
 
-## Full script:
+### Full script:
 ```python
 import urllib.parse
 import requests
@@ -719,15 +719,15 @@ if __name__ == "__main__":
 ![image](https://hackmd.io/_uploads/Bkzjv9wLWe.png)
 ![image](https://hackmd.io/_uploads/BywsPcvIbl.png)
 
-# 4llD4y
+## 4llD4y
 ![image](https://hackmd.io/_uploads/rJFMR4_IZg.png)
 ![image](https://hackmd.io/_uploads/rydEC4OUWx.png)
 
-## Phân tích
+### Phân tích
 - Flag được ghi vào một file có tên `/flag_xxxxx.txt` (nằm ở root `/`)
 - biến môi trường `$FLAG` bị unset -> RCE để list file trong `/` và đọc
 
-### app.js
+#### app.js
 ![image](https://hackmd.io/_uploads/HyCx1H_8-e.png)
 
 - Sử dụng `express` và `happy-dom`
@@ -740,7 +740,7 @@ if __name__ == "__main__":
     - ghi HTML vào document và trả về `outerHTML`
     => Nơi ta execute XSS/JS nhưng mặc định `happy-dom` sẽ tắt execute JS 
     
-## Vuln
+### Vuln
 **1. prototype pollution trong flasnest (CVE-2023-26135)** 
 - ![image](https://hackmd.io/_uploads/Hkx1lBuLWe.png)
 - Thư viện `flatnest` (v1.0.1) unflatten một object (chuyển key dạng dot-notation `x.y` thành nested object `{x: {y: ...}}`)
@@ -755,8 +755,8 @@ if __name__ == "__main__":
 -  khi `enableJavaScriptEvaluation` được bật -> tag `script` trong HTML gửi lên sẽ được execute
 -  Vì chạy trong cùng context với note process nên ta có thể dùng `this.constructor.constructor` để lấy `Function` constructor gốc -> gọi ra `process` của nodejs và rce
 
-## Exploit
-### prototype pollution
+### Exploit
+#### prototype pollution
 - Dùng `nest()` tại `/config` để pollution `Object.prototype.settings`
 ``` json
 {
@@ -769,13 +769,13 @@ if __name__ == "__main__":
 - Nó gán `obj.polluter.settings.enableJavaScriptEvaluation = true`
 <=> `Object.prototype.settings = { enableJavaScriptEvaluation: true }`
 
-### RCE
-#### sandbox escapse
+#### RCE
+##### sandbox escapse
 - sau khi pollute và trả về `{ message: 'configuration applied' }` 
 - `happy-dom` sử dụng `vm` module của node.js để chạy script trong tag `<script>`
 - `vm` không phải là security sandbox. Context bên trong `vm` vẫn có thể truy cập vào constructor của các object cơ bản ( `Object`, `Function`)
 - ta dùng `this.constructor.constructor` (trong đó `this` là window/global scope của VM) sẽ trả về `Function` constructor của host process (node.js chính) cho phép ta thoát khỏi VM context và execute code
-#### internal binding
+##### internal binding
 - `process.binding('spawn_sync')` là internal API của node.js được dùng bởi `child_process`. Dùng cái này để bypass nếu module `child_process` bị override hoặc filter, và nó khá ổn để spawn process con (như `/bin/ls` hay `/bin/cat`) trực tiếp
 
 ```javascript!
@@ -825,7 +825,7 @@ const opts = {
 ![image](https://hackmd.io/_uploads/HyJI92O8-g.png)
 
 
-## Full script exploit
+### Full script exploit
 ```python
 import requests
 import json
@@ -971,14 +971,14 @@ if __name__ == "__main__":
 
 
 
-# 0xClinic
+## 0xClinic
 ![image](https://hackmd.io/_uploads/SyFinLdIZe.png)
-## Overview 
+### Overview 
 ![image](https://hackmd.io/_uploads/BJeVcYO8Wl.png)
 
 - Reg không có quyền cao và cũng không thể làm gì hơn 
 
-## Exploit 
+### Exploit 
 - Passwd được lấy bằng national_id 
 - Đầu tiên sẽ đi vào `/api/profile/patient_test` muốn biết được path này thì cần có kĩ năng fuzzing , và lấy được các thông tin như sau:
 ![image](https://hackmd.io/_uploads/Sy077yK8Zl.png)

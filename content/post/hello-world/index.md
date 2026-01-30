@@ -12,7 +12,7 @@ tags:
 weight: 100
 ---
 
- # 0xNote
+# 0xNote
 
 ![image](https://hackmd.io/_uploads/ryOk1sVIWx.png)
 ## Overview 
@@ -559,6 +559,8 @@ while True:
 
 # Smol Web
 ![image](https://hackmd.io/_uploads/SyeNttP8bx.png)
+
+
 ![image](https://hackmd.io/_uploads/r1nQ0FvLWl.png)
 
 

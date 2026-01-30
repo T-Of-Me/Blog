@@ -1,5 +1,5 @@
 /*
-    Hacker Theme - Black background with animated icons
+    Hacker Theme - Black background with interactive animated icons (CSS only)
 */
 
 :root {
@@ -33,8 +33,7 @@ body::before {
 }
 
 /* Scanline effect */
-body::after {
-    content: "";
+.dot-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -65,215 +64,503 @@ h1::before, h2::before {
     text-shadow: var(--text-glow);
 }
 
-/* Multiple animated icons floating */
-.floating-icons {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 1;
-}
+/* Container cho các icons - phải thêm vào HTML */
+/* Hoặc dùng các pseudo-elements có sẵn */
 
-/* Icon 1 - Lock/Security */
-.floating-icons::before {
+/* Icon 1 - Lock 🔒 - Top Left */
+body > div:first-child::before {
     content: "🔒";
-    position: absolute;
-    font-size: 30px;
-    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.6));
-    animation: float1 20s ease-in-out infinite;
+    position: fixed;
+    font-size: 65px;
     left: 10%;
     top: 20%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float1 20s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* Icon 2 - Terminal */
-.floating-icons::after {
+body > div:first-child::before:hover {
+    transform: scale(1.3) rotate(15deg) translate(40px, -40px);
+    filter: drop-shadow(0 0 30px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 2 - Terminal 💻 - Top Right */
+nav::before {
     content: "💻";
-    position: absolute;
-    font-size: 35px;
-    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.6));
-    animation: float2 25s ease-in-out infinite;
+    position: fixed;
+    font-size: 70px;
     right: 15%;
     top: 30%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float2 25s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+nav::before:hover {
+    transform: scale(1.4) rotate(-15deg) translate(-50px, -50px);
+    filter: drop-shadow(0 0 35px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 3 - Lightning ⚡ - Bottom Left */
+nav::after {
+    content: "⚡";
+    position: fixed;
+    font-size: 62px;
+    left: 5%;
+    bottom: 25%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float3 18s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+nav::after:hover {
+    transform: scale(1.35) rotate(20deg) translate(45px, 45px);
+    filter: drop-shadow(0 0 32px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 4 - Shield 🛡️ - Bottom Right */
+footer::before {
+    content: "🛡️";
+    position: fixed;
+    font-size: 68px;
+    right: 8%;
+    bottom: 40%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float4 22s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+footer::before:hover {
+    transform: scale(1.38) rotate(-12deg) translate(-48px, 48px);
+    filter: drop-shadow(0 0 34px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 5 - Locked 🔐 - Center Left */
+footer::after {
+    content: "🔐";
+    position: fixed;
+    font-size: 64px;
+    left: 20%;
+    top: 50%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float5 24s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+footer::after:hover {
+    transform: scale(1.32) rotate(18deg) translate(42px, -42px);
+    filter: drop-shadow(0 0 33px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 6 - Desktop 🖥️ - Top Center Right */
+main::before {
+    content: "🖥️";
+    position: fixed;
+    font-size: 72px;
+    right: 25%;
+    top: 15%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float6 19s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+main::before:hover {
+    transform: scale(1.42) rotate(-18deg) translate(-52px, -52px);
+    filter: drop-shadow(0 0 36px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 7 - Gear ⚙️ - Right Center */
+main::after {
+    content: "⚙️";
+    position: fixed;
+    font-size: 60px;
+    left: 80%;
+    top: 60%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float7 21s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+main::after:hover {
+    transform: scale(1.36) rotate(360deg) translate(-46px, -46px);
+    filter: drop-shadow(0 0 34px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 8 - Wrench 🔧 - Bottom Left */
+main > div::before {
+    content: "🔧";
+    position: fixed;
+    font-size: 66px;
+    left: 12%;
+    top: 70%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float8 23s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+main > div::before:hover {
+    transform: scale(1.34) rotate(-25deg) translate(44px, 44px);
+    filter: drop-shadow(0 0 33px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 9 - Skull ☠️ - Bottom Far Right */
+main > div::after {
+    content: "☠️";
+    position: fixed;
+    font-size: 68px;
+    right: 5%;
+    top: 75%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float9 26s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+main > div::after:hover {
+    transform: scale(1.4) rotate(22deg) translate(-50px, 50px);
+    filter: drop-shadow(0 0 35px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 10 - Bug 🐛 - Top Center Left */
+.flex.flex-col.min-h-screen::before {
+    content: "🐛";
+    position: fixed;
+    font-size: 64px;
+    left: 30%;
+    top: 10%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float10 20s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.flex.flex-col.min-h-screen::before:hover {
+    transform: scale(1.36) rotate(16deg) translate(46px, -46px);
+    filter: drop-shadow(0 0 34px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 11 - Bomb 💣 - Bottom Center */
+.flex.flex-col.min-h-screen::after {
+    content: "💣";
+    position: fixed;
+    font-size: 62px;
+    right: 30%;
+    bottom: 15%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float11 24s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.flex.flex-col.min-h-screen::after:hover {
+    transform: scale(1.4) rotate(-20deg) translate(-50px, 50px);
+    filter: drop-shadow(0 0 36px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 12 - Satellite 🛰️ - Top Center */
+.mt-12::before {
+    content: "🛰️";
+    position: fixed;
+    font-size: 66px;
+    left: 45%;
+    top: 5%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float12 22s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.mt-12::before:hover {
+    transform: scale(1.38) rotate(14deg) translate(48px, -48px);
+    filter: drop-shadow(0 0 35px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 13 - Robot 🤖 - Bottom Center Right */
+.mt-12::after {
+    content: "🤖";
+    position: fixed;
+    font-size: 68px;
+    right: 40%;
+    bottom: 10%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float13 25s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.mt-12::after:hover {
+    transform: scale(1.42) rotate(-16deg) translate(-52px, 52px);
+    filter: drop-shadow(0 0 36px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 14 - Key 🔑 - Right Center */
+.flex-grow::before {
+    content: "🔑";
+    position: fixed;
+    font-size: 60px;
+    left: 65%;
+    top: 40%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float14 21s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.flex-grow::before:hover {
+    transform: scale(1.35) rotate(24deg) translate(-45px, -45px);
+    filter: drop-shadow(0 0 33px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Icon 15 - Alien 👾 - Bottom Center */
+.flex-grow::after {
+    content: "👾";
+    position: fixed;
+    font-size: 70px;
+    left: 50%;
+    top: 85%;
+    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+    animation: float15 23s ease-in-out infinite;
+    z-index: 5;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.flex-grow::after:hover {
+    transform: scale(1.45) rotate(-22deg) translate(55px, 55px);
+    filter: drop-shadow(0 0 38px rgba(57, 255, 20, 1));
+    animation-play-state: paused;
+}
+
+/* Animations với nhiều biến thể */
 @keyframes float1 {
     0%, 100% {
         transform: translateY(0px) translateX(0px) rotate(0deg);
-        opacity: 0.3;
+        opacity: 0.75;
     }
     25% {
-        transform: translateY(-30px) translateX(20px) rotate(5deg);
-        opacity: 0.6;
+        transform: translateY(-35px) translateX(25px) rotate(5deg);
+        opacity: 0.95;
     }
     50% {
-        transform: translateY(-50px) translateX(-10px) rotate(-3deg);
-        opacity: 0.4;
+        transform: translateY(-55px) translateX(-15px) rotate(-3deg);
+        opacity: 0.85;
     }
     75% {
-        transform: translateY(-20px) translateX(30px) rotate(8deg);
-        opacity: 0.5;
+        transform: translateY(-25px) translateX(35px) rotate(8deg);
+        opacity: 0.9;
     }
 }
 
 @keyframes float2 {
     0%, 100% {
         transform: translateY(0px) translateX(0px) rotate(0deg);
-        opacity: 0.4;
+        opacity: 0.8;
     }
     33% {
-        transform: translateY(-40px) translateX(-25px) rotate(-6deg);
-        opacity: 0.6;
+        transform: translateY(-45px) translateX(-30px) rotate(-6deg);
+        opacity: 0.95;
     }
     66% {
-        transform: translateY(-60px) translateX(15px) rotate(4deg);
-        opacity: 0.3;
+        transform: translateY(-65px) translateX(20px) rotate(4deg);
+        opacity: 0.85;
     }
-}
-
-/* Add more floating icons via pseudo elements on different containers */
-nav::before {
-    content: "⚡";
-    position: fixed;
-    font-size: 28px;
-    left: 5%;
-    bottom: 25%;
-    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
-    animation: float3 18s ease-in-out infinite;
-    z-index: 1;
-    pointer-events: none;
-}
-
-nav::after {
-    content: "🛡️";
-    position: fixed;
-    font-size: 32px;
-    right: 8%;
-    bottom: 40%;
-    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
-    animation: float4 22s ease-in-out infinite;
-    z-index: 1;
-    pointer-events: none;
 }
 
 @keyframes float3 {
     0%, 100% {
         transform: translateY(0px) translateX(0px) rotate(0deg);
-        opacity: 0.35;
+        opacity: 0.75;
     }
     50% {
-        transform: translateY(-45px) translateX(20px) rotate(-5deg);
-        opacity: 0.6;
+        transform: translateY(-50px) translateX(25px) rotate(-5deg);
+        opacity: 0.95;
     }
 }
 
 @keyframes float4 {
     0%, 100% {
         transform: translateY(0px) translateX(0px) scale(1);
-        opacity: 0.3;
+        opacity: 0.77;
     }
     50% {
-        transform: translateY(-35px) translateX(-15px) scale(1.1);
-        opacity: 0.55;
+        transform: translateY(-40px) translateX(-20px) scale(1.1);
+        opacity: 0.93;
     }
-}
-
-/* More icons on footer */
-footer::before {
-    content: "🔐";
-    position: fixed;
-    font-size: 30px;
-    left: 20%;
-    top: 50%;
-    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
-    animation: float5 24s ease-in-out infinite;
-    z-index: 1;
-    pointer-events: none;
-}
-
-footer::after {
-    content: "🖥️";
-    position: fixed;
-    font-size: 33px;
-    right: 25%;
-    top: 15%;
-    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
-    animation: float6 19s ease-in-out infinite;
-    z-index: 1;
-    pointer-events: none;
 }
 
 @keyframes float5 {
     0%, 100% {
         transform: translateY(0px) rotate(0deg);
-        opacity: 0.4;
+        opacity: 0.78;
     }
     50% {
-        transform: translateY(-40px) rotate(10deg);
-        opacity: 0.6;
+        transform: translateY(-45px) rotate(12deg);
+        opacity: 0.94;
     }
 }
 
 @keyframes float6 {
     0%, 100% {
         transform: translateY(0px) translateX(0px);
-        opacity: 0.35;
+        opacity: 0.76;
     }
     33% {
-        transform: translateY(-25px) translateX(20px);
-        opacity: 0.5;
+        transform: translateY(-30px) translateX(25px);
+        opacity: 0.9;
     }
     66% {
-        transform: translateY(-50px) translateX(-10px);
-        opacity: 0.4;
+        transform: translateY(-55px) translateX(-12px);
+        opacity: 0.85;
     }
-}
-
-/* Additional floating icons */
-main::before {
-    content: "⚙️";
-    position: fixed;
-    font-size: 26px;
-    left: 80%;
-    top: 60%;
-    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
-    animation: float7 21s ease-in-out infinite;
-    z-index: 1;
-    pointer-events: none;
-}
-
-main::after {
-    content: "🔧";
-    position: fixed;
-    font-size: 29px;
-    left: 12%;
-    top: 70%;
-    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
-    animation: float8 23s ease-in-out infinite;
-    z-index: 1;
-    pointer-events: none;
 }
 
 @keyframes float7 {
     0%, 100% {
         transform: rotate(0deg) translateY(0px);
-        opacity: 0.3;
+        opacity: 0.75;
     }
     50% {
-        transform: rotate(180deg) translateY(-30px);
-        opacity: 0.6;
+        transform: rotate(180deg) translateY(-35px);
+        opacity: 0.95;
     }
 }
 
 @keyframes float8 {
     0%, 100% {
         transform: rotate(0deg) scale(1);
-        opacity: 0.35;
+        opacity: 0.78;
     }
     50% {
         transform: rotate(-180deg) scale(1.15);
-        opacity: 0.5;
+        opacity: 0.92;
+    }
+}
+
+@keyframes float9 {
+    0%, 100% {
+        transform: translateX(0px) translateY(0px) rotate(0deg);
+        opacity: 0.77;
+    }
+    50% {
+        transform: translateX(-35px) translateY(-45px) rotate(15deg);
+        opacity: 0.94;
+    }
+}
+
+@keyframes float10 {
+    0%, 100% {
+        transform: translateY(0px) scale(1);
+        opacity: 0.79;
+    }
+    50% {
+        transform: translateY(-40px) scale(1.12);
+        opacity: 0.93;
+    }
+}
+
+@keyframes float11 {
+    0%, 100% {
+        transform: translateX(0px) rotate(0deg);
+        opacity: 0.76;
+    }
+    50% {
+        transform: translateX(30px) rotate(-12deg);
+        opacity: 0.91;
+    }
+}
+
+@keyframes float12 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+        opacity: 0.75;
+    }
+    50% {
+        transform: translateY(-50px) translateX(35px);
+        opacity: 0.95;
+    }
+}
+
+@keyframes float13 {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.14) rotate(6deg);
+        opacity: 0.94;
+    }
+}
+
+@keyframes float14 {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.77;
+    }
+    50% {
+        transform: translateY(-42px) rotate(-16deg);
+        opacity: 0.92;
+    }
+}
+
+@keyframes float15 {
+    0%, 100% {
+        transform: translateX(0px) translateY(0px) scale(1);
+        opacity: 0.79;
+    }
+    50% {
+        transform: translateX(-25px) translateY(-48px) scale(1.1);
+        opacity: 0.95;
     }
 }
 
@@ -316,7 +603,7 @@ pre {
 
 /* Articles/Posts - Cyber frame */
 article, .article-content {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.85);
     border: 1px solid var(--terminal-green);
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
 }

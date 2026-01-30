@@ -1,267 +1,467 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Writeups | Snake Edition</title>
-    <style>
-        /* --- CẤU HÌNH CƠ BẢN --- */
-        :root {
-            --bg-color: #050505;
-            --text-color: #a1a1aa;
-            --highlight: #00ff00; /* Màu xanh hacker */
-            --glass-bg: rgba(20, 20, 20, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
+/*
+    Hacker Theme - Black background with animated icons
+*/
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace; /* Font hacker */
-            line-height: 1.6;
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* --- 1. HIỆU ỨNG DOT BACKGROUND (Mô phỏng mushroom.cat) --- */
-        .bg-dots {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(#333 1px, transparent 1px);
-            background-size: 24px 24px; /* Kích thước lưới chấm */
-            opacity: 0.5;
-            z-index: -1;
-            pointer-events: none;
-            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-        }
-
-        /* --- 2. LAYOUT & NAVIGATION --- */
-        nav {
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            z-index: 10;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .logo span { color: var(--highlight); }
-
-        .container {
-            width: 100%;
-            max-width: 760px;
-            padding: 40px 20px;
-            position: relative;
-        }
-
-        /* --- 3. SHINE ANIMATION (Hiệu ứng chữ phát sáng chạy qua) --- */
-        .title-wrapper {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        h1.shine-title {
-            font-size: 3rem;
-            color: #333; /* Màu chữ gốc tối */
-            font-weight: 800;
-            display: inline-block;
-            background: linear-gradient(to right, #333 0%, #fff 50%, #333 100%);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: shineMove 3s linear infinite;
-        }
-
-        @keyframes shineMove {
-            to { background-position: 200% center; }
-        }
-
-        .meta-info {
-            font-size: 0.8rem;
-            color: #555;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* --- 4. NỘI DUNG BÀI VIẾT (Glassmorphism) --- */
-        .content-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s;
-        }
-
-        .content-card:hover {
-            border-color: var(--highlight);
-            transform: translateY(-2px);
-        }
-
-        h2 { color: white; margin-bottom: 15px; font-size: 1.5rem; }
-        p { margin-bottom: 20px; }
-        
-        code {
-            background: #1e1e20;
-            color: var(--highlight);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            border: 1px solid #333;
-        }
-
-        pre {
-            background: #111;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 3px solid var(--highlight);
-            overflow-x: auto;
-            margin-bottom: 20px;
-        }
-
-        /* --- 5. TÍCH HỢP CON RẮN (SNAKE V2) --- */
-        body::after {
-            content: "🐍";
-            position: fixed;
-            top: 50px;
-            font-size: 45px;
-            z-index: 9999;
-            filter: hue-rotate(90deg) drop-shadow(0 0 5px #00ff00);
-            animation: snakeRun 15s linear infinite, snakeSlither 0.8s ease-in-out infinite alternate;
-            cursor: grab;
-            pointer-events: auto;
-            transition: all 0.3s ease;
-        }
-
-        body::after:hover {
-            animation-play-state: paused;
-            transform: scale(1.5) rotate(0deg) !important; 
-            filter: hue-rotate(0deg) drop-shadow(0 0 20px red) brightness(1.2);
-            content: "🐉";
-            cursor: grabbing;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            top: 75px;
-            height: 6px;
-            width: 80px;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.8), transparent);
-            border-radius: 50%;
-            filter: blur(4px);
-            z-index: 9998;
-            pointer-events: none;
-            animation: trailRun 15s linear infinite, trailFade 0.8s ease-in-out infinite alternate;
-        }
-
-        @keyframes snakeRun {
-            0% { left: -100px; transform: scaleX(1); }
-            48% { left: 105vw; transform: scaleX(1); }
-            50% { left: 105vw; transform: scaleX(-1); }
-            98% { left: -100px; transform: scaleX(-1); }
-            100% { left: -100px; transform: scaleX(1); }
-        }
-
-        @keyframes snakeSlither {
-            0% { margin-top: -8px; transform: rotate(-10deg); }
-            100% { margin-top: 8px; transform: rotate(5deg); }
-        }
-
-        @keyframes trailRun {
-            0% { left: -140px; opacity: 0; }
-            2% { opacity: 1; }
-            48% { left: calc(105vw - 40px); opacity: 1; }
-            50% { left: calc(105vw - 40px); opacity: 0; }
-            52% { opacity: 1; }
-            98% { left: -140px; opacity: 1; }
-            100% { left: -140px; opacity: 0; }
-        }
-
-        @keyframes trailFade {
-            0% { opacity: 0.3; width: 60px; }
-            100% { opacity: 0.8; width: 90px; }
-        }
-
-        /* --- EXTRA: Footer --- */
-        footer {
-            margin-top: auto;
-            padding: 40px;
-            color: #444;
-            font-size: 0.8rem;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="bg-dots"></div>
-
-    <nav>
-        <div class="logo">ROOT<span>@</span>USER:~#</div>
-        <div style="color: #666; font-size: 14px;">[ MENU ]</div>
-    </nav>
-
-    <div class="container">
-        
-        <div class="title-wrapper">
-            <div class="meta-info">29/01/2026 // 0-DAY RESEARCH</div>
-            <h1 class="shine-title">HACKER_THEME_V2</h1>
-            <p style="color: #666; margin-top: 10px;">Official Writeup: CSS Injection | Snake Bypass</p>
-        </div>
-
-        <div class="content-card">
-            <h2>1. Injection Point</h2>
-            <p>
-                Phân tích mã nguồn cho thấy việc sử dụng <code>radial-gradient</code> để tạo ra một lớp phủ (overlay) dạng lưới chấm (dot grid), mô phỏng lại phong cách hiển thị của màn hình CRT cũ hoặc các giao diện cyber-security hiện đại.
-            </p>
-<pre>
-/* CSS Payload */
-.target {
-    overflow: hidden;
-    filter: drop-shadow(0 0 10px #00ff00);
+:root {
+    --primary-color: #00ff00;
+    --terminal-green: #00ff41;
+    --accent: #39ff14;
+    --bg-dark: #000000;
+    --text-glow: 0 0 5px rgba(0, 255, 0, 0.5);
 }
-</pre>
-        </div>
 
-        <div class="content-card">
-            <h2>2. The "Snake" Payload</h2>
-            <p>
-                Bằng cách sử dụng <code>::after</code> pseudo-element, chúng ta có thể tiêm nhiễm (inject) một thực thể sống vào DOM mà không cần thêm thẻ HTML.
-            </p>
-            <p>Di chuyển chuột lên phía trên để tương tác với payload rắn.</p>
-        </div>
+/* Nền đen hoàn toàn */
+body {
+    background-color: #000000 !important;
+    color: var(--terminal-green);
+}
 
-        <div class="content-card">
-            <h2>3. Conclusion</h2>
-            <p>
-                Theme này giữ được sự sạch sẽ (clean) của Next.js nhưng vẫn đậm chất Hacker nhờ Font chữ <code>Monospace</code>, màu xanh neon <code>#00ff00</code> và nền tối.
-            </p>
-        </div>
+/* Matrix grid effect nhẹ */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, 0.02) 25%, rgba(0, 255, 0, 0.02) 26%, transparent 27%),
+        linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, 0.02) 25%, rgba(0, 255, 0, 0.02) 26%, transparent 27%);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
 
-    </div>
+/* Scanline effect */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 998;
+    animation: scanline 8s linear infinite;
+}
 
-    <footer>
-        <p>EOF | DISCONNECTED</p>
-    </footer>
+@keyframes scanline {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100%); }
+}
 
-</body>
-</html>
+/* Terminal prompt tùy chỉnh */
+h1::before, h2::before {
+    content: "root@tiwza:~$ ";
+    color: var(--terminal-green);
+    font-family: 'Courier New', monospace;
+    text-shadow: var(--text-glow);
+}
+
+/* Multiple animated icons floating */
+.floating-icons {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Icon 1 - Lock/Security */
+.floating-icons::before {
+    content: "🔒";
+    position: absolute;
+    font-size: 30px;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.6));
+    animation: float1 20s ease-in-out infinite;
+    left: 10%;
+    top: 20%;
+}
+
+/* Icon 2 - Terminal */
+.floating-icons::after {
+    content: "💻";
+    position: absolute;
+    font-size: 35px;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.6));
+    animation: float2 25s ease-in-out infinite;
+    right: 15%;
+    top: 30%;
+}
+
+@keyframes float1 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+        opacity: 0.3;
+    }
+    25% {
+        transform: translateY(-30px) translateX(20px) rotate(5deg);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translateY(-50px) translateX(-10px) rotate(-3deg);
+        opacity: 0.4;
+    }
+    75% {
+        transform: translateY(-20px) translateX(30px) rotate(8deg);
+        opacity: 0.5;
+    }
+}
+
+@keyframes float2 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+        opacity: 0.4;
+    }
+    33% {
+        transform: translateY(-40px) translateX(-25px) rotate(-6deg);
+        opacity: 0.6;
+    }
+    66% {
+        transform: translateY(-60px) translateX(15px) rotate(4deg);
+        opacity: 0.3;
+    }
+}
+
+/* Add more floating icons via pseudo elements on different containers */
+nav::before {
+    content: "⚡";
+    position: fixed;
+    font-size: 28px;
+    left: 5%;
+    bottom: 25%;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
+    animation: float3 18s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+nav::after {
+    content: "🛡️";
+    position: fixed;
+    font-size: 32px;
+    right: 8%;
+    bottom: 40%;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
+    animation: float4 22s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes float3 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+        opacity: 0.35;
+    }
+    50% {
+        transform: translateY(-45px) translateX(20px) rotate(-5deg);
+        opacity: 0.6;
+    }
+}
+
+@keyframes float4 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translateY(-35px) translateX(-15px) scale(1.1);
+        opacity: 0.55;
+    }
+}
+
+/* More icons on footer */
+footer::before {
+    content: "🔐";
+    position: fixed;
+    font-size: 30px;
+    left: 20%;
+    top: 50%;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
+    animation: float5 24s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+footer::after {
+    content: "🖥️";
+    position: fixed;
+    font-size: 33px;
+    right: 25%;
+    top: 15%;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
+    animation: float6 19s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes float5 {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translateY(-40px) rotate(10deg);
+        opacity: 0.6;
+    }
+}
+
+@keyframes float6 {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px);
+        opacity: 0.35;
+    }
+    33% {
+        transform: translateY(-25px) translateX(20px);
+        opacity: 0.5;
+    }
+    66% {
+        transform: translateY(-50px) translateX(-10px);
+        opacity: 0.4;
+    }
+}
+
+/* Additional floating icons */
+main::before {
+    content: "⚙️";
+    position: fixed;
+    font-size: 26px;
+    left: 80%;
+    top: 60%;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
+    animation: float7 21s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+main::after {
+    content: "🔧";
+    position: fixed;
+    font-size: 29px;
+    left: 12%;
+    top: 70%;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 0, 0.5));
+    animation: float8 23s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes float7 {
+    0%, 100% {
+        transform: rotate(0deg) translateY(0px);
+        opacity: 0.3;
+    }
+    50% {
+        transform: rotate(180deg) translateY(-30px);
+        opacity: 0.6;
+    }
+}
+
+@keyframes float8 {
+    0%, 100% {
+        transform: rotate(0deg) scale(1);
+        opacity: 0.35;
+    }
+    50% {
+        transform: rotate(-180deg) scale(1.15);
+        opacity: 0.5;
+    }
+}
+
+/* Links với hacker style */
+a {
+    color: var(--terminal-green);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--terminal-green);
+    transition: all 0.3s ease;
+    text-shadow: var(--text-glow);
+}
+
+a:hover {
+    color: var(--accent);
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+    border-bottom-color: var(--accent);
+}
+
+/* Code blocks - Terminal style */
+code {
+    background-color: rgba(0, 0, 0, 0.9);
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--terminal-green);
+    font-family: 'Courier New', monospace;
+    text-shadow: var(--text-glow);
+}
+
+pre {
+    background-color: #000000;
+    border: 2px solid var(--terminal-green);
+    border-radius: 6px;
+    padding: 20px;
+    overflow-x: auto;
+    box-shadow: 
+        0 0 15px rgba(0, 255, 0, 0.3),
+        inset 0 0 15px rgba(0, 255, 0, 0.1);
+}
+
+/* Articles/Posts - Cyber frame */
+article, .article-content {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+/* Images - Scanline effect */
+img:not(.animate-cat) {
+    border: 2px solid var(--terminal-green);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+    filter: contrast(1.1) brightness(0.95);
+}
+
+img:not(.animate-cat):hover {
+    box-shadow: 0 0 25px rgba(0, 255, 0, 0.5);
+    filter: contrast(1.15) brightness(1);
+}
+
+/* Blockquotes - Terminal output */
+blockquote {
+    border-left: 4px solid var(--terminal-green);
+    background-color: rgba(0, 255, 0, 0.05);
+    padding: 15px 25px;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+}
+
+blockquote::before {
+    content: ">>> ";
+    color: var(--accent);
+    font-weight: bold;
+    font-family: monospace;
+}
+
+/* Tables - Data terminal */
+table {
+    border: 2px solid var(--terminal-green);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+th {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+tr:hover {
+    background-color: rgba(0, 255, 0, 0.05);
+}
+
+td, th {
+    border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+/* Navigation với cyber border */
+nav {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    border-bottom: 1px solid var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+/* Buttons - Cyber style */
+button, .button {
+    border: 2px solid var(--terminal-green);
+    background: transparent;
+    color: var(--terminal-green);
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+button:hover, .button:hover {
+    background-color: var(--terminal-green);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+    text-shadow: none;
+}
+
+/* Scrollbar hacker style */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+    border: 1px solid var(--terminal-green);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--terminal-green);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* Selection color */
+::selection {
+    background-color: var(--terminal-green);
+    color: #000;
+    text-shadow: none;
+}
+
+/* Text colors */
+.text-white, .text-gray-100, .text-gray-200, .text-gray-300 {
+    color: rgba(0, 255, 0, 0.9) !important;
+    text-shadow: var(--text-glow);
+}
+
+/* Glitch effect cho title khi hover */
+h1:hover {
+    animation: glitch 0.3s infinite;
+}
+
+@keyframes glitch {
+    0%, 100% { transform: translate(0); }
+    25% { transform: translate(-2px, 2px); }
+    50% { transform: translate(2px, -2px); }
+    75% { transform: translate(-2px, -2px); }
+}
+
+/* Footer cyber style */
+footer {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    border-top: 2px solid var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+/* Animate shine với màu xanh */
+@keyframes shine {
+    0%, 100% { 
+        color: rgba(0, 255, 0, 0.6);
+        text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+    50% { 
+        color: rgba(57, 255, 20, 1);
+        text-shadow: 0 0 15px rgba(57, 255, 20, 0.8);
+    }
+}
+
+/* Ensure main content has proper z-index */
+main, article, .article-content {
+    position: relative;
+    z-index: 10;
+}

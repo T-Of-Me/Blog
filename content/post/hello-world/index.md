@@ -568,9 +568,11 @@ while True:
 - bot service (port 3000): admin bot sử dụng puppeteer để visit URL được report
 
 ### `app/Dockerfile`
+
 - Flag nằm trong biến môi trường, chỉ có thể đọc qua binary `/readflagbinary` (được set quyền SUID) => RCE
 
 ### `app/main.py`
+
 - endpoint `/ratings` lấy tham số `quantity` và đưa trực tiếp vào lệnh SQL qua `f-string`
 ![image](https://hackmd.io/_uploads/H1PEk5v8Wg.png)
 

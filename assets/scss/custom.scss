@@ -752,3 +752,138 @@ main, article, .article-content {
     position: relative;
     z-index: 10;
 }
+
+/* Table of Contents - Rainbow colors cho từng level */
+
+/* Level 1 - Cyan/Aqua */
+.article-content h2,
+nav a[href^="#"]:not([href*="."]) {
+    color: #00ffff !important;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+/* Level 2 - Green (giữ nguyên) */
+.article-content h3 {
+    color: #00ff00 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* Level 3 - Yellow */
+.article-content h4 {
+    color: #ffff00 !important;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+}
+
+/* Level 4 - Orange */
+.article-content h5 {
+    color: #ff8800 !important;
+    text-shadow: 0 0 10px rgba(255, 136, 0, 0.8);
+}
+
+/* Level 5 - Pink/Magenta */
+.article-content h6 {
+    color: #ff00ff !important;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+}
+
+/* TOC links theo màu heading tương ứng */
+/* Nếu TOC có class riêng, target như này: */
+.table-of-contents li {
+    transition: all 0.3s ease;
+}
+
+/* Level 1 TOC - Cyan */
+.table-of-contents > ul > li > a {
+    color: #00ffff !important;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.6);
+}
+
+.table-of-contents > ul > li > a:hover {
+    color: #00ffff !important;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 1);
+}
+
+/* Level 2 TOC - Green */
+.table-of-contents > ul > li > ul > li > a {
+    color: #00ff00 !important;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.6);
+}
+
+.table-of-contents > ul > li > ul > li > a:hover {
+    color: #39ff14 !important;
+    text-shadow: 0 0 15px rgba(57, 255, 20, 1);
+}
+
+/* Level 3 TOC - Yellow */
+.table-of-contents > ul > li > ul > li > ul > li > a {
+    color: #ffff00 !important;
+    text-shadow: 0 0 5px rgba(255, 255, 0, 0.6);
+}
+
+.table-of-contents > ul > li > ul > li > ul > li > a:hover {
+    color: #ffff44 !important;
+    text-shadow: 0 0 15px rgba(255, 255, 68, 1);
+}
+
+/* Level 4 TOC - Orange */
+.table-of-contents > ul > li > ul > li > ul > li > ul > li > a {
+    color: #ff8800 !important;
+    text-shadow: 0 0 5px rgba(255, 136, 0, 0.6);
+}
+
+/* Level 5 TOC - Pink */
+.table-of-contents > ul > li > ul > li > ul > li > ul > li > ul > li > a {
+    color: #ff00ff !important;
+    text-shadow: 0 0 5px rgba(255, 0, 255, 0.6);
+}
+
+/* Hoặc style đơn giản hơn với :nth-child */
+.table-of-contents li:nth-child(1) > a {
+    color: #00ffff !important;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
+}
+
+.table-of-contents li:nth-child(2) > a {
+    color: #00ff00 !important;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
+}
+
+.table-of-contents li:nth-child(3) > a {
+    color: #ffff00 !important;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
+}
+
+.table-of-contents li:nth-child(4) > a {
+    color: #ff8800 !important;
+    text-shadow: 0 0 8px rgba(255, 136, 0, 0.7);
+}
+
+.table-of-contents li:nth-child(5) > a {
+    color: #ff00ff !important;
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
+}
+
+.table-of-contents li:nth-child(6) > a {
+    color: #ff0066 !important;
+    text-shadow: 0 0 8px rgba(255, 0, 102, 0.7);
+}
+
+.table-of-contents li:nth-child(7) > a {
+    color: #00ff99 !important;
+    text-shadow: 0 0 8px rgba(0, 255, 153, 0.7);
+}
+
+/* Rainbow gradient cho terminal prompt nếu muốn */
+h1::before, h2::before {
+    background: linear-gradient(90deg, 
+        #00ffff 0%, 
+        #00ff00 20%, 
+        #ffff00 40%, 
+        #ff8800 60%, 
+        #ff00ff 80%, 
+        #00ffff 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

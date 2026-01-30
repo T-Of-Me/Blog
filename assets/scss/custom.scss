@@ -1035,3 +1035,161 @@ a[href^="#3"] {
     color: #ff00ff !important;
     text-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
 }
+
+/* Rainbow colors cho Table of Contents - Target đúng elements */
+
+/* Section 1 - 0xNote - Cyan */
+#TableOfContents > ul > li:nth-child(1) > a,
+.table-of-contents > ul > li:nth-child(1) > a {
+    color: #ff00ff !important; /* Magenta */
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+}
+
+/* Section 1.1, 1.2, 1.3 - Green to Yellow gradient */
+#TableOfContents > ul > li:nth-child(1) > ul > li:nth-child(1) > a {
+    color: #00ff00 !important; /* Green */
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+#TableOfContents > ul > li:nth-child(1) > ul > li:nth-child(2) > a {
+    color: #88ff00 !important; /* Yellow-Green */
+    text-shadow: 0 0 10px rgba(136, 255, 0, 0.8);
+}
+
+#TableOfContents > ul > li:nth-child(1) > ul > li:nth-child(3) > a {
+    color: #ffff00 !important; /* Yellow */
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+}
+
+/* Section 1.3.1 - Orange */
+#TableOfContents > ul > li:nth-child(1) > ul > li:nth-child(3) > ul > li > a {
+    color: #ff8800 !important;
+    text-shadow: 0 0 10px rgba(255, 136, 0, 0.8);
+}
+
+/* Section 2 - pdf.exe - Red */
+#TableOfContents > ul > li:nth-child(2) > a {
+    color: #ff0000 !important;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+}
+
+/* Section 2.1 - Cyan */
+#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(1) > a {
+    color: #00ffff !important;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+/* Section 2.2 - Green */
+#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(2) > a {
+    color: #00ff99 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 153, 0.8);
+}
+
+/* Section 2.3 - Yellow */
+#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(3) > a {
+    color: #ffff00 !important;
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+}
+
+/* Section 2.4 - Orange */
+#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(4) > a {
+    color: #ff6600 !important;
+    text-shadow: 0 0 10px rgba(255, 102, 0, 0.8);
+}
+
+/* Section 2.5 - Red */
+#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(5) > a {
+    color: #ff3300 !important;
+    text-shadow: 0 0 10px rgba(255, 51, 0, 0.8);
+}
+
+/* Section 3 - Smol Web - Purple */
+#TableOfContents > ul > li:nth-child(3) > a {
+    color: #9900ff !important;
+    text-shadow: 0 0 10px rgba(153, 0, 255, 0.8);
+}
+
+/* Section 3.1 - Pink */
+#TableOfContents > ul > li:nth-child(3) > ul > li:nth-child(1) > a {
+    color: #ff0099 !important;
+    text-shadow: 0 0 10px rgba(255, 0, 153, 0.8);
+}
+
+/* Section 3.1.1 - Lime */
+#TableOfContents > ul > li:nth-child(3) > ul > li:nth-child(1) > ul > li > a {
+    color: #00ff00 !important;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+}
+
+/* Hover effect */
+#TableOfContents a:hover {
+    filter: brightness(1.4) !important;
+    text-shadow: 0 0 20px currentColor !important;
+    transform: translateX(5px);
+    transition: all 0.3s ease;
+}
+
+/* Nếu theme dùng nav thay vì #TableOfContents */
+nav[aria-label="Table of Contents"] li:nth-child(1) > a,
+.toc li:nth-child(1) > a {
+    color: #ff00ff !important;
+}
+
+nav[aria-label="Table of Contents"] li:nth-child(2) > a,
+.toc li:nth-child(2) > a {
+    color: #ff0000 !important;
+}
+
+nav[aria-label="Table of Contents"] li:nth-child(3) > a,
+.toc li:nth-child(3) > a {
+    color: #9900ff !important;
+}
+
+/* Universal fallback - áp dụng cho mọi link trong TOC */
+[class*="table-of-contents"] a,
+[class*="toc"] a,
+[id*="TableOfContents"] a {
+    transition: all 0.3s ease;
+}
+
+/* Specific target theo href nếu cần */
+a[href="#0xnote"] {
+    color: #ff00ff !important;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+}
+
+a[href*="overview"]:nth-of-type(1) {
+    color: #00ff00 !important;
+}
+
+a[href*="solve"] {
+    color: #88ff00 !important;
+}
+
+a[href*="exploit"] {
+    color: #ffff00 !important;
+}
+
+a[href*="pdf"] {
+    color: #ff0000 !important;
+}
+
+a[href*="next"] {
+    color: #00ff99 !important;
+}
+
+a[href*="python"] {
+    color: #ffff00 !important;
+}
+
+a[href*="pdfkit"] {
+    color: #ff6600 !important;
+}
+
+a[href*="final"] {
+    color: #ff3300 !important;
+}
+
+a[href*="smol"] {
+    color: #9900ff !important;
+}

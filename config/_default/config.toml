@@ -16,3 +16,8 @@ disqusShortname = "hugo-theme-stack"
 
 [pagination]
     pagerSize = 5
+[markup]
+  [markup.tableOfContents]
+    endLevel = 5      # Thay vì 2 (default)
+    startLevel = 1    # Bắt đầu từ level 2
+    ordered = false

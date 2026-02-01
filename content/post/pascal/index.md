@@ -146,7 +146,7 @@ for payload in payloads:
 - Hàm `sanitize` quét toàn bộ file XML nên các thẻ `<author>`,`<title>,`,`<content>` không được chứa bất kỳ từ khóa nào trong blacklist (VD: `sh, bash, tmp...`)
     - không dùng các từ tiếng Anh có chứa `sh` (như `"should", "flash", "bashful"`)
 
-### Build payload
+### Build payloadd
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE data [

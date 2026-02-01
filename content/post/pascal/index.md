@@ -16,7 +16,7 @@ weight: 0
 
 ![image](https://hackmd.io/_uploads/ryt-epnI-x.png)
 
-# JSHit
+## JSHit
 - Bài này thuần html 🤡
 - Chúng ta sẽ lấy được chuỗi này ở source code 
 ```code
@@ -26,7 +26,7 @@ weight: 0
 ![image](https://hackmd.io/_uploads/rye4CX3L-x.png)
 
 **FLAG: pascalCTF{1_h4t3_j4v4scr1pt_s0o0o0o0_much}**
-# ZazaStore
+## ZazaStore
 - Bài này lỗi logic code 
 - Sau khi login ta có giao diện mua hàng như sau 
 ![image](https://hackmd.io/_uploads/S1l6yEnI-g.png)
@@ -73,7 +73,7 @@ weight: 0
 - Sau đó load lại `/inventory`
 ![image](https://hackmd.io/_uploads/r1gmMV28Zl.png)
 
-# Travel Playlist
+## Travel Playlist
 
 ```code=
 import requests
@@ -104,14 +104,14 @@ for payload in payloads:
 ![image](https://hackmd.io/_uploads/Hk02zNn8-l.png)
 
 
-# PDFile
+## PDFile
 ![image](https://hackmd.io/_uploads/HJM2wnh8-g.png)
 ![image](https://hackmd.io/_uploads/SkV9vhnUbl.png)
 ![image](https://hackmd.io/_uploads/B1Ksq3hLZg.png)
 
-## Phân tích
+### Phân tích
 - ta thấy trang web cho người dùng upload các file định dạng `.pasx` (XML) và chuyển đổi sang PDF
-### app.py
+#### app.py
 **Hàm `sanitize(xml_content)`** ![image](https://hackmd.io/_uploads/H1Rdd228Wg.png)
 
 - bộ lọc (WAF) để chặn các content độc hại
@@ -129,7 +129,7 @@ for payload in payloads:
 - Lấy dữ liệu đã parse (title, author, content) và ghi vào file PDF
 - Nếu ta exploit thành công XXE để đọc file, nội dung file đó sẽ hiển trị trong file PDF đầu ra
 
-## Vuln: XXE 
+### Vuln: XXE 
 ![image](https://hackmd.io/_uploads/H1Xws33I-g.png)
 - dù có hàm `sanitize` để chặn các keyword nhạy cảm như `file`, `flag`, nhưng nó chỉ thực hiện so sánh chuỗi trên nội dung raw
 - Mà trình phân tích cú pháp XML (`lxml`) có khả năng hiểu và giải mã các ký tự được mã hóa URL trong đường dẫn hệ thống 
@@ -137,18 +137,18 @@ for payload in payloads:
 => ta có thể định nghĩa một external entity trỏ đến file `/app/flag.txt` (nơi chứa flag theo Dockerfile). Do `flag` bị cấm nên ta không thể để trực tiếp `SYSTEM "file:///app/flag.txt"`
 => Ta cần sử dụng mã hoá để lừa hàm `sanitize` nhưng vẫn để cho `lxml` hiểu được đường dẫn đúng
 
-## Exploit
-### bypass `blacklist`
+### Exploit
+#### bypass `blacklist`
 - Thay vì dùng `file://`, `lxml` cho phép dùng đường dẫn tuyệt đối trên linux
 - thay vì viết `flag` ta dùng URL encoding cho một ký tự trong đó (VD: ký tự `a` có mã hex là `61`) khi đó `flag` => `fl%61g`
 
 - Khi `lxml` phân tích thì nó đọc đường dẫn `/app/fl%61g.txt`, tự động giải mã `%61` thành `a` => đọc `file /app/flag.txt`
 
-### clean content
+#### clean content
 - Hàm `sanitize` quét toàn bộ file XML nên các thẻ `<author>`,`<title>,`,`<content>` không được chứa bất kỳ từ khóa nào trong blacklist (VD: `sh, bash, tmp...`)
     - không dùng các từ tiếng Anh có chứa `sh` (như `"should", "flash", "bashful"`)
 
-### Build payload
+#### Build payload
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE data [
@@ -165,7 +165,7 @@ for payload in payloads:
     </chapters>
 </data>
 ```
-#### attack
+##### attack
 - Lưu nội dung với file có đuôi là `.pasx`
 - upload lên trang web
 ![image](https://hackmd.io/_uploads/Hy_9Ahh8Wl.png)

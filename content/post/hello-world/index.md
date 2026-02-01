@@ -1,7 +1,7 @@
 ---
 title: 0xL4ugh v5
 description: Chill đi 
-date: 2026-00-00 00:00:00+0000
+date: 2026-01-01 00:00:00+0000
 image: cover.jpg
 categories:
     - CTF

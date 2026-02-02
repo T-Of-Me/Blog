@@ -574,3 +574,129 @@ h1:hover { animation: glitch 0.3s infinite; }
 
 /* === Z-INDEX === */
 main, article, .article-content { position: relative; z-index: 10; }
+
+/* === INTERACTIVE ICONS - Mouse Avoidance === */
+body > div:first-child::before, nav::before, nav::after, footer::before, footer::after,
+main::before, main::after, main > div::before, main > div::after,
+.flex.flex-col.min-h-screen::before, .flex.flex-col.min-h-screen::after,
+.mt-12::before, .mt-12::after, .flex-grow::before, .flex-grow::after {
+    will-change: transform;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+}
+
+/* === FIREWORKS CANVAS === */
+#fireworks-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* === MOUSE AVOIDANCE - Using CSS Variables === */
+body > div:first-child::before {
+    transform: translate(
+        var(--move-x-before, 0px), 
+        var(--move-y-before, 0px)
+    ) !important;
+}
+
+nav::before {
+    transform: translate(
+        var(--move-x-before, 0px), 
+        var(--move-y-before, 0px)
+    ) !important;
+}
+
+nav::after {
+    transform: translate(
+        var(--move-x-after, 0px), 
+        var(--move-y-after, 0px)
+    ) !important;
+}
+
+footer::before {
+    transform: translate(
+        var(--move-x-before, 0px), 
+        var(--move-y-before, 0px)
+    ) !important;
+}
+
+footer::after {
+    transform: translate(
+        var(--move-x-after, 0px), 
+        var(--move-y-after, 0px)
+    ) !important;
+}
+
+main::before {
+    transform: translate(
+        var(--move-x-before, 0px), 
+        var(--move-y-before, 0px)
+    ) !important;
+}
+
+main::after {
+    transform: translate(
+        var(--move-x-after, 0px), 
+        var(--move-y-after, 0px)
+    ) !important;
+}
+
+main > div::before {
+    transform: translate(
+        var(--move-x-before, 0px), 
+        var(--move-y-before, 0px)
+    ) !important;
+}
+
+main > div::after {
+    transform: translate(
+        var(--move-x-after, 0px), 
+        var(--move-y-after, 0px)
+    ) !important;
+}
+
+.flex.flex-col.min-h-screen::before {
+    transform: translate(
+        var(--move-x-before, 0px), 
+        var(--move-y-before, 0px)
+    ) !important;
+}
+
+.flex.flex-col.min-h-screen::after {
+    transform: translate(
+        var(--move-x-after, 0px), 
+        var(--move-y-after, 0px)
+    ) !important;
+}
+
+.mt-12::before {
+    transform: translate(
+        var(--move-x-before, 0px), 
+        var(--move-y-before, 0px)
+    ) !important;
+}
+
+.mt-12::after {
+    transform: translate(
+        var(--move-x-after, 0px), 
+        var(--move-y-after, 0px)
+    ) !important;
+}
+
+.flex-grow::before {
+    transform: translate(
+        var(--move-x-before, 0px), 
+        var(--move-y-before, 0px)
+    ) !important;
+}
+
+.flex-grow::after {
+    transform: translate(
+        var(--move-x-after, 0px), 
+        var(--move-y-after, 0px)
+    ) !important;
+}

@@ -1,4 +1,278 @@
 <!-- Matrix Rain Effect -->
 <script>
-(function(){function initMatrix(){const canvas=document.createElement('canvas');canvas.id='matrix-canvas';canvas.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.8;pointer-events:none';if(document.body.firstChild){document.body.insertBefore(canvas,document.body.firstChild)}else{document.body.appendChild(canvas)}const ctx=canvas.getContext('2d');let w=canvas.width=window.innerWidth;let h=canvas.height=window.innerHeight;const chars='アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';const fontSize=16;let cols=Math.floor(w/fontSize);const drops=[];for(let i=0;i<cols;i++){drops[i]=Math.floor(Math.random()*h/fontSize)}function draw(){ctx.fillStyle='rgba(0,0,0,0.05)';ctx.fillRect(0,0,w,h);ctx.fillStyle='#0F0';ctx.font=fontSize+'px monospace';for(let i=0;i<drops.length;i++){const text=chars[Math.floor(Math.random()*chars.length)];ctx.fillText(text,i*fontSize,drops[i]*fontSize);if(drops[i]*fontSize>h&&Math.random()>0.975){drops[i]=0}drops[i]++}}setInterval(draw,30);window.addEventListener('resize',function(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight;cols=Math.floor(w/fontSize);drops.length=cols;for(let i=0;i<cols;i++){drops[i]=Math.floor(Math.random()*h/fontSize)}})}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initMatrix)}else{initMatrix()}})();
+(function() {
+    'use strict';
+    
+    function initMatrix() {
+        const canvas = document.createElement('canvas');
+        canvas.id = 'matrix-canvas';
+        canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.8;pointer-events:none';
+        
+        if (document.body.firstChild) {
+            document.body.insertBefore(canvas, document.body.firstChild);
+        } else {
+            document.body.appendChild(canvas);
+        }
+        
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+        
+        const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const fontSize = 16;
+        let cols = Math.floor(w / fontSize);
+        const drops = [];
+        
+        for (let i = 0; i < cols; i++) {
+            drops[i] = Math.floor(Math.random() * h / fontSize);
+        }
+        
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > h && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        
+        setInterval(draw, 30);
+        
+        window.addEventListener('resize', function() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+            cols = Math.floor(w / fontSize);
+            drops.length = cols;
+            for (let i = 0; i < cols; i++) {
+                drops[i] = Math.floor(Math.random() * h / fontSize);
+            }
+        });
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMatrix);
+    } else {
+        initMatrix();
+    }
+})();
+</script>
+
+<!-- Mouse Avoidance Effect for Icons -->
+<script>
+(function() {
+    'use strict';
+    
+    function initMouseAvoidance() {
+        // Selectors cho các pseudo-elements (ta sẽ track parent elements)
+        const iconSelectors = [
+            'body > div:first-child',
+            'nav',
+            'footer',
+            'main',
+            'main > div',
+            '.flex.flex-col.min-h-screen',
+            '.mt-12',
+            '.flex-grow'
+        ];
+        
+        const iconElements = [];
+        const avoidanceDistance = 150; // Khoảng cách né (pixels)
+        const avoidanceStrength = 80; // Độ mạnh của hiệu ứng
+        
+        // Collect elements
+        iconSelectors.forEach(selector => {
+            const els = document.querySelectorAll(selector);
+            els.forEach(el => {
+                if (!iconElements.includes(el)) {
+                    iconElements.push(el);
+                }
+            });
+        });
+        
+        // Mouse position
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        // Track mouse
+        document.addEventListener('mousemove', function(e) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        // Animation loop
+        function updateIconPositions() {
+            iconElements.forEach(el => {
+                // Get pseudo-element position (approximate from parent)
+                const rect = el.getBoundingClientRect();
+                
+                // Check ::before
+                const beforeStyle = window.getComputedStyle(el, '::before');
+                if (beforeStyle.content !== 'none' && beforeStyle.content !== '') {
+                    const iconX = rect.left + rect.width / 2;
+                    const iconY = rect.top + rect.height / 2;
+                    
+                    const deltaX = mouseX - iconX;
+                    const deltaY = mouseY - iconY;
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    
+                    if (distance < avoidanceDistance) {
+                        const force = (avoidanceDistance - distance) / avoidanceDistance;
+                        const moveX = -(deltaX / distance) * avoidanceStrength * force;
+                        const moveY = -(deltaY / distance) * avoidanceStrength * force;
+                        
+                        el.style.setProperty('--move-x-before', moveX + 'px');
+                        el.style.setProperty('--move-y-before', moveY + 'px');
+                    } else {
+                        el.style.setProperty('--move-x-before', '0px');
+                        el.style.setProperty('--move-y-before', '0px');
+                    }
+                }
+                
+                // Check ::after
+                const afterStyle = window.getComputedStyle(el, '::after');
+                if (afterStyle.content !== 'none' && afterStyle.content !== '') {
+                    const iconX = rect.right - rect.width / 2;
+                    const iconY = rect.bottom - rect.height / 2;
+                    
+                    const deltaX = mouseX - iconX;
+                    const deltaY = mouseY - iconY;
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    
+                    if (distance < avoidanceDistance) {
+                        const force = (avoidanceDistance - distance) / avoidanceDistance;
+                        const moveX = -(deltaX / distance) * avoidanceStrength * force;
+                        const moveY = -(deltaY / distance) * avoidanceStrength * force;
+                        
+                        el.style.setProperty('--move-x-after', moveX + 'px');
+                        el.style.setProperty('--move-y-after', moveY + 'px');
+                    } else {
+                        el.style.setProperty('--move-x-after', '0px');
+                        el.style.setProperty('--move-y-after', '0px');
+                    }
+                }
+            });
+            
+            requestAnimationFrame(updateIconPositions);
+        }
+        
+        updateIconPositions();
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMouseAvoidance);
+    } else {
+        initMouseAvoidance();
+    }
+})();
+</script>
+
+<!-- Fireworks Effect on Click -->
+<script>
+(function() {
+    'use strict';
+    
+    function initFireworks() {
+        // Create fireworks canvas
+        const canvas = document.createElement('canvas');
+        canvas.id = 'fireworks-canvas';
+        document.body.appendChild(canvas);
+        
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const particles = [];
+        
+        // Particle class
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 8,
+                    y: (Math.random() - 0.5) * 8
+                };
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.015;
+                this.size = Math.random() * 3 + 2;
+            }
+            
+            update() {
+                this.velocity.x *= 0.98;
+                this.velocity.y *= 0.98;
+                this.velocity.y += 0.15; // Gravity
+                
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= this.decay;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+        
+        // Create firework
+        function createFirework(x, y) {
+            const colors = ['#00ff00', '#00ff41', '#39ff14', '#0ff', '#0f0', '#ff0', '#f0f'];
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particles.push(new Particle(x, y, color));
+            }
+        }
+        
+        // Animation loop
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        // Click event
+        document.addEventListener('click', function(e) {
+            createFirework(e.clientX, e.clientY);
+        });
+        
+        // Resize event
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFireworks);
+    } else {
+        initFireworks();
+    }
+})();
 </script>

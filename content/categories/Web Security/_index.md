@@ -1,7 +1,7 @@
 ---
 title: Web security
 description: Học thuật tí
-image: 
+image: image.png
 
 # Badge style
 style:

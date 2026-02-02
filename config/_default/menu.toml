@@ -15,10 +15,4 @@
     [social.params]
         icon = "brand-github"
 
-[[social]]
-    identifier = "youtube"
-    name       = "Youtube"
-    url        = "https://www.youtube.com/@TungPhan-qf4tu"
-
-    [social.params]
-        icon = "brand-github"
+ 

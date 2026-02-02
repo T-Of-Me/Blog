@@ -1,5 +1,5 @@
 ---
-title: "Về tôi"
+title: "About me"
 description: "Giới thiệu về bản thân và các dự án cá nhân"
 date: 2026-02-02
 layout: "single"  # Sử dụng layout single để tránh lỗi Archives
@@ -31,9 +31,9 @@ Tôi tập trung nghiên cứu sâu về các lỗ hổng bảo mật web và x�
 
 Nếu bạn muốn trao đổi về kỹ thuật hoặc hợp tác trong các dự án, hãy liên hệ với tôi qua:
 
-* **Github:** [github.com/your-username](https://github.com/)
-* **Email:** your-email@example.com
-* **Facebook/LinkedIn:** [Link Profile]
-
+* **Github:** [github.com/your-username](https://github.com/T-Of-Me)
+* **Email:** phantung2k4nd@gmail.com
+* **Facebook/LinkedIn:** [https://www.facebook.com/thanh.tung.901453?locale=vi_VN]
+* **Youtube:** [Youtube](https://www.youtube.com/@TungPhan-qf4tu)
 ---
 > *"Security is not a product, but a process."*

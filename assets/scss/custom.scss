@@ -1,4 +1,287 @@
-/* Hacker Theme - Optimized */
+// /* Hacker Theme - Optimized */
+
+// :root {
+//     --primary-color: #00ff00;
+//     --terminal-green: #00ff41;
+//     --accent: #39ff14;
+//     --text-glow: 0 0 5px rgba(0, 255, 0, 0.5);
+// }
+
+// /* === BACKGROUND & BASE === */
+// body {
+//     background-color: #000000 !important;
+//     color: var(--terminal-green);
+// }
+
+// /* Matrix grid effect */
+// body::before {
+//     content: "";
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     background: 
+//         linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, 0.02) 25%, rgba(0, 255, 0, 0.02) 26%, transparent 27%),
+//         linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, 0.02) 25%, rgba(0, 255, 0, 0.02) 26%, transparent 27%);
+//     background-size: 40px 40px;
+//     pointer-events: none;
+//     z-index: 0;
+// }
+
+// /* Scanline effect */
+// .dot-overlay {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
+//     pointer-events: none;
+//     z-index: 998;
+//     animation: scanline 8s linear infinite;
+// }
+
+// @keyframes scanline {
+//     0% { transform: translateY(0); }
+//     100% { transform: translateY(100%); }
+// }
+
+// /* === TERMINAL PROMPT === */
+// h1::before, h2::before {
+//     content: "root@tiwza:~$ ";
+//     color: var(--terminal-green);
+//     font-family: 'Courier New', monospace;
+//     text-shadow: var(--text-glow);
+// }
+
+// /* === FLOATING ICONS === */
+// /* Icon positions và animations */
+// body > div:first-child::before { content: "🔒"; position: fixed; font-size: 65px; left: 10%; top: 20%; }
+// nav::before { content: "💻"; position: fixed; font-size: 70px; right: 15%; top: 30%; }
+// nav::after { content: "⚡"; position: fixed; font-size: 62px; left: 5%; bottom: 25%; }
+// footer::before { content: "🛡️"; position: fixed; font-size: 68px; right: 8%; bottom: 40%; }
+// footer::after { content: "🔐"; position: fixed; font-size: 64px; left: 20%; top: 50%; }
+// main::before { content: "🖥️"; position: fixed; font-size: 72px; right: 25%; top: 15%; }
+// main::after { content: "⚙️"; position: fixed; font-size: 60px; left: 80%; top: 60%; }
+// main > div::before { content: "🔧"; position: fixed; font-size: 66px; left: 12%; top: 70%; }
+// main > div::after { content: "☠️"; position: fixed; font-size: 68px; right: 5%; top: 75%; }
+// .flex.flex-col.min-h-screen::before { content: "🐛"; position: fixed; font-size: 64px; left: 30%; top: 10%; }
+// .flex.flex-col.min-h-screen::after { content: "💣"; position: fixed; font-size: 62px; right: 30%; bottom: 15%; }
+// .mt-12::before { content: "🛰️"; position: fixed; font-size: 66px; left: 45%; top: 5%; }
+// .mt-12::after { content: "🤖"; position: fixed; font-size: 68px; right: 40%; bottom: 10%; }
+// .flex-grow::before { content: "🔑"; position: fixed; font-size: 60px; left: 65%; top: 40%; }
+// .flex-grow::after { content: "👾"; position: fixed; font-size: 70px; left: 50%; top: 85%; }
+
+// /* Common icon styles */
+// body > div:first-child::before, nav::before, nav::after, footer::before, footer::after,
+// main::before, main::after, main > div::before, main > div::after,
+// .flex.flex-col.min-h-screen::before, .flex.flex-col.min-h-screen::after,
+// .mt-12::before, .mt-12::after, .flex-grow::before, .flex-grow::after {
+//     filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+//     z-index: 5;
+//     pointer-events: auto;
+//     cursor: pointer;
+//     transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+// }
+
+// /* Hover effect for all icons */
+// body > div:first-child::before:hover, nav::before:hover, nav::after:hover, 
+// footer::before:hover, footer::after:hover, main::before:hover, main::after:hover,
+// main > div::before:hover, main > div::after:hover,
+// .flex.flex-col.min-h-screen::before:hover, .flex.flex-col.min-h-screen::after:hover,
+// .mt-12::before:hover, .mt-12::after:hover, .flex-grow::before:hover, .flex-grow::after:hover {
+//     transform: scale(1.4) rotate(15deg);
+//     filter: drop-shadow(0 0 35px rgba(57, 255, 20, 1));
+//     animation-play-state: paused;
+// }
+
+// /* Floating animations */
+// body > div:first-child::before { animation: float 20s ease-in-out infinite; }
+// nav::before { animation: float 25s ease-in-out infinite; }
+// nav::after { animation: float 18s ease-in-out infinite; }
+// footer::before { animation: float 22s ease-in-out infinite; }
+// footer::after { animation: float 24s ease-in-out infinite; }
+// main::before { animation: float 19s ease-in-out infinite; }
+// main::after { animation: float 21s ease-in-out infinite; }
+// main > div::before { animation: float 23s ease-in-out infinite; }
+// main > div::after { animation: float 26s ease-in-out infinite; }
+// .flex.flex-col.min-h-screen::before { animation: float 20s ease-in-out infinite; }
+// .flex.flex-col.min-h-screen::after { animation: float 24s ease-in-out infinite; }
+// .mt-12::before { animation: float 22s ease-in-out infinite; }
+// .mt-12::after { animation: float 25s ease-in-out infinite; }
+// .flex-grow::before { animation: float 21s ease-in-out infinite; }
+// .flex-grow::after { animation: float 23s ease-in-out infinite; }
+
+// @keyframes float {
+//     0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0.75; }
+//     25% { transform: translateY(-35px) translateX(25px) rotate(5deg); opacity: 0.95; }
+//     50% { transform: translateY(-55px) translateX(-15px) rotate(-3deg); opacity: 0.85; }
+//     75% { transform: translateY(-25px) translateX(35px) rotate(8deg); opacity: 0.9; }
+// }
+
+// /* === LINKS & TEXT === */
+// a {
+//     color: var(--terminal-green);
+//     text-decoration: none;
+//     border-bottom: 1px dashed var(--terminal-green);
+//     transition: all 0.3s ease;
+//     text-shadow: var(--text-glow);
+// }
+
+// a:hover {
+//     color: var(--accent);
+//     text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+//     border-bottom-color: var(--accent);
+// }
+
+// /* === CODE BLOCKS === */
+// code {
+//     background-color: rgba(0, 0, 0, 0.9);
+//     color: var(--accent);
+//     padding: 3px 8px;
+//     border-radius: 4px;
+//     border: 1px solid var(--terminal-green);
+//     font-family: 'Courier New', monospace;
+//     text-shadow: var(--text-glow);
+// }
+
+// pre {
+//     background-color: #000000;
+//     border: 2px solid var(--terminal-green);
+//     border-radius: 6px;
+//     padding: 20px;
+//     overflow-x: auto;
+//     box-shadow: 0 0 15px rgba(0, 255, 0, 0.3), inset 0 0 15px rgba(0, 255, 0, 0.1);
+// }
+
+// /* === CONTENT ELEMENTS === */
+// article, .article-content {
+//     background-color: rgba(0, 0, 0, 0.85);
+//     border: 1px solid var(--terminal-green);
+//     box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+// }
+
+// img:not(.animate-cat) {
+//     border: 2px solid var(--terminal-green);
+//     box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+//     filter: contrast(1.1) brightness(0.95);
+// }
+
+// img:not(.animate-cat):hover {
+//     box-shadow: 0 0 25px rgba(0, 255, 0, 0.5);
+//     filter: contrast(1.15) brightness(1);
+// }
+
+// blockquote {
+//     border-left: 4px solid var(--terminal-green);
+//     background-color: rgba(0, 255, 0, 0.05);
+//     padding: 15px 25px;
+//     margin: 20px 0;
+//     box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+// }
+
+// blockquote::before {
+//     content: ">>> ";
+//     color: var(--accent);
+//     font-weight: bold;
+//     font-family: monospace;
+// }
+
+// /* === TABLES === */
+// table {
+//     border: 2px solid var(--terminal-green);
+//     box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+//     background-color: rgba(0, 0, 0, 0.9);
+// }
+
+// th {
+//     background-color: rgba(0, 255, 0, 0.1);
+//     color: var(--accent);
+//     text-transform: uppercase;
+//     letter-spacing: 1px;
+// }
+
+// tr:hover {
+//     background-color: rgba(0, 255, 0, 0.05);
+// }
+
+// td, th {
+//     border: 1px solid rgba(0, 255, 0, 0.3);
+// }
+
+// /* === NAVIGATION === */
+// nav {
+//     background-color: rgba(0, 0, 0, 0.95) !important;
+//     border-bottom: 1px solid var(--terminal-green);
+//     box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+// }
+
+// footer {
+//     background-color: rgba(0, 0, 0, 0.95) !important;
+//     border-top: 2px solid var(--terminal-green);
+//     box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+// }
+
+// /* === BUTTONS === */
+// button, .button {
+//     border: 2px solid var(--terminal-green);
+//     background: transparent;
+//     color: var(--terminal-green);
+//     font-family: 'Courier New', monospace;
+//     text-transform: uppercase;
+//     letter-spacing: 2px;
+//     transition: all 0.3s ease;
+// }
+
+// button:hover, .button:hover {
+//     background-color: var(--terminal-green);
+//     color: #000;
+//     box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+//     text-shadow: none;
+// }
+
+// /* === SCROLLBAR === */
+// ::-webkit-scrollbar { width: 10px; height: 10px; }
+// ::-webkit-scrollbar-track { background: #000; border: 1px solid var(--terminal-green); }
+// ::-webkit-scrollbar-thumb { background: var(--terminal-green); box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+// ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+// /* === SELECTION === */
+// ::selection {
+//     background-color: var(--terminal-green);
+//     color: #000;
+//     text-shadow: none;
+// }
+
+// /* === TEXT COLORS === */
+// .text-white, .text-gray-100, .text-gray-200, .text-gray-300 {
+//     color: rgba(0, 255, 0, 0.9) !important;
+//     text-shadow: var(--text-glow);
+// }
+
+// /* === GLITCH EFFECT === */
+// h1:hover { animation: glitch 0.3s infinite; }
+
+// @keyframes glitch {
+//     0%, 100% { transform: translate(0); }
+//     25% { transform: translate(-2px, 2px); }
+//     50% { transform: translate(2px, -2px); }
+//     75% { transform: translate(-2px, -2px); }
+// }
+
+// /* === TABLE OF CONTENTS - RAINBOW COLORS === */
+// .article-content h2, nav a[href^="#"]:not([href*="."]) { color: #00ffff !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
+// .article-content h3 { color: #00ff00 !important; text-shadow: 0 0 10px rgba(0, 255, 0, 0.8); }
+// .article-content h4 { color: #ffff00 !important; text-shadow: 0 0 10px rgba(255, 255, 0, 0.8); }
+// .article-content h5 { color: #ff8800 !important; text-shadow: 0 0 10px rgba(255, 136, 0, 0.8); }
+// .article-content h6 { color: #ff00ff !important; text-shadow: 0 0 10px rgba(255, 0, 255, 0.8); }
+
+// /* === Z-INDEX === */
+// main, article, .article-content { position: relative; z-index: 10; }
+
+
+/* Hacker Theme - Optimized with Matrix Rain Effect */
 
 :root {
     --primary-color: #00ff00;
@@ -11,9 +294,21 @@
 body {
     background-color: #000000 !important;
     color: var(--terminal-green);
+    overflow-x: hidden;
 }
 
-/* Matrix grid effect */
+/* Matrix Rain Canvas Background */
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.8;
+}
+
+/* Matrix grid effect overlay */
 body::before {
     content: "";
     position: fixed;

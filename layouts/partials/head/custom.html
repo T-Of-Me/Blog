@@ -417,3 +417,297 @@
     }
 })();
 </script>
+<!-- Color Picker Button for Matrix Rain -->
+<style>
+#color-picker-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 180px; /* Cách nút Pause 160px */
+    z-index: 10000;
+    background: transparent;
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    padding: 12px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    user-select: none;
+}
+
+#color-picker-btn:hover {
+    background: #00ff00;
+    color: #000;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+    transform: scale(1.05);
+}
+
+#color-picker-btn:active {
+    transform: scale(0.95);
+}
+
+/* Color palette dropdown */
+#color-palette {
+    position: fixed;
+    bottom: 70px;
+    right: 180px;
+    z-index: 10001;
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid #00ff00;
+    border-radius: 8px;
+    padding: 15px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+#color-palette.show {
+    display: flex;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.color-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    border: 1px solid transparent;
+}
+
+.color-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.color-option.active {
+    border-color: currentColor;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.color-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px currentColor;
+}
+
+.color-label {
+    flex: 1;
+    font-weight: bold;
+}
+
+/* Preset colors */
+.color-green { color: #00ff00; }
+.color-cyan { color: #00ffff; }
+.color-blue { color: #0080ff; }
+.color-purple { color: #ff00ff; }
+.color-red { color: #ff0000; }
+.color-orange { color: #ff8800; }
+.color-yellow { color: #ffff00; }
+.color-pink { color: #ff69b4; }
+.color-white { color: #ffffff; }
+.color-rainbow { 
+    background: linear-gradient(90deg, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0080ff, #ff00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+</style>
+
+<script>
+(function() {
+    'use strict';
+    
+    // Matrix color configuration
+    const colorPresets = [
+        { name: 'Matrix Green', color: '#0F0', class: 'color-green' },
+        { name: 'Cyber Cyan', color: '#0FF', class: 'color-cyan' },
+        { name: 'Electric Blue', color: '#0080FF', class: 'color-blue' },
+        { name: 'Neon Purple', color: '#F0F', class: 'color-purple' },
+        { name: 'Hacker Red', color: '#F00', class: 'color-red' },
+        { name: 'Orange Alert', color: '#F80', class: 'color-orange' },
+        { name: 'Warning Yellow', color: '#FF0', class: 'color-yellow' },
+        { name: 'Hot Pink', color: '#FF69B4', class: 'color-pink' },
+        { name: 'Ghost White', color: '#FFF', class: 'color-white' },
+        { name: 'Rainbow Mode', color: 'rainbow', class: 'color-rainbow' }
+    ];
+    
+    let currentColorIndex = 0;
+    let currentColor = colorPresets[0].color;
+    let rainbowMode = false;
+    
+    function initColorPicker() {
+        // Create button
+        const button = document.createElement('button');
+        button.id = 'color-picker-btn';
+        button.innerHTML = '🎨 Color';
+        document.body.appendChild(button);
+        
+        // Create palette
+        const palette = document.createElement('div');
+        palette.id = 'color-palette';
+        document.body.appendChild(palette);
+        
+        // Populate palette
+        colorPresets.forEach((preset, index) => {
+            const option = document.createElement('div');
+            option.className = `color-option ${preset.class}`;
+            if (index === 0) option.classList.add('active');
+            
+            const swatch = document.createElement('div');
+            swatch.className = 'color-swatch';
+            if (preset.color !== 'rainbow') {
+                swatch.style.backgroundColor = preset.color;
+            } else {
+                swatch.style.background = 'linear-gradient(90deg, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0080ff, #ff00ff)';
+            }
+            
+            const label = document.createElement('span');
+            label.className = 'color-label';
+            label.textContent = preset.name;
+            
+            option.appendChild(swatch);
+            option.appendChild(label);
+            palette.appendChild(option);
+            
+            // Click handler
+            option.addEventListener('click', () => {
+                currentColorIndex = index;
+                currentColor = preset.color;
+                rainbowMode = (preset.color === 'rainbow');
+                
+                // Update active state
+                palette.querySelectorAll('.color-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                option.classList.add('active');
+                
+                // Update button color
+                button.style.borderColor = preset.color === 'rainbow' ? '#00ff00' : preset.color;
+                button.style.color = preset.color === 'rainbow' ? '#00ff00' : preset.color;
+                button.style.boxShadow = preset.color === 'rainbow' 
+                    ? '0 0 20px rgba(0, 255, 0, 0.3)' 
+                    : `0 0 20px ${preset.color}80`;
+                
+                // Close palette
+                palette.classList.remove('show');
+            });
+        });
+        
+        // Toggle palette
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            palette.classList.toggle('show');
+        });
+        
+        // Close palette when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!palette.contains(e.target) && e.target !== button) {
+                palette.classList.remove('show');
+            }
+        });
+        
+        // Inject color into Matrix Rain
+        injectColorIntoMatrix();
+    }
+    
+    function injectColorIntoMatrix() {
+        // Override Matrix draw function
+        const canvas = document.getElementById('matrix-canvas');
+        if (!canvas) {
+            setTimeout(injectColorIntoMatrix, 100);
+            return;
+        }
+        
+        const ctx = canvas.getContext('2d');
+        let hue = 0;
+        
+        // Store original draw function
+        const originalRequestAnimationFrame = window.requestAnimationFrame;
+        
+        window.requestAnimationFrame = function(callback) {
+            return originalRequestAnimationFrame(function() {
+                // Update color before drawing
+                if (rainbowMode) {
+                    hue = (hue + 1) % 360;
+                    const rainbowColor = `hsl(${hue}, 100%, 50%)`;
+                    // Patch ctx.fillStyle
+                    const originalFillStyleDescriptor = Object.getOwnPropertyDescriptor(
+                        CanvasRenderingContext2D.prototype, 
+                        'fillStyle'
+                    );
+                    
+                    Object.defineProperty(ctx, 'fillStyle', {
+                        get: function() {
+                            return this._fillStyle;
+                        },
+                        set: function(value) {
+                            if (value === '#0F0' || value === '#0FF' || value.startsWith('#F')) {
+                                this._fillStyle = rainbowColor;
+                            } else {
+                                this._fillStyle = value;
+                            }
+                        }
+                    });
+                } else {
+                    // Reset to normal behavior
+                    if (ctx._fillStyle !== undefined) {
+                        delete ctx.fillStyle;
+                    }
+                }
+                
+                callback();
+            });
+        };
+        
+        // Simpler approach: Modify canvas directly
+        const originalFill = CanvasRenderingContext2D.prototype.fillText;
+        CanvasRenderingContext2D.prototype.fillText = function(text, x, y, maxWidth) {
+            if (this.canvas.id === 'matrix-canvas') {
+                if (rainbowMode) {
+                    hue = (hue + 0.5) % 360;
+                    this.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                } else if (currentColor !== '#0F0') {
+                    if (this.fillStyle === '#0F0' || this.fillStyle === 'rgb(0, 255, 0)') {
+                        this.fillStyle = currentColor;
+                    }
+                }
+            }
+            return originalFill.call(this, text, x, y, maxWidth);
+        };
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initColorPicker, 300);
+        });
+    } else {
+        setTimeout(initColorPicker, 300);
+    }
+})();
+</script>

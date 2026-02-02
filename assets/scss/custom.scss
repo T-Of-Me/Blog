@@ -1,22 +1,19 @@
-/*
-    Hacker Theme - Black background with interactive animated icons (CSS only)
-*/
+/* Hacker Theme - Optimized */
 
 :root {
     --primary-color: #00ff00;
     --terminal-green: #00ff41;
     --accent: #39ff14;
-    --bg-dark: #000000;
     --text-glow: 0 0 5px rgba(0, 255, 0, 0.5);
 }
 
-/* Nền đen hoàn toàn */
+/* === BACKGROUND & BASE === */
 body {
     background-color: #000000 !important;
     color: var(--terminal-green);
 }
 
-/* Matrix grid effect nhẹ */
+/* Matrix grid effect */
 body::before {
     content: "";
     position: fixed;
@@ -39,13 +36,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: repeating-linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15) 1px,
-        transparent 1px,
-        transparent 2px
-    );
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15) 1px, transparent 1px, transparent 2px);
     pointer-events: none;
     z-index: 998;
     animation: scanline 8s linear infinite;
@@ -56,7 +47,7 @@ body::before {
     100% { transform: translateY(100%); }
 }
 
-/* Terminal prompt tùy chỉnh */
+/* === TERMINAL PROMPT === */
 h1::before, h2::before {
     content: "root@tiwza:~$ ";
     color: var(--terminal-green);
@@ -64,507 +55,72 @@ h1::before, h2::before {
     text-shadow: var(--text-glow);
 }
 
-/* Container cho các icons - phải thêm vào HTML */
-/* Hoặc dùng các pseudo-elements có sẵn */
+/* === FLOATING ICONS === */
+/* Icon positions và animations */
+body > div:first-child::before { content: "🔒"; position: fixed; font-size: 65px; left: 10%; top: 20%; }
+nav::before { content: "💻"; position: fixed; font-size: 70px; right: 15%; top: 30%; }
+nav::after { content: "⚡"; position: fixed; font-size: 62px; left: 5%; bottom: 25%; }
+footer::before { content: "🛡️"; position: fixed; font-size: 68px; right: 8%; bottom: 40%; }
+footer::after { content: "🔐"; position: fixed; font-size: 64px; left: 20%; top: 50%; }
+main::before { content: "🖥️"; position: fixed; font-size: 72px; right: 25%; top: 15%; }
+main::after { content: "⚙️"; position: fixed; font-size: 60px; left: 80%; top: 60%; }
+main > div::before { content: "🔧"; position: fixed; font-size: 66px; left: 12%; top: 70%; }
+main > div::after { content: "☠️"; position: fixed; font-size: 68px; right: 5%; top: 75%; }
+.flex.flex-col.min-h-screen::before { content: "🐛"; position: fixed; font-size: 64px; left: 30%; top: 10%; }
+.flex.flex-col.min-h-screen::after { content: "💣"; position: fixed; font-size: 62px; right: 30%; bottom: 15%; }
+.mt-12::before { content: "🛰️"; position: fixed; font-size: 66px; left: 45%; top: 5%; }
+.mt-12::after { content: "🤖"; position: fixed; font-size: 68px; right: 40%; bottom: 10%; }
+.flex-grow::before { content: "🔑"; position: fixed; font-size: 60px; left: 65%; top: 40%; }
+.flex-grow::after { content: "👾"; position: fixed; font-size: 70px; left: 50%; top: 85%; }
 
-/* Icon 1 - Lock 🔒 - Top Left */
-body > div:first-child::before {
-    content: "🔒";
-    position: fixed;
-    font-size: 65px;
-    left: 10%;
-    top: 20%;
+/* Common icon styles */
+body > div:first-child::before, nav::before, nav::after, footer::before, footer::after,
+main::before, main::after, main > div::before, main > div::after,
+.flex.flex-col.min-h-screen::before, .flex.flex-col.min-h-screen::after,
+.mt-12::before, .mt-12::after, .flex-grow::before, .flex-grow::after {
     filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float1 20s ease-in-out infinite;
     z-index: 5;
     pointer-events: auto;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-body > div:first-child::before:hover {
-    transform: scale(1.3) rotate(15deg) translate(40px, -40px);
-    filter: drop-shadow(0 0 30px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 2 - Terminal 💻 - Top Right */
-nav::before {
-    content: "💻";
-    position: fixed;
-    font-size: 70px;
-    right: 15%;
-    top: 30%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float2 25s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-nav::before:hover {
-    transform: scale(1.4) rotate(-15deg) translate(-50px, -50px);
+/* Hover effect for all icons */
+body > div:first-child::before:hover, nav::before:hover, nav::after:hover, 
+footer::before:hover, footer::after:hover, main::before:hover, main::after:hover,
+main > div::before:hover, main > div::after:hover,
+.flex.flex-col.min-h-screen::before:hover, .flex.flex-col.min-h-screen::after:hover,
+.mt-12::before:hover, .mt-12::after:hover, .flex-grow::before:hover, .flex-grow::after:hover {
+    transform: scale(1.4) rotate(15deg);
     filter: drop-shadow(0 0 35px rgba(57, 255, 20, 1));
     animation-play-state: paused;
 }
 
-/* Icon 3 - Lightning ⚡ - Bottom Left */
-nav::after {
-    content: "⚡";
-    position: fixed;
-    font-size: 62px;
-    left: 5%;
-    bottom: 25%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float3 18s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+/* Floating animations */
+body > div:first-child::before { animation: float 20s ease-in-out infinite; }
+nav::before { animation: float 25s ease-in-out infinite; }
+nav::after { animation: float 18s ease-in-out infinite; }
+footer::before { animation: float 22s ease-in-out infinite; }
+footer::after { animation: float 24s ease-in-out infinite; }
+main::before { animation: float 19s ease-in-out infinite; }
+main::after { animation: float 21s ease-in-out infinite; }
+main > div::before { animation: float 23s ease-in-out infinite; }
+main > div::after { animation: float 26s ease-in-out infinite; }
+.flex.flex-col.min-h-screen::before { animation: float 20s ease-in-out infinite; }
+.flex.flex-col.min-h-screen::after { animation: float 24s ease-in-out infinite; }
+.mt-12::before { animation: float 22s ease-in-out infinite; }
+.mt-12::after { animation: float 25s ease-in-out infinite; }
+.flex-grow::before { animation: float 21s ease-in-out infinite; }
+.flex-grow::after { animation: float 23s ease-in-out infinite; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0.75; }
+    25% { transform: translateY(-35px) translateX(25px) rotate(5deg); opacity: 0.95; }
+    50% { transform: translateY(-55px) translateX(-15px) rotate(-3deg); opacity: 0.85; }
+    75% { transform: translateY(-25px) translateX(35px) rotate(8deg); opacity: 0.9; }
 }
 
-nav::after:hover {
-    transform: scale(1.35) rotate(20deg) translate(45px, 45px);
-    filter: drop-shadow(0 0 32px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 4 - Shield 🛡️ - Bottom Right */
-footer::before {
-    content: "🛡️";
-    position: fixed;
-    font-size: 68px;
-    right: 8%;
-    bottom: 40%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float4 22s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-footer::before:hover {
-    transform: scale(1.38) rotate(-12deg) translate(-48px, 48px);
-    filter: drop-shadow(0 0 34px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 5 - Locked 🔐 - Center Left */
-footer::after {
-    content: "🔐";
-    position: fixed;
-    font-size: 64px;
-    left: 20%;
-    top: 50%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float5 24s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-footer::after:hover {
-    transform: scale(1.32) rotate(18deg) translate(42px, -42px);
-    filter: drop-shadow(0 0 33px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 6 - Desktop 🖥️ - Top Center Right */
-main::before {
-    content: "🖥️";
-    position: fixed;
-    font-size: 72px;
-    right: 25%;
-    top: 15%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float6 19s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-main::before:hover {
-    transform: scale(1.42) rotate(-18deg) translate(-52px, -52px);
-    filter: drop-shadow(0 0 36px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 7 - Gear ⚙️ - Right Center */
-main::after {
-    content: "⚙️";
-    position: fixed;
-    font-size: 60px;
-    left: 80%;
-    top: 60%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float7 21s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-main::after:hover {
-    transform: scale(1.36) rotate(360deg) translate(-46px, -46px);
-    filter: drop-shadow(0 0 34px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 8 - Wrench 🔧 - Bottom Left */
-main > div::before {
-    content: "🔧";
-    position: fixed;
-    font-size: 66px;
-    left: 12%;
-    top: 70%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float8 23s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-main > div::before:hover {
-    transform: scale(1.34) rotate(-25deg) translate(44px, 44px);
-    filter: drop-shadow(0 0 33px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 9 - Skull ☠️ - Bottom Far Right */
-main > div::after {
-    content: "☠️";
-    position: fixed;
-    font-size: 68px;
-    right: 5%;
-    top: 75%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float9 26s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-main > div::after:hover {
-    transform: scale(1.4) rotate(22deg) translate(-50px, 50px);
-    filter: drop-shadow(0 0 35px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 10 - Bug 🐛 - Top Center Left */
-.flex.flex-col.min-h-screen::before {
-    content: "🐛";
-    position: fixed;
-    font-size: 64px;
-    left: 30%;
-    top: 10%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float10 20s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.flex.flex-col.min-h-screen::before:hover {
-    transform: scale(1.36) rotate(16deg) translate(46px, -46px);
-    filter: drop-shadow(0 0 34px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 11 - Bomb 💣 - Bottom Center */
-.flex.flex-col.min-h-screen::after {
-    content: "💣";
-    position: fixed;
-    font-size: 62px;
-    right: 30%;
-    bottom: 15%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float11 24s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.flex.flex-col.min-h-screen::after:hover {
-    transform: scale(1.4) rotate(-20deg) translate(-50px, 50px);
-    filter: drop-shadow(0 0 36px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 12 - Satellite 🛰️ - Top Center */
-.mt-12::before {
-    content: "🛰️";
-    position: fixed;
-    font-size: 66px;
-    left: 45%;
-    top: 5%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float12 22s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.mt-12::before:hover {
-    transform: scale(1.38) rotate(14deg) translate(48px, -48px);
-    filter: drop-shadow(0 0 35px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 13 - Robot 🤖 - Bottom Center Right */
-.mt-12::after {
-    content: "🤖";
-    position: fixed;
-    font-size: 68px;
-    right: 40%;
-    bottom: 10%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float13 25s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.mt-12::after:hover {
-    transform: scale(1.42) rotate(-16deg) translate(-52px, 52px);
-    filter: drop-shadow(0 0 36px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 14 - Key 🔑 - Right Center */
-.flex-grow::before {
-    content: "🔑";
-    position: fixed;
-    font-size: 60px;
-    left: 65%;
-    top: 40%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float14 21s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.flex-grow::before:hover {
-    transform: scale(1.35) rotate(24deg) translate(-45px, -45px);
-    filter: drop-shadow(0 0 33px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Icon 15 - Alien 👾 - Bottom Center */
-.flex-grow::after {
-    content: "👾";
-    position: fixed;
-    font-size: 70px;
-    left: 50%;
-    top: 85%;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    animation: float15 23s ease-in-out infinite;
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.flex-grow::after:hover {
-    transform: scale(1.45) rotate(-22deg) translate(55px, 55px);
-    filter: drop-shadow(0 0 38px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Animations với nhiều biến thể */
-@keyframes float1 {
-    0%, 100% {
-        transform: translateY(0px) translateX(0px) rotate(0deg);
-        opacity: 0.75;
-    }
-    25% {
-        transform: translateY(-35px) translateX(25px) rotate(5deg);
-        opacity: 0.95;
-    }
-    50% {
-        transform: translateY(-55px) translateX(-15px) rotate(-3deg);
-        opacity: 0.85;
-    }
-    75% {
-        transform: translateY(-25px) translateX(35px) rotate(8deg);
-        opacity: 0.9;
-    }
-}
-
-@keyframes float2 {
-    0%, 100% {
-        transform: translateY(0px) translateX(0px) rotate(0deg);
-        opacity: 0.8;
-    }
-    33% {
-        transform: translateY(-45px) translateX(-30px) rotate(-6deg);
-        opacity: 0.95;
-    }
-    66% {
-        transform: translateY(-65px) translateX(20px) rotate(4deg);
-        opacity: 0.85;
-    }
-}
-
-@keyframes float3 {
-    0%, 100% {
-        transform: translateY(0px) translateX(0px) rotate(0deg);
-        opacity: 0.75;
-    }
-    50% {
-        transform: translateY(-50px) translateX(25px) rotate(-5deg);
-        opacity: 0.95;
-    }
-}
-
-@keyframes float4 {
-    0%, 100% {
-        transform: translateY(0px) translateX(0px) scale(1);
-        opacity: 0.77;
-    }
-    50% {
-        transform: translateY(-40px) translateX(-20px) scale(1.1);
-        opacity: 0.93;
-    }
-}
-
-@keyframes float5 {
-    0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-        opacity: 0.78;
-    }
-    50% {
-        transform: translateY(-45px) rotate(12deg);
-        opacity: 0.94;
-    }
-}
-
-@keyframes float6 {
-    0%, 100% {
-        transform: translateY(0px) translateX(0px);
-        opacity: 0.76;
-    }
-    33% {
-        transform: translateY(-30px) translateX(25px);
-        opacity: 0.9;
-    }
-    66% {
-        transform: translateY(-55px) translateX(-12px);
-        opacity: 0.85;
-    }
-}
-
-@keyframes float7 {
-    0%, 100% {
-        transform: rotate(0deg) translateY(0px);
-        opacity: 0.75;
-    }
-    50% {
-        transform: rotate(180deg) translateY(-35px);
-        opacity: 0.95;
-    }
-}
-
-@keyframes float8 {
-    0%, 100% {
-        transform: rotate(0deg) scale(1);
-        opacity: 0.78;
-    }
-    50% {
-        transform: rotate(-180deg) scale(1.15);
-        opacity: 0.92;
-    }
-}
-
-@keyframes float9 {
-    0%, 100% {
-        transform: translateX(0px) translateY(0px) rotate(0deg);
-        opacity: 0.77;
-    }
-    50% {
-        transform: translateX(-35px) translateY(-45px) rotate(15deg);
-        opacity: 0.94;
-    }
-}
-
-@keyframes float10 {
-    0%, 100% {
-        transform: translateY(0px) scale(1);
-        opacity: 0.79;
-    }
-    50% {
-        transform: translateY(-40px) scale(1.12);
-        opacity: 0.93;
-    }
-}
-
-@keyframes float11 {
-    0%, 100% {
-        transform: translateX(0px) rotate(0deg);
-        opacity: 0.76;
-    }
-    50% {
-        transform: translateX(30px) rotate(-12deg);
-        opacity: 0.91;
-    }
-}
-
-@keyframes float12 {
-    0%, 100% {
-        transform: translateY(0px) translateX(0px);
-        opacity: 0.75;
-    }
-    50% {
-        transform: translateY(-50px) translateX(35px);
-        opacity: 0.95;
-    }
-}
-
-@keyframes float13 {
-    0%, 100% {
-        transform: scale(1) rotate(0deg);
-        opacity: 0.8;
-    }
-    50% {
-        transform: scale(1.14) rotate(6deg);
-        opacity: 0.94;
-    }
-}
-
-@keyframes float14 {
-    0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-        opacity: 0.77;
-    }
-    50% {
-        transform: translateY(-42px) rotate(-16deg);
-        opacity: 0.92;
-    }
-}
-
-@keyframes float15 {
-    0%, 100% {
-        transform: translateX(0px) translateY(0px) scale(1);
-        opacity: 0.79;
-    }
-    50% {
-        transform: translateX(-25px) translateY(-48px) scale(1.1);
-        opacity: 0.95;
-    }
-}
-
-/* Links với hacker style */
+/* === LINKS & TEXT === */
 a {
     color: var(--terminal-green);
     text-decoration: none;
@@ -579,7 +135,7 @@ a:hover {
     border-bottom-color: var(--accent);
 }
 
-/* Code blocks - Terminal style */
+/* === CODE BLOCKS === */
 code {
     background-color: rgba(0, 0, 0, 0.9);
     color: var(--accent);
@@ -596,19 +152,16 @@ pre {
     border-radius: 6px;
     padding: 20px;
     overflow-x: auto;
-    box-shadow: 
-        0 0 15px rgba(0, 255, 0, 0.3),
-        inset 0 0 15px rgba(0, 255, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3), inset 0 0 15px rgba(0, 255, 0, 0.1);
 }
 
-/* Articles/Posts - Cyber frame */
+/* === CONTENT ELEMENTS === */
 article, .article-content {
     background-color: rgba(0, 0, 0, 0.85);
     border: 1px solid var(--terminal-green);
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
 }
 
-/* Images - Scanline effect */
 img:not(.animate-cat) {
     border: 2px solid var(--terminal-green);
     box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
@@ -620,7 +173,6 @@ img:not(.animate-cat):hover {
     filter: contrast(1.15) brightness(1);
 }
 
-/* Blockquotes - Terminal output */
 blockquote {
     border-left: 4px solid var(--terminal-green);
     background-color: rgba(0, 255, 0, 0.05);
@@ -636,7 +188,7 @@ blockquote::before {
     font-family: monospace;
 }
 
-/* Tables - Data terminal */
+/* === TABLES === */
 table {
     border: 2px solid var(--terminal-green);
     box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
@@ -658,14 +210,20 @@ td, th {
     border: 1px solid rgba(0, 255, 0, 0.3);
 }
 
-/* Navigation với cyber border */
+/* === NAVIGATION === */
 nav {
     background-color: rgba(0, 0, 0, 0.95) !important;
     border-bottom: 1px solid var(--terminal-green);
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
 }
 
-/* Buttons - Cyber style */
+footer {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    border-top: 2px solid var(--terminal-green);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+/* === BUTTONS === */
 button, .button {
     border: 2px solid var(--terminal-green);
     background: transparent;
@@ -683,43 +241,27 @@ button:hover, .button:hover {
     text-shadow: none;
 }
 
-/* Scrollbar hacker style */
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-}
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #000; border: 1px solid var(--terminal-green); }
+::-webkit-scrollbar-thumb { background: var(--terminal-green); box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-::-webkit-scrollbar-track {
-    background: #000;
-    border: 1px solid var(--terminal-green);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--terminal-green);
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--accent);
-}
-
-/* Selection color */
+/* === SELECTION === */
 ::selection {
     background-color: var(--terminal-green);
     color: #000;
     text-shadow: none;
 }
 
-/* Text colors */
+/* === TEXT COLORS === */
 .text-white, .text-gray-100, .text-gray-200, .text-gray-300 {
     color: rgba(0, 255, 0, 0.9) !important;
     text-shadow: var(--text-glow);
 }
 
-/* Glitch effect cho title khi hover */
-h1:hover {
-    animation: glitch 0.3s infinite;
-}
+/* === GLITCH EFFECT === */
+h1:hover { animation: glitch 0.3s infinite; }
 
 @keyframes glitch {
     0%, 100% { transform: translate(0); }
@@ -728,763 +270,12 @@ h1:hover {
     75% { transform: translate(-2px, -2px); }
 }
 
-/* Footer cyber style */
-footer {
-    background-color: rgba(0, 0, 0, 0.95) !important;
-    border-top: 2px solid var(--terminal-green);
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
-}
-
-/* Animate shine với màu xanh */
-@keyframes shine {
-    0%, 100% { 
-        color: rgba(0, 255, 0, 0.6);
-        text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
-    }
-    50% { 
-        color: rgba(57, 255, 20, 1);
-        text-shadow: 0 0 15px rgba(57, 255, 20, 0.8);
-    }
-}
-
-/* Ensure main content has proper z-index */
-main, article, .article-content {
-    position: relative;
-    z-index: 10;
-}
-
-/* Table of Contents - Rainbow colors cho từng level */
-
-/* Level 1 - Cyan/Aqua */
-.article-content h2,
-nav a[href^="#"]:not([href*="."]) {
-    color: #00ffff !important;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-}
-
-/* Level 2 - Green (giữ nguyên) */
-.article-content h3 {
-    color: #00ff00 !important;
-    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-}
-
-/* Level 3 - Yellow */
-.article-content h4 {
-    color: #ffff00 !important;
-    text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
-}
-
-/* Level 4 - Orange */
-.article-content h5 {
-    color: #ff8800 !important;
-    text-shadow: 0 0 10px rgba(255, 136, 0, 0.8);
-}
-
-/* Level 5 - Pink/Magenta */
-.article-content h6 {
-    color: #ff00ff !important;
-    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
-}
-
-/* TOC links theo màu heading tương ứng */
-/* Nếu TOC có class riêng, target như này: */
-.table-of-contents li {
-    transition: all 0.3s ease;
-}
-
-/* Level 1 TOC - Cyan */
-.table-of-contents > ul > li > a {
-    color: #00ffff !important;
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.6);
-}
-
-.table-of-contents > ul > li > a:hover {
-    color: #00ffff !important;
-    text-shadow: 0 0 15px rgba(0, 255, 255, 1);
-}
-
-/* Level 2 TOC - Green */
-.table-of-contents > ul > li > ul > li > a {
-    color: #00ff00 !important;
-    text-shadow: 0 0 5px rgba(0, 255, 0, 0.6);
-}
-
-.table-of-contents > ul > li > ul > li > a:hover {
-    color: #39ff14 !important;
-    text-shadow: 0 0 15px rgba(57, 255, 20, 1);
-}
-
-/* Level 3 TOC - Yellow */
-.table-of-contents > ul > li > ul > li > ul > li > a {
-    color: #ffff00 !important;
-    text-shadow: 0 0 5px rgba(255, 255, 0, 0.6);
-}
-
-.table-of-contents > ul > li > ul > li > ul > li > a:hover {
-    color: #ffff44 !important;
-    text-shadow: 0 0 15px rgba(255, 255, 68, 1);
-}
-
-/* Level 4 TOC - Orange */
-.table-of-contents > ul > li > ul > li > ul > li > ul > li > a {
-    color: #ff8800 !important;
-    text-shadow: 0 0 5px rgba(255, 136, 0, 0.6);
-}
-
-/* Level 5 TOC - Pink */
-.table-of-contents > ul > li > ul > li > ul > li > ul > li > ul > li > a {
-    color: #ff00ff !important;
-    text-shadow: 0 0 5px rgba(255, 0, 255, 0.6);
-}
-
-/* Hoặc style đơn giản hơn với :nth-child */
-.table-of-contents li:nth-child(1) > a {
-    color: #00ffff !important;
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.7);
-}
-
-.table-of-contents li:nth-child(2) > a {
-    color: #00ff00 !important;
-    text-shadow: 0 0 8px rgba(0, 255, 0, 0.7);
-}
-
-.table-of-contents li:nth-child(3) > a {
-    color: #ffff00 !important;
-    text-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
-}
-
-.table-of-contents li:nth-child(4) > a {
-    color: #ff8800 !important;
-    text-shadow: 0 0 8px rgba(255, 136, 0, 0.7);
-}
-
-.table-of-contents li:nth-child(5) > a {
-    color: #ff00ff !important;
-    text-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
-}
-
-.table-of-contents li:nth-child(6) > a {
-    color: #ff0066 !important;
-    text-shadow: 0 0 8px rgba(255, 0, 102, 0.7);
-}
-
-.table-of-contents li:nth-child(7) > a {
-    color: #00ff99 !important;
-    text-shadow: 0 0 8px rgba(0, 255, 153, 0.7);
-}
-
-/* Rainbow gradient cho terminal prompt nếu muốn */
-h1::before, h2::before {
-    background: linear-gradient(90deg, 
-        #00ffff 0%, 
-        #00ff00 20%, 
-        #ffff00 40%, 
-        #ff8800 60%, 
-        #ff00ff 80%, 
-        #00ffff 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* Rainbow colors cho Table of Contents - Target đúng elements */
-
-/* Section 1 - 0xNote - Cyan */
-#TableOfContents > ul > li:nth-child(1) > a,
-.table-of-contents > ul > li:nth-child(1) > a {
-    color: #ff00ff !important; /* Magenta */
-    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
-}
-
-/* Section 1.1, 1.2, 1.3 - Green to Yellow gradient */
-#TableOfContents > ul > li:nth-child(1) > ul > li:nth-child(1) > a {
-    color: #00ff00 !important; /* Green */
-    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-}
-
-#TableOfContents > ul > li:nth-child(1) > ul > li:nth-child(2) > a {
-    color: #88ff00 !important; /* Yellow-Green */
-    text-shadow: 0 0 10px rgba(136, 255, 0, 0.8);
-}
-
-#TableOfContents > ul > li:nth-child(1) > ul > li:nth-child(3) > a {
-    color: #ffff00 !important; /* Yellow */
-    text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
-}
-
-/* Section 1.3.1 - Orange */
-#TableOfContents > ul > li:nth-child(1) > ul > li:nth-child(3) > ul > li > a {
-    color: #ff8800 !important;
-    text-shadow: 0 0 10px rgba(255, 136, 0, 0.8);
-}
-
-/* Section 2 - pdf.exe - Red */
-#TableOfContents > ul > li:nth-child(2) > a {
-    color: #ff0000 !important;
-    text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
-}
-
-/* Section 2.1 - Cyan */
-#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(1) > a {
-    color: #00ffff !important;
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-}
-
-/* Section 2.2 - Green */
-#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(2) > a {
-    color: #00ff99 !important;
-    text-shadow: 0 0 10px rgba(0, 255, 153, 0.8);
-}
-
-/* Section 2.3 - Yellow */
-#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(3) > a {
-    color: #ffff00 !important;
-    text-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
-}
-
-/* Section 2.4 - Orange */
-#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(4) > a {
-    color: #ff6600 !important;
-    text-shadow: 0 0 10px rgba(255, 102, 0, 0.8);
-}
-
-/* Section 2.5 - Red */
-#TableOfContents > ul > li:nth-child(2) > ul > li:nth-child(5) > a {
-    color: #ff3300 !important;
-    text-shadow: 0 0 10px rgba(255, 51, 0, 0.8);
-}
-
-/* Section 3 - Smol Web - Purple */
-#TableOfContents > ul > li:nth-child(3) > a {
-    color: #9900ff !important;
-    text-shadow: 0 0 10px rgba(153, 0, 255, 0.8);
-}
-
-/* Section 3.1 - Pink */
-#TableOfContents > ul > li:nth-child(3) > ul > li:nth-child(1) > a {
-    color: #ff0099 !important;
-    text-shadow: 0 0 10px rgba(255, 0, 153, 0.8);
-}
-
-/* Section 3.1.1 - Lime */
-#TableOfContents > ul > li:nth-child(3) > ul > li:nth-child(1) > ul > li > a {
-    color: #00ff00 !important;
-    text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-}
-
-/* Hover effect */
-#TableOfContents a:hover {
-    filter: brightness(1.4) !important;
-    text-shadow: 0 0 20px currentColor !important;
-    transform: translateX(5px);
-    transition: all 0.3s ease;
-}
-
-/* Nếu theme dùng nav thay vì #TableOfContents */
-nav[aria-label="Table of Contents"] li:nth-child(1) > a,
-.toc li:nth-child(1) > a {
-    color: #ff00ff !important;
-}
-
-nav[aria-label="Table of Contents"] li:nth-child(2) > a,
-.toc li:nth-child(2) > a {
-    color: #ff0000 !important;
-}
-
-nav[aria-label="Table of Contents"] li:nth-child(3) > a,
-.toc li:nth-child(3) > a {
-    color: #9900ff !important;
-}
-
-/* Universal fallback - áp dụng cho mọi link trong TOC */
-[class*="table-of-contents"] a,
-[class*="toc"] a,
-[id*="TableOfContents"] a {
-    transition: all 0.3s ease;
-}
-
-/* Specific target theo href nếu cần */
-a[href="#0xnote"] {
-    color: #ff00ff !important;
-    text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
-}
-
-a[href*="overview"]:nth-of-type(1) {
-    color: #00ff00 !important;
-}
-
-a[href*="solve"] {
-    color: #88ff00 !important;
-}
-
-a[href*="exploit"] {
-    color: #ffff00 !important;
-}
-
-a[href*="pdf"] {
-    color: #ff0000 !important;
-}
-
-a[href*="next"] {
-    color: #00ff99 !important;
-}
-
-a[href*="python"] {
-    color: #ffff00 !important;
-}
-
-a[href*="pdfkit"] {
-    color: #ff6600 !important;
-}
-
-a[href*="final"] {
-    color: #ff3300 !important;
-}
-
-a[href*="smol"] {
-    color: #9900ff !important;
-}
-
-// ========================================
-// HIỆU ỨNG CLICK VÀ VUỐT CHUỘT
-// ========================================
-
-// Variables
-$primary-color: #3498db;
-$secondary-color: #e74c3c;
-$success-color: #27ae60;
-$purple-gradient: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
-
-// Mixins
-@mixin button-base {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-// ========================================
-// 1. RIPPLE EFFECT (Click)
-// ========================================
-.ripple-button {
-  @include button-base;
-  position: relative;
-  overflow: hidden;
-  background: $primary-color;
-  color: white;
-  border-radius: 8px;
-
-  &:hover {
-    background: darken($primary-color, 10%);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
-  }
-
-  &:active::before {
-    width: 300px;
-    height: 300px;
-  }
-}
-
-// ========================================
-// 2. PRESS DOWN EFFECT (Click)
-// ========================================
-.press-button {
-  @include button-base;
-  padding: 15px 30px;
-  background: $purple-gradient;
-  color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  }
-
-  &:active {
-    transform: translateY(1px) scale(0.98);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  }
-}
-
-// ========================================
-// 3. GLOW EFFECT (Click)
-// ========================================
-.glow-button {
-  @include button-base;
-  background: $secondary-color;
-  color: white;
-  border-radius: 25px;
-  box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
-
-  &:hover {
-    box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
-  }
-
-  &:active {
-    box-shadow: 0 0 30px rgba(231, 76, 60, 0.9),
-                0 0 60px rgba(231, 76, 60, 0.6);
-    transform: scale(0.95);
-  }
-}
-
-// ========================================
-// 4. SWIPE/DRAG CARD (Vuốt chuột)
-// ========================================
-.swipe-card {
-  width: 300px;
-  height: 200px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  cursor: grab;
-  user-select: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-
-  &:hover {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  }
-
-  &:active {
-    cursor: grabbing;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-    transform: scale(1.02);
-  }
-}
-
-// ========================================
-// 5. SLIDE FILL EFFECT (Click)
-// ========================================
-.slide-button {
-  @include button-base;
-  position: relative;
-  padding: 12px 30px;
-  color: $primary-color;
-  border: 2px solid $primary-color;
-  background: transparent;
-  overflow: hidden;
-  z-index: 1;
-  transition: color 0.4s;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: $primary-color;
-    transition: left 0.4s ease;
-    z-index: -1;
-  }
-
-  &:hover::before {
-    left: 0;
-  }
-
-  &:hover {
-    color: white;
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
-}
-
-// ========================================
-// 6. PULSE EFFECT (Click)
-// ========================================
-.pulse-button {
-  @include button-base;
-  background: $success-color;
-  color: white;
-  border-radius: 50px;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50px;
-    background: inherit;
-    opacity: 0;
-    z-index: -1;
-  }
-
-  &:active::after {
-    animation: pulse 0.6s ease-out;
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1.3);
-    opacity: 0;
-  }
-}
-
-// ========================================
-// 7. TILT CARD (Vuốt chuột)
-// ========================================
-.tilt-card {
-  width: 250px;
-  height: 350px;
-  background: $purple-gradient;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: transform 0.1s ease-out;
-  transform-style: preserve-3d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  
-  &:hover {
-    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-  }
-
-  // Cần JavaScript để thêm transform động khi di chuyển chuột
-}
-
-// ========================================
-// 8. BORDER ANIMATION (Click)
-// ========================================
-.border-button {
-  @include button-base;
-  position: relative;
-  padding: 15px 30px;
-  background: transparent;
-  color: #8e44ad;
-  font-weight: 600;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background: #8e44ad;
-    transition: width 0.3s ease;
-  }
-
-  &::before {
-    top: 0;
-    left: 0;
-  }
-
-  &::after {
-    bottom: 0;
-    right: 0;
-  }
-
-  span {
-    position: relative;
-    
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      width: 2px;
-      height: 0;
-      background: #8e44ad;
-      transition: height 0.3s ease;
-    }
-
-    &::before {
-      top: 0;
-      left: -15px;
-    }
-
-    &::after {
-      bottom: 0;
-      right: -15px;
-    }
-  }
-
-  &:hover::before,
-  &:hover::after {
-    width: 100%;
-  }
-
-  &:hover span::before,
-  &:hover span::after {
-    height: 100%;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-// ========================================
-// 9. BOUNCE EFFECT (Click)
-// ========================================
-.bounce-button {
-  @include button-base;
-  background: #f39c12;
-  color: white;
-  border-radius: 8px;
-
-  &:active {
-    animation: bounce 0.5s ease;
-  }
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  25% {
-    transform: translateY(-10px);
-  }
-  50% {
-    transform: translateY(0);
-  }
-  75% {
-    transform: translateY(-5px);
-  }
-}
-
-// ========================================
-// 10. SHAKE EFFECT (Click)
-// ========================================
-.shake-button {
-  @include button-base;
-  background: #e67e22;
-  color: white;
-  border-radius: 8px;
-
-  &:active {
-    animation: shake 0.5s ease;
-  }
-}
-
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-5px);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(5px);
-  }
-}
-
-// ========================================
-// 11. NEON EFFECT (Hover & Click)
-// ========================================
-.neon-button {
-  @include button-base;
-  background: #1a1a1a;
-  color: #00ff88;
-  border: 2px solid #00ff88;
-  border-radius: 8px;
-  text-shadow: 0 0 5px #00ff88;
-  box-shadow: 0 0 10px #00ff88;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: #00ff88;
-    color: #1a1a1a;
-    text-shadow: none;
-    box-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
-  }
-
-  &:active {
-    transform: scale(0.95);
-    box-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88;
-  }
-}
-
-// ========================================
-// 12. GRADIENT SHIFT (Hover)
-// ========================================
-.gradient-button {
-  @include button-base;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-  background-size: 200% 100%;
-  color: white;
-  border-radius: 25px;
-  transition: background-position 0.5s ease;
-
-  &:hover {
-    background-position: 100% 0;
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
-}
-
-// ========================================
-// DEMO CONTAINER STYLES
-// ========================================
-.demo-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 40px;
-  background: #f5f5f5;
-  min-height: 100vh;
-  align-items: flex-start;
-  justify-content: center;
-
-  .demo-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-
-    .label {
-      font-size: 12px;
-      color: #666;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-  }
-}
-
-// Reset
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+/* === TABLE OF CONTENTS - RAINBOW COLORS === */
+.article-content h2, nav a[href^="#"]:not([href*="."]) { color: #00ffff !important; text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
+.article-content h3 { color: #00ff00 !important; text-shadow: 0 0 10px rgba(0, 255, 0, 0.8); }
+.article-content h4 { color: #ffff00 !important; text-shadow: 0 0 10px rgba(255, 255, 0, 0.8); }
+.article-content h5 { color: #ff8800 !important; text-shadow: 0 0 10px rgba(255, 136, 0, 0.8); }
+.article-content h6 { color: #ff00ff !important; text-shadow: 0 0 10px rgba(255, 0, 255, 0.8); }
+
+/* === Z-INDEX === */
+main, article, .article-content { position: relative; z-index: 10; }

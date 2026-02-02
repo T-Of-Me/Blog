@@ -1,12 +1,19 @@
-<!-- Matrix Rain Effect -->
+<!-- Matrix Rain Effect - With Color Control -->
 <script>
 (function() {
     'use strict';
     
+    // GLOBAL variables accessible from anywhere
+    window.matrixConfig = {
+        color: '#0F0',
+        isRunning: true,
+        animationId: null
+    };
+    
     function initMatrix() {
         const canvas = document.createElement('canvas');
         canvas.id = 'matrix-canvas';
-        canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.8;pointer-events:none';
+        canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.8;pointer-events:none;transition:opacity 0.3s ease';
         
         if (document.body.firstChild) {
             document.body.insertBefore(canvas, document.body.firstChild);
@@ -28,9 +35,13 @@
         }
         
         function draw() {
+            if (!window.matrixConfig.isRunning) return;
+            
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, w, h);
-            ctx.fillStyle = '#0F0';
+            
+            // READ color from global config
+            ctx.fillStyle = window.matrixConfig.color;
             ctx.font = fontSize + 'px monospace';
             
             for (let i = 0; i < drops.length; i++) {
@@ -42,9 +53,11 @@
                 }
                 drops[i]++;
             }
+            
+            window.matrixConfig.animationId = requestAnimationFrame(draw);
         }
         
-        setInterval(draw, 30);
+        draw();
         
         window.addEventListener('resize', function() {
             w = canvas.width = window.innerWidth;
@@ -55,6 +68,26 @@
                 drops[i] = Math.floor(Math.random() * h / fontSize);
             }
         });
+        
+        // Expose control functions
+        window.pauseMatrix = function() {
+            window.matrixConfig.isRunning = false;
+            if (window.matrixConfig.animationId) {
+                cancelAnimationFrame(window.matrixConfig.animationId);
+            }
+        };
+        
+        window.resumeMatrix = function() {
+            if (!window.matrixConfig.isRunning) {
+                window.matrixConfig.isRunning = true;
+                draw();
+            }
+        };
+        
+        window.setMatrixColor = function(color) {
+            console.log('Setting color to:', color); // Debug
+            window.matrixConfig.color = color;
+        };
     }
     
     if (document.readyState === 'loading') {
@@ -64,6 +97,161 @@
     }
 })();
 </script>
+
+<!-- Control Buttons -->
+<style>
+.matrix-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    gap: 15px;
+    flex-direction: row-reverse;
+}
+
+.matrix-btn {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    padding: 12px 24px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.matrix-btn:hover {
+    background: #00ff00;
+    color: #000;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.matrix-btn:active {
+    transform: translateY(0);
+}
+
+.matrix-btn.paused {
+    border-color: #ff0000;
+    color: #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+.matrix-btn.paused:hover {
+    background: #ff0000;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+}
+
+@keyframes btnPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.matrix-btn.pulse {
+    animation: btnPulse 0.3s ease;
+}
+</style>
+
+<script>
+(function() {
+    'use strict';
+    
+    function initControls() {
+        // Create container
+        const container = document.createElement('div');
+        container.className = 'matrix-controls';
+        document.body.appendChild(container);
+        
+        // === PAUSE/PLAY BUTTON ===
+        const pauseBtn = document.createElement('button');
+        pauseBtn.className = 'matrix-btn';
+        pauseBtn.innerHTML = '⏸ PAUSE';
+        container.appendChild(pauseBtn);
+        
+        let isRunning = true;
+        
+        pauseBtn.addEventListener('click', function() {
+            isRunning = !isRunning;
+            
+            if (isRunning) {
+                if (window.resumeMatrix) window.resumeMatrix();
+                const canvas = document.getElementById('matrix-canvas');
+                if (canvas) canvas.style.opacity = '0.8';
+                pauseBtn.innerHTML = '⏸ PAUSE';
+                pauseBtn.classList.remove('paused');
+            } else {
+                if (window.pauseMatrix) window.pauseMatrix();
+                const canvas = document.getElementById('matrix-canvas');
+                if (canvas) canvas.style.opacity = '0';
+                pauseBtn.innerHTML = '▶ PLAY';
+                pauseBtn.classList.add('paused');
+            }
+            
+            pauseBtn.classList.add('pulse');
+            setTimeout(() => pauseBtn.classList.remove('pulse'), 300);
+        });
+        
+        // === COLOR BUTTON ===
+        const colorBtn = document.createElement('button');
+        colorBtn.className = 'matrix-btn';
+        colorBtn.innerHTML = '🎨 GREEN';
+        container.appendChild(colorBtn);
+        
+        const colors = [
+            { name: 'GREEN', hex: '#0F0' },
+            { name: 'CYAN', hex: '#0FF' },
+            { name: 'BLUE', hex: '#08F' },
+            { name: 'PURPLE', hex: '#F0F' },
+            { name: 'RED', hex: '#F00' },
+            { name: 'ORANGE', hex: '#F80' },
+            { name: 'YELLOW', hex: '#FF0' },
+            { name: 'PINK', hex: '#F6B' },
+            { name: 'WHITE', hex: '#FFF' }
+        ];
+        
+        let colorIndex = 0;
+        
+        colorBtn.addEventListener('click', function() {
+            colorIndex = (colorIndex + 1) % colors.length;
+            const color = colors[colorIndex];
+            
+            // Change color using global function
+            if (window.setMatrixColor) {
+                window.setMatrixColor(color.hex);
+                console.log('Color changed to:', color.hex); // Debug
+            }
+            
+            // Update button style
+            colorBtn.innerHTML = '🎨 ' + color.name;
+            colorBtn.style.borderColor = color.hex;
+            colorBtn.style.color = color.hex;
+            colorBtn.style.boxShadow = `0 0 20px ${color.hex}80`;
+            
+            colorBtn.classList.add('pulse');
+            setTimeout(() => colorBtn.classList.remove('pulse'), 300);
+        });
+    }
+    
+    // Wait for Matrix to initialize
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initControls, 600);
+        });
+    } else {
+        setTimeout(initControls, 600);
+    }
+})();
+</script>
+
 
 <!-- Floating Icons with Mouse Avoidance -->
 <script>

@@ -1045,3 +1045,446 @@ a[href*="final"] {
 a[href*="smol"] {
     color: #9900ff !important;
 }
+
+// ========================================
+// HIỆU ỨNG CLICK VÀ VUỐT CHUỘT
+// ========================================
+
+// Variables
+$primary-color: #3498db;
+$secondary-color: #e74c3c;
+$success-color: #27ae60;
+$purple-gradient: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+
+// Mixins
+@mixin button-base {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+// ========================================
+// 1. RIPPLE EFFECT (Click)
+// ========================================
+.ripple-button {
+  @include button-base;
+  position: relative;
+  overflow: hidden;
+  background: $primary-color;
+  color: white;
+  border-radius: 8px;
+
+  &:hover {
+    background: darken($primary-color, 10%);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  &:active::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+// ========================================
+// 2. PRESS DOWN EFFECT (Click)
+// ========================================
+.press-button {
+  @include button-base;
+  padding: 15px 30px;
+  background: $purple-gradient;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// ========================================
+// 3. GLOW EFFECT (Click)
+// ========================================
+.glow-button {
+  @include button-base;
+  background: $secondary-color;
+  color: white;
+  border-radius: 25px;
+  box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+  }
+
+  &:active {
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.9),
+                0 0 60px rgba(231, 76, 60, 0.6);
+    transform: scale(0.95);
+  }
+}
+
+// ========================================
+// 4. SWIPE/DRAG CARD (Vuốt chuột)
+// ========================================
+.swipe-card {
+  width: 300px;
+  height: 200px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    cursor: grabbing;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+  }
+}
+
+// ========================================
+// 5. SLIDE FILL EFFECT (Click)
+// ========================================
+.slide-button {
+  @include button-base;
+  position: relative;
+  padding: 12px 30px;
+  color: $primary-color;
+  border: 2px solid $primary-color;
+  background: transparent;
+  overflow: hidden;
+  z-index: 1;
+  transition: color 0.4s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: $primary-color;
+    transition: left 0.4s ease;
+    z-index: -1;
+  }
+
+  &:hover::before {
+    left: 0;
+  }
+
+  &:hover {
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// ========================================
+// 6. PULSE EFFECT (Click)
+// ========================================
+.pulse-button {
+  @include button-base;
+  background: $success-color;
+  color: white;
+  border-radius: 50px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+    background: inherit;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  &:active::after {
+    animation: pulse 0.6s ease-out;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+// ========================================
+// 7. TILT CARD (Vuốt chuột)
+// ========================================
+.tilt-card {
+  width: 250px;
+  height: 350px;
+  background: $purple-gradient;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  
+  &:hover {
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  }
+
+  // Cần JavaScript để thêm transform động khi di chuyển chuột
+}
+
+// ========================================
+// 8. BORDER ANIMATION (Click)
+// ========================================
+.border-button {
+  @include button-base;
+  position: relative;
+  padding: 15px 30px;
+  background: transparent;
+  color: #8e44ad;
+  font-weight: 600;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #8e44ad;
+    transition: width 0.3s ease;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+  }
+
+  &::after {
+    bottom: 0;
+    right: 0;
+  }
+
+  span {
+    position: relative;
+    
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 0;
+      background: #8e44ad;
+      transition: height 0.3s ease;
+    }
+
+    &::before {
+      top: 0;
+      left: -15px;
+    }
+
+    &::after {
+      bottom: 0;
+      right: -15px;
+    }
+  }
+
+  &:hover::before,
+  &:hover::after {
+    width: 100%;
+  }
+
+  &:hover span::before,
+  &:hover span::after {
+    height: 100%;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// ========================================
+// 9. BOUNCE EFFECT (Click)
+// ========================================
+.bounce-button {
+  @include button-base;
+  background: #f39c12;
+  color: white;
+  border-radius: 8px;
+
+  &:active {
+    animation: bounce 0.5s ease;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-5px);
+  }
+}
+
+// ========================================
+// 10. SHAKE EFFECT (Click)
+// ========================================
+.shake-button {
+  @include button-base;
+  background: #e67e22;
+  color: white;
+  border-radius: 8px;
+
+  &:active {
+    animation: shake 0.5s ease;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+// ========================================
+// 11. NEON EFFECT (Hover & Click)
+// ========================================
+.neon-button {
+  @include button-base;
+  background: #1a1a1a;
+  color: #00ff88;
+  border: 2px solid #00ff88;
+  border-radius: 8px;
+  text-shadow: 0 0 5px #00ff88;
+  box-shadow: 0 0 10px #00ff88;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #00ff88;
+    color: #1a1a1a;
+    text-shadow: none;
+    box-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+  }
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88;
+  }
+}
+
+// ========================================
+// 12. GRADIENT SHIFT (Hover)
+// ========================================
+.gradient-button {
+  @include button-base;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background-size: 200% 100%;
+  color: white;
+  border-radius: 25px;
+  transition: background-position 0.5s ease;
+
+  &:hover {
+    background-position: 100% 0;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+// ========================================
+// DEMO CONTAINER STYLES
+// ========================================
+.demo-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 40px;
+  background: #f5f5f5;
+  min-height: 100vh;
+  align-items: flex-start;
+  justify-content: center;
+
+  .demo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    .label {
+      font-size: 12px;
+      color: #666;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
+}
+
+// Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

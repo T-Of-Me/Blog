@@ -1,7 +1,7 @@
 ---
 title: CTF Writeups
 description: Thư giản cuối tuần
-image: 
+image: image.png
 
 # Badge style
 style:

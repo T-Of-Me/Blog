@@ -65,111 +65,143 @@
 })();
 </script>
 
-<!-- Mouse Avoidance Effect for Icons -->
+<!-- Floating Icons with Mouse Avoidance -->
 <script>
 (function() {
     'use strict';
     
-    function initMouseAvoidance() {
-        // Selectors cho các pseudo-elements (ta sẽ track parent elements)
-        const iconSelectors = [
-            'body > div:first-child',
-            'nav',
-            'footer',
-            'main',
-            'main > div',
-            '.flex.flex-col.min-h-screen',
-            '.mt-12',
-            '.flex-grow'
-        ];
+    function initFloatingIcons() {
+        // Tạo container cho icons
+        const container = document.createElement('div');
+        container.id = 'floating-icons-container';
+        container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;';
+        document.body.appendChild(container);
         
-        const iconElements = [];
-        const avoidanceDistance = 150; // Khoảng cách né (pixels)
-        const avoidanceStrength = 80; // Độ mạnh của hiệu ứng
+        // Danh sách icons
+        const iconsList = ['🔒', '💻', '⚡', '🛡️', '🔐', '🖥️', '⚙️', '🔧', '☠️', '🐛', '💣', '🛰️', '🤖', '🔑', '👾'];
         
-        // Collect elements
-        iconSelectors.forEach(selector => {
-            const els = document.querySelectorAll(selector);
-            els.forEach(el => {
-                if (!iconElements.includes(el)) {
-                    iconElements.push(el);
+        // Icon class
+        class FloatingIcon {
+            constructor(emoji, index) {
+                this.element = document.createElement('div');
+                this.element.textContent = emoji;
+                this.element.className = 'floating-icon';
+                this.element.style.cssText = `
+                    position: absolute;
+                    font-size: ${60 + Math.random() * 15}px;
+                    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
+                    cursor: pointer;
+                    pointer-events: auto;
+                    user-select: none;
+                    transition: filter 0.3s ease;
+                `;
+                
+                // Random position
+                this.x = Math.random() * (window.innerWidth - 100);
+                this.y = Math.random() * (window.innerHeight - 100);
+                
+                // Random velocity
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                
+                // Avoidance
+                this.avoidX = 0;
+                this.avoidY = 0;
+                
+                container.appendChild(this.element);
+                this.updatePosition();
+                
+                // Hover effect
+                this.element.addEventListener('mouseenter', () => {
+                    this.element.style.filter = 'drop-shadow(0 0 35px rgba(57, 255, 20, 1))';
+                    this.element.style.transform = 'scale(1.3) rotate(15deg)';
+                });
+                
+                this.element.addEventListener('mouseleave', () => {
+                    this.element.style.filter = 'drop-shadow(0 0 20px rgba(0, 255, 0, 0.8))';
+                    this.element.style.transform = 'scale(1) rotate(0deg)';
+                });
+            }
+            
+            update(mouseX, mouseY) {
+                // Bounce off edges
+                if (this.x <= 0 || this.x >= window.innerWidth - 80) {
+                    this.vx *= -1;
                 }
-            });
+                if (this.y <= 0 || this.y >= window.innerHeight - 80) {
+                    this.vy *= -1;
+                }
+                
+                // Keep in bounds
+                this.x = Math.max(0, Math.min(window.innerWidth - 80, this.x));
+                this.y = Math.max(0, Math.min(window.innerHeight - 80, this.y));
+                
+                // Mouse avoidance
+                const dx = mouseX - (this.x + 40);
+                const dy = mouseY - (this.y + 40);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const avoidanceRadius = 150;
+                
+                if (distance < avoidanceRadius && distance > 0) {
+                    const force = (avoidanceRadius - distance) / avoidanceRadius;
+                    this.avoidX = -(dx / distance) * force * 5;
+                    this.avoidY = -(dy / distance) * force * 5;
+                } else {
+                    this.avoidX *= 0.9;
+                    this.avoidY *= 0.9;
+                }
+                
+                // Update position
+                this.x += this.vx + this.avoidX;
+                this.y += this.vy + this.avoidY;
+                
+                this.updatePosition();
+            }
+            
+            updatePosition() {
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+            }
+        }
+        
+        // Create icons
+        const icons = [];
+        iconsList.forEach((emoji, index) => {
+            icons.push(new FloatingIcon(emoji, index));
         });
         
-        // Mouse position
-        let mouseX = 0;
-        let mouseY = 0;
+        // Mouse tracking
+        let mouseX = -1000;
+        let mouseY = -1000;
         
-        // Track mouse
-        document.addEventListener('mousemove', function(e) {
+        document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
         });
         
         // Animation loop
-        function updateIconPositions() {
-            iconElements.forEach(el => {
-                // Get pseudo-element position (approximate from parent)
-                const rect = el.getBoundingClientRect();
-                
-                // Check ::before
-                const beforeStyle = window.getComputedStyle(el, '::before');
-                if (beforeStyle.content !== 'none' && beforeStyle.content !== '') {
-                    const iconX = rect.left + rect.width / 2;
-                    const iconY = rect.top + rect.height / 2;
-                    
-                    const deltaX = mouseX - iconX;
-                    const deltaY = mouseY - iconY;
-                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                    
-                    if (distance < avoidanceDistance) {
-                        const force = (avoidanceDistance - distance) / avoidanceDistance;
-                        const moveX = -(deltaX / distance) * avoidanceStrength * force;
-                        const moveY = -(deltaY / distance) * avoidanceStrength * force;
-                        
-                        el.style.setProperty('--move-x-before', moveX + 'px');
-                        el.style.setProperty('--move-y-before', moveY + 'px');
-                    } else {
-                        el.style.setProperty('--move-x-before', '0px');
-                        el.style.setProperty('--move-y-before', '0px');
-                    }
-                }
-                
-                // Check ::after
-                const afterStyle = window.getComputedStyle(el, '::after');
-                if (afterStyle.content !== 'none' && afterStyle.content !== '') {
-                    const iconX = rect.right - rect.width / 2;
-                    const iconY = rect.bottom - rect.height / 2;
-                    
-                    const deltaX = mouseX - iconX;
-                    const deltaY = mouseY - iconY;
-                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                    
-                    if (distance < avoidanceDistance) {
-                        const force = (avoidanceDistance - distance) / avoidanceDistance;
-                        const moveX = -(deltaX / distance) * avoidanceStrength * force;
-                        const moveY = -(deltaY / distance) * avoidanceStrength * force;
-                        
-                        el.style.setProperty('--move-x-after', moveX + 'px');
-                        el.style.setProperty('--move-y-after', moveY + 'px');
-                    } else {
-                        el.style.setProperty('--move-x-after', '0px');
-                        el.style.setProperty('--move-y-after', '0px');
-                    }
-                }
+        function animate() {
+            icons.forEach(icon => {
+                icon.update(mouseX, mouseY);
             });
-            
-            requestAnimationFrame(updateIconPositions);
+            requestAnimationFrame(animate);
         }
         
-        updateIconPositions();
+        animate();
+        
+        // Resize handler
+        window.addEventListener('resize', () => {
+            icons.forEach(icon => {
+                icon.x = Math.min(icon.x, window.innerWidth - 80);
+                icon.y = Math.min(icon.y, window.innerHeight - 80);
+            });
+        });
     }
     
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMouseAvoidance);
+        document.addEventListener('DOMContentLoaded', initFloatingIcons);
     } else {
-        initMouseAvoidance();
+        initFloatingIcons();
     }
 })();
 </script>
@@ -180,7 +212,6 @@
     'use strict';
     
     function initFireworks() {
-        // Create fireworks canvas
         const canvas = document.createElement('canvas');
         canvas.id = 'fireworks-canvas';
         document.body.appendChild(canvas);
@@ -191,7 +222,6 @@
         
         const particles = [];
         
-        // Particle class
         class Particle {
             constructor(x, y, color) {
                 this.x = x;
@@ -209,7 +239,7 @@
             update() {
                 this.velocity.x *= 0.98;
                 this.velocity.y *= 0.98;
-                this.velocity.y += 0.15; // Gravity
+                this.velocity.y += 0.15;
                 
                 this.x += this.velocity.x;
                 this.y += this.velocity.y;
@@ -227,7 +257,6 @@
             }
         }
         
-        // Create firework
         function createFirework(x, y) {
             const colors = ['#00ff00', '#00ff41', '#39ff14', '#0ff', '#0f0', '#ff0', '#f0f'];
             const particleCount = 50;
@@ -238,12 +267,9 @@
             }
         }
         
-        // Animation loop
         function animate() {
-            // ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            // ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+            
             for (let i = particles.length - 1; i >= 0; i--) {
                 particles[i].update();
                 particles[i].draw();
@@ -258,12 +284,10 @@
         
         animate();
         
-        // Click event
         document.addEventListener('click', function(e) {
             createFirework(e.clientX, e.clientY);
         });
         
-        // Resize event
         window.addEventListener('resize', function() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;

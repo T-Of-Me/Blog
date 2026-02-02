@@ -350,70 +350,7 @@ h1::before, h2::before {
     text-shadow: var(--text-glow);
 }
 
-/* === FLOATING ICONS === */
-/* Icon positions và animations */
-body > div:first-child::before { content: "🔒"; position: fixed; font-size: 65px; left: 10%; top: 20%; }
-nav::before { content: "💻"; position: fixed; font-size: 70px; right: 15%; top: 30%; }
-nav::after { content: "⚡"; position: fixed; font-size: 62px; left: 5%; bottom: 25%; }
-footer::before { content: "🛡️"; position: fixed; font-size: 68px; right: 8%; bottom: 40%; }
-footer::after { content: "🔐"; position: fixed; font-size: 64px; left: 20%; top: 50%; }
-main::before { content: "🖥️"; position: fixed; font-size: 72px; right: 25%; top: 15%; }
-main::after { content: "⚙️"; position: fixed; font-size: 60px; left: 80%; top: 60%; }
-main > div::before { content: "🔧"; position: fixed; font-size: 66px; left: 12%; top: 70%; }
-main > div::after { content: "☠️"; position: fixed; font-size: 68px; right: 5%; top: 75%; }
-.flex.flex-col.min-h-screen::before { content: "🐛"; position: fixed; font-size: 64px; left: 30%; top: 10%; }
-.flex.flex-col.min-h-screen::after { content: "💣"; position: fixed; font-size: 62px; right: 30%; bottom: 15%; }
-.mt-12::before { content: "🛰️"; position: fixed; font-size: 66px; left: 45%; top: 5%; }
-.mt-12::after { content: "🤖"; position: fixed; font-size: 68px; right: 40%; bottom: 10%; }
-.flex-grow::before { content: "🔑"; position: fixed; font-size: 60px; left: 65%; top: 40%; }
-.flex-grow::after { content: "👾"; position: fixed; font-size: 70px; left: 50%; top: 85%; }
 
-/* Common icon styles */
-body > div:first-child::before, nav::before, nav::after, footer::before, footer::after,
-main::before, main::after, main > div::before, main > div::after,
-.flex.flex-col.min-h-screen::before, .flex.flex-col.min-h-screen::after,
-.mt-12::before, .mt-12::after, .flex-grow::before, .flex-grow::after {
-    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-    z-index: 5;
-    pointer-events: auto;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* Hover effect for all icons */
-body > div:first-child::before:hover, nav::before:hover, nav::after:hover, 
-footer::before:hover, footer::after:hover, main::before:hover, main::after:hover,
-main > div::before:hover, main > div::after:hover,
-.flex.flex-col.min-h-screen::before:hover, .flex.flex-col.min-h-screen::after:hover,
-.mt-12::before:hover, .mt-12::after:hover, .flex-grow::before:hover, .flex-grow::after:hover {
-    transform: scale(1.4) rotate(15deg);
-    filter: drop-shadow(0 0 35px rgba(57, 255, 20, 1));
-    animation-play-state: paused;
-}
-
-/* Floating animations */
-body > div:first-child::before { animation: float 20s ease-in-out infinite; }
-nav::before { animation: float 25s ease-in-out infinite; }
-nav::after { animation: float 18s ease-in-out infinite; }
-footer::before { animation: float 22s ease-in-out infinite; }
-footer::after { animation: float 24s ease-in-out infinite; }
-main::before { animation: float 19s ease-in-out infinite; }
-main::after { animation: float 21s ease-in-out infinite; }
-main > div::before { animation: float 23s ease-in-out infinite; }
-main > div::after { animation: float 26s ease-in-out infinite; }
-.flex.flex-col.min-h-screen::before { animation: float 20s ease-in-out infinite; }
-.flex.flex-col.min-h-screen::after { animation: float 24s ease-in-out infinite; }
-.mt-12::before { animation: float 22s ease-in-out infinite; }
-.mt-12::after { animation: float 25s ease-in-out infinite; }
-.flex-grow::before { animation: float 21s ease-in-out infinite; }
-.flex-grow::after { animation: float 23s ease-in-out infinite; }
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0.75; }
-    25% { transform: translateY(-35px) translateX(25px) rotate(5deg); opacity: 0.95; }
-    50% { transform: translateY(-55px) translateX(-15px) rotate(-3deg); opacity: 0.85; }
-    75% { transform: translateY(-25px) translateX(35px) rotate(8deg); opacity: 0.9; }
-}
 
 /* === LINKS & TEXT === */
 a {

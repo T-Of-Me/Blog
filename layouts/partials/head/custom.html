@@ -655,3 +655,72 @@
     }
 })();
 </script>
+
+
+
+<!-- Custom Cursor -->
+<script>
+(function() {
+    'use strict';
+    
+    function initCustomCursor() {
+        // Create cursor element
+        const cursor = document.createElement('div');
+        cursor.id = 'custom-cursor';
+        
+        // Chọn 1 trong các icon sau:
+        // cursor.innerHTML = '🎯'; // Mục tiêu
+        // cursor.innerHTML = '⚔️'; // Kiếm
+        // cursor.innerHTML = '🔫'; // Súng
+        cursor.innerHTML = '💀'; // Đầu lâu
+        // cursor.innerHTML = '👾'; // Space invader
+        // cursor.innerHTML = '🕷️'; // Nhện
+        // cursor.innerHTML = '🦂'; // Bọ cạp
+        // cursor.innerHTML = '⚡'; // Sét
+        // cursor.innerHTML = '🔥'; // Lửa
+        // cursor.innerHTML = '👁️'; // Con mắt
+        // cursor.innerHTML = '🧿'; // Evil eye
+        // cursor.innerHTML = '☠️'; // Skull & bones
+        
+        cursor.style.fontSize = '24px';
+        document.body.appendChild(cursor);
+        
+        // Track mouse position
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Update cursor position with smooth follow
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+        
+        // Click effect
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('clicking');
+        });
+        
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('clicking');
+        });
+        
+        // Hide cursor when leaving window
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+        });
+        
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+        });
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCustomCursor);
+    } else {
+        initCustomCursor();
+    }
+})();
+</script>

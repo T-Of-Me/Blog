@@ -638,3 +638,59 @@ main > div::after {
         var(--move-y-after, 0px)
     ) !important;
 }
+
+/* === CUSTOM CURSOR === */
+
+/* Hide default cursor */
+* {
+    cursor: none !important;
+}
+
+/* Custom cursor - Main pointer */
+#custom-cursor {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.1s ease;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.8));
+}
+
+/* Cursor trail effect */
+#custom-cursor::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #00ff00;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.3;
+    animation: cursorPulse 1.5s infinite;
+}
+
+@keyframes cursorPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* Hover effect - larger when hovering clickable elements */
+a:hover ~ #custom-cursor,
+button:hover ~ #custom-cursor,
+.matrix-btn:hover ~ #custom-cursor {
+    transform: scale(1.5);
+}
+
+/* Click effect */
+#custom-cursor.clicking {
+    transform: scale(0.8);
+}

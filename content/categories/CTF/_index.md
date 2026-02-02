@@ -1,10 +1,10 @@
 ---
-title: CTF
+title: CTF Writeups
 description: A description of this category
 image: 
 
 # Badge style
 style:
-    background: "#2a9d8f"
-    color: "#fff"
+    background: "#00f8ba"
+    color: "#ffffff"
 ---

@@ -105,9 +105,15 @@ for payload in payloads:
 
 
 ## PDFile
+
 ![image](https://hackmd.io/_uploads/HJM2wnh8-g.png)
+
+
 ![image](https://hackmd.io/_uploads/SkV9vhnUbl.png)
+
+
 ![image](https://hackmd.io/_uploads/B1Ksq3hLZg.png)
+
 
 ### Phân tích
 - ta thấy trang web cho người dùng upload các file định dạng `.pasx` (XML) và chuyển đổi sang PDF

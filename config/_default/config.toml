@@ -21,3 +21,14 @@ disqusShortname = "hugo-theme-stack"
     endLevel = 5      # Thay vì 2 (default)
     startLevel = 1    # Bắt đầu từ level 2
     ordered = false
+
+
+[params]
+    [params.footer]
+        since = 2024
+        customText = ""
+    
+    [params.assets]
+        # Đường dẫn đến custom CSS/JS
+        favicon = ""
+        customJS = ["js/matrix-rain.js"]  # Thêm dòng này

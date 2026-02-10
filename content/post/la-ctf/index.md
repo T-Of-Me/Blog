@@ -17,7 +17,7 @@ weight: 50
  
 ![](https://hackmd.io/_uploads/ryI3SZ_DZe.png)
 
-## Table content 
+**Table content**
 ![platform.lac.tf_challs](https://hackmd.io/_uploads/H1fki-Ov-x.jpg)
 
 

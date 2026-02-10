@@ -1,726 +1,406 @@
-<!-- Matrix Rain Effect - With Color Control -->
-<script>
-(function() {
-    'use strict';
-    
-    // GLOBAL variables accessible from anywhere
-    window.matrixConfig = {
-        color: '#0F0',
-        isRunning: true,
-        animationId: null
-    };
-    
-    function initMatrix() {
-        const canvas = document.createElement('canvas');
-        canvas.id = 'matrix-canvas';
-        canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.8;pointer-events:none;transition:opacity 0.3s ease';
-        
-        if (document.body.firstChild) {
-            document.body.insertBefore(canvas, document.body.firstChild);
-        } else {
-            document.body.appendChild(canvas);
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacking Theme - Matrix Effects</title>
+    <link rel="stylesheet" href="custom.css">
+    <style>
+        #fireworks-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
         }
         
-        const ctx = canvas.getContext('2d');
-        let w = canvas.width = window.innerWidth;
-        let h = canvas.height = window.innerHeight;
-        
-        const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        const fontSize = 16;
-        let cols = Math.floor(w / fontSize);
-        const drops = [];
-        
-        for (let i = 0; i < cols; i++) {
-            drops[i] = Math.floor(Math.random() * h / fontSize);
+        .matrix-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            gap: 15px;
+            flex-direction: row-reverse;
         }
+
+        .matrix-btn {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            padding: 12px 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .matrix-btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .matrix-btn:active {
+            transform: translateY(0);
+        }
+
+        .matrix-btn.paused {
+            border-color: #ff0000;
+            color: #ff0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .matrix-btn.paused:hover {
+            background: #ff0000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+        }
+
+        @keyframes btnPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .matrix-btn.pulse {
+            animation: btnPulse 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scanline Overlay -->
+    <div class="dot-overlay"></div>
+
+    <!-- Main Content -->
+    <div style="position: relative; z-index: 10; max-width: 1200px; margin: 0 auto; padding: 50px 20px; min-height: 100vh;">
         
-        function draw() {
-            if (!window.matrixConfig.isRunning) return;
+        <section style="text-align: center; margin-bottom: 80px; padding: 60px 0;">
+            <h1 style="font-size: 72px; margin-bottom: 20px; font-weight: bold;">
+                CYBER SECURITY
+            </h1>
+            <p style="font-size: 24px; opacity: 0.8; margin-bottom: 40px;">
+                System breached successfully... Click anywhere for fireworks!
+            </p>
             
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, w, h);
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin: 40px 0;">
+                <button class="neon-button">INITIALIZE HACK</button>
+                <button class="ripple-button">DECRYPT DATA</button>
+                <button class="glow-button">BYPASS FIREWALL</button>
+            </div>
+        </section>
+
+        <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 60px 0;">
+            <div class="swipe-card">
+                <h3 style="font-size: 24px; margin-bottom: 15px;">⚡ Matrix Rain</h3>
+                <p>Hiệu ứng mưa matrix với control buttons</p>
+            </div>
             
-            // READ color from global config
-            ctx.fillStyle = window.matrixConfig.color;
-            ctx.font = fontSize + 'px monospace';
+            <div class="swipe-card">
+                <h3 style="font-size: 24px; margin-bottom: 15px;">🎆 Fireworks</h3>
+                <p>Click anywhere để tạo pháo hoa</p>
+            </div>
             
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                
-                if (drops[i] * fontSize > h && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i] ++;
+            <div class="swipe-card">
+                <h3 style="font-size: 24px; margin-bottom: 15px;">🎨 Color Change</h3>
+                <p>Đổi màu matrix rain với button</p>
+            </div>
+        </section>
+
+        <footer style="text-align: center; padding: 40px 0; margin-top: 80px; opacity: 0.6;">
+            <p>Created by Tung | Penetration Tester & CTF Player</p>
+            <p style="margin-top: 10px;">⚡ HACK THE PLANET ⚡</p>
+        </footer>
+
+    </div>
+
+    <!-- Matrix Rain Effect -->
+    <script>
+    (function() {
+        'use strict';
+        
+        window.matrixConfig = {
+            color: '#0F0',
+            isRunning: true,
+            animationId: null
+        };
+        
+        function initMatrix() {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'matrix-canvas';
+            canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.8;pointer-events:none;transition:opacity 0.3s ease';
+            
+            if (document.body.firstChild) {
+                document.body.insertBefore(canvas, document.body.firstChild);
+            } else {
+                document.body.appendChild(canvas);
             }
             
-            window.matrixConfig.animationId = requestAnimationFrame(draw);
-        }
-        
-        draw();
-        
-        window.addEventListener('resize', function() {
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-            cols = Math.floor(w / fontSize);
-            drops.length = cols;
+            const ctx = canvas.getContext('2d');
+            let w = canvas.width = window.innerWidth;
+            let h = canvas.height = window.innerHeight;
+            
+            const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const fontSize = 16;
+            let cols = Math.floor(w / fontSize);
+            const drops = [];
+            
             for (let i = 0; i < cols; i++) {
                 drops[i] = Math.floor(Math.random() * h / fontSize);
             }
-        });
-        
-        // Expose control functions
-        window.pauseMatrix = function() {
-            window.matrixConfig.isRunning = false;
-            if (window.matrixConfig.animationId) {
-                cancelAnimationFrame(window.matrixConfig.animationId);
-            }
-        };
-        
-        window.resumeMatrix = function() {
-            if (!window.matrixConfig.isRunning) {
-                window.matrixConfig.isRunning = true;
-                draw();
-            }
-        };
-        
-        window.setMatrixColor = function(color) {
-            console.log('Setting color to:', color); // Debug
-            window.matrixConfig.color = color;
-        };
-    }
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMatrix);
-    } else {
-        initMatrix();
-    }
-})();
-</script>
-
-<!-- Control Buttons -->
-<style>
-.matrix-controls {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 10000;
-    display: flex;
-    gap: 15px;
-    flex-direction: row-reverse;
-}
-
-.matrix-btn {
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid #00ff00;
-    color: #00ff00;
-    padding: 12px 24px;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    user-select: none;
-    white-space: nowrap;
-}
-
-.matrix-btn:hover {
-    background: #00ff00;
-    color: #000;
-    box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
-    transform: translateY(-2px);
-}
-
-.matrix-btn:active {
-    transform: translateY(0);
-}
-
-.matrix-btn.paused {
-    border-color: #ff0000;
-    color: #ff0000;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-}
-
-.matrix-btn.paused:hover {
-    background: #ff0000;
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
-}
-
-@keyframes btnPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-.matrix-btn.pulse {
-    animation: btnPulse 0.3s ease;
-}
-</style>
-
-<script>
-(function() {
-    'use strict';
-    
-    function initControls() {
-        // Create container
-        const container = document.createElement('div');
-        container.className = 'matrix-controls';
-        document.body.appendChild(container);
-        
-        // === PAUSE/PLAY BUTTON ===
-        const pauseBtn = document.createElement('button');
-        pauseBtn.className = 'matrix-btn';
-        pauseBtn.innerHTML = '⏸ PAUSE';
-        container.appendChild(pauseBtn);
-        
-        let isRunning = true;
-        
-        pauseBtn.addEventListener('click', function() {
-            isRunning = !isRunning;
             
-            if (isRunning) {
-                if (window.resumeMatrix) window.resumeMatrix();
-                const canvas = document.getElementById('matrix-canvas');
-                if (canvas) canvas.style.opacity = '0.8';
-                pauseBtn.innerHTML = '⏸ PAUSE';
-                pauseBtn.classList.remove('paused');
-            } else {
-                if (window.pauseMatrix) window.pauseMatrix();
-                const canvas = document.getElementById('matrix-canvas');
-                if (canvas) canvas.style.opacity = '0';
-                pauseBtn.innerHTML = '▶ PLAY';
-                pauseBtn.classList.add('paused');
-            }
-            
-            pauseBtn.classList.add('pulse');
-            setTimeout(() => pauseBtn.classList.remove('pulse'), 300);
-        });
-        
-        // === COLOR BUTTON ===
-        const colorBtn = document.createElement('button');
-        colorBtn.className = 'matrix-btn';
-        colorBtn.innerHTML = '🎨 GREEN';
-        container.appendChild(colorBtn);
-        
-        const colors = [
-            { name: 'GREEN', hex: '#0F0' },
-            { name: 'CYAN', hex: '#0FF' },
-            { name: 'BLUE', hex: '#08F' },
-            { name: 'PURPLE', hex: '#F0F' },
-            { name: 'RED', hex: '#F00' },
-            { name: 'ORANGE', hex: '#F80' },
-            { name: 'YELLOW', hex: '#FF0' },
-            { name: 'PINK', hex: '#F6B' },
-            { name: 'WHITE', hex: '#FFF' }
-        ];
-        
-        let colorIndex = 0;
-        
-        colorBtn.addEventListener('click', function() {
-            colorIndex = (colorIndex + 1) % colors.length;
-            const color = colors[colorIndex];
-            
-            // Change color using global function
-            if (window.setMatrixColor) {
-                window.setMatrixColor(color.hex);
-                console.log('Color changed to:', color.hex); // Debug
-            }
-            
-            // Update button style
-            colorBtn.innerHTML = '🎨 ' + color.name;
-            colorBtn.style.borderColor = color.hex;
-            colorBtn.style.color = color.hex;
-            colorBtn.style.boxShadow = `0 0 20px ${color.hex}80`;
-            
-            colorBtn.classList.add('pulse');
-            setTimeout(() => colorBtn.classList.remove('pulse'), 300);
-        });
-    }
-    
-    // Wait for Matrix to initialize
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(initControls, 600);
-        });
-    } else {
-        setTimeout(initControls, 600);
-    }
-})();
-</script>
-
-
-<!-- Floating Icons with Mouse Avoidance -->
-<!-- <script>
-(function() {
-    'use strict';
-    
-    function initFloatingIcons() {
-        // Tạo container cho icons
-        const container = document.createElement('div');
-        container.id = 'floating-icons-container';
-        container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;';
-        document.body.appendChild(container);
-        
-        // Danh sách icons
-        const iconsList = ['🔒', '💻', '⚡', '🛡️', '🔐', '🖥️', '⚙️', '🔧', '☠️', '🐛', '💣', '🛰️', '🤖', '🔑', '👾'];
-        
-        // Icon class
-        class FloatingIcon {
-            constructor(emoji, index) {
-                this.element = document.createElement('div');
-                this.element.textContent = emoji;
-                this.element.className = 'floating-icon';
-                this.element.style.cssText = `
-                    position: absolute;
-                    font-size: ${60 + Math.random() * 15}px;
-                    filter: drop-shadow(0 0 20px rgba(0, 255, 0, 0.8));
-                    cursor: pointer;
-                    pointer-events: auto;
-                    user-select: none;
-                    transition: filter 0.3s ease;
-                `;
+            function draw() {
+                if (!window.matrixConfig.isRunning) return;
                 
-                // Random position
-                this.x = Math.random() * (window.innerWidth - 100);
-                this.y = Math.random() * (window.innerHeight - 100);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, w, h);
                 
-                // Random velocity
-                this.vx = (Math.random() - 0.5) * 2;
-                this.vy = (Math.random() - 0.5) * 2;
+                ctx.fillStyle = window.matrixConfig.color;
+                ctx.font = fontSize + 'px monospace';
                 
-                // Avoidance
-                this.avoidX = 0;
-                this.avoidY = 0;
-                
-                container.appendChild(this.element);
-                this.updatePosition();
-                
-                // Hover effect
-                this.element.addEventListener('mouseenter', () => {
-                    this.element.style.filter = 'drop-shadow(0 0 35px rgba(57, 255, 20, 1))';
-                    this.element.style.transform = 'scale(1.3) rotate(15deg)';
-                });
-                
-                this.element.addEventListener('mouseleave', () => {
-                    this.element.style.filter = 'drop-shadow(0 0 20px rgba(0, 255, 0, 0.8))';
-                    this.element.style.transform = 'scale(1) rotate(0deg)';
-                });
-            }
-            
-            update(mouseX, mouseY) {
-                // Bounce off edges
-                if (this.x <= 0 || this.x >= window.innerWidth - 80) {
-                    this.vx *= -1;
-                }
-                if (this.y <= 0 || this.y >= window.innerHeight - 80) {
-                    this.vy *= -1;
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > h && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
                 }
                 
-                // Keep in bounds
-                this.x = Math.max(0, Math.min(window.innerWidth - 80, this.x));
-                this.y = Math.max(0, Math.min(window.innerHeight - 80, this.y));
+                window.matrixConfig.animationId = requestAnimationFrame(draw);
+            }
+            
+            draw();
+            
+            window.addEventListener('resize', function() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                cols = Math.floor(w / fontSize);
+                drops.length = cols;
+                for (let i = 0; i < cols; i++) {
+                    drops[i] = Math.floor(Math.random() * h / fontSize);
+                }
+            });
+            
+            window.pauseMatrix = function() {
+                window.matrixConfig.isRunning = false;
+                if (window.matrixConfig.animationId) {
+                    cancelAnimationFrame(window.matrixConfig.animationId);
+                }
+            };
+            
+            window.resumeMatrix = function() {
+                if (!window.matrixConfig.isRunning) {
+                    window.matrixConfig.isRunning = true;
+                    draw();
+                }
+            };
+            
+            window.setMatrixColor = function(color) {
+                window.matrixConfig.color = color;
+            };
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMatrix);
+        } else {
+            initMatrix();
+        }
+    })();
+    </script>
+
+    <!-- Control Buttons -->
+    <script>
+    (function() {
+        'use strict';
+        
+        function initControls() {
+            const container = document.createElement('div');
+            container.className = 'matrix-controls';
+            document.body.appendChild(container);
+            
+            // PAUSE/PLAY BUTTON
+            const pauseBtn = document.createElement('button');
+            pauseBtn.className = 'matrix-btn';
+            pauseBtn.innerHTML = '⏸ PAUSE';
+            container.appendChild(pauseBtn);
+            
+            let isRunning = true;
+            
+            pauseBtn.addEventListener('click', function() {
+                isRunning = !isRunning;
                 
-                // Mouse avoidance
-                const dx = mouseX - (this.x + 40);
-                const dy = mouseY - (this.y + 40);
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const avoidanceRadius = 150;
-                
-                if (distance < avoidanceRadius && distance > 0) {
-                    const force = (avoidanceRadius - distance) / avoidanceRadius;
-                    this.avoidX = -(dx / distance) * force * 5;
-                    this.avoidY = -(dy / distance) * force * 5;
+                if (isRunning) {
+                    if (window.resumeMatrix) window.resumeMatrix();
+                    const canvas = document.getElementById('matrix-canvas');
+                    if (canvas) canvas.style.opacity = '0.8';
+                    pauseBtn.innerHTML = '⏸ PAUSE';
+                    pauseBtn.classList.remove('paused');
                 } else {
-                    this.avoidX *= 0.9;
-                    this.avoidY *= 0.9;
+                    if (window.pauseMatrix) window.pauseMatrix();
+                    const canvas = document.getElementById('matrix-canvas');
+                    if (canvas) canvas.style.opacity = '0';
+                    pauseBtn.innerHTML = '▶ PLAY';
+                    pauseBtn.classList.add('paused');
                 }
                 
-                // Update position
-                this.x += this.vx + this.avoidX;
-                this.y += this.vy + this.avoidY;
-                
-                this.updatePosition();
-            }
+                pauseBtn.classList.add('pulse');
+                setTimeout(() => pauseBtn.classList.remove('pulse'), 300);
+            });
             
-            updatePosition() {
-                this.element.style.left = this.x + 'px';
-                this.element.style.top = this.y + 'px';
-            }
+            // COLOR BUTTON
+            const colorBtn = document.createElement('button');
+            colorBtn.className = 'matrix-btn';
+            colorBtn.innerHTML = '🎨 GREEN';
+            container.appendChild(colorBtn);
+            
+            const colors = [
+                { name: 'GREEN', hex: '#0F0' },
+                { name: 'CYAN', hex: '#0FF' },
+                { name: 'BLUE', hex: '#08F' },
+                { name: 'PURPLE', hex: '#F0F' },
+                { name: 'RED', hex: '#F00' },
+                { name: 'ORANGE', hex: '#F80' },
+                { name: 'YELLOW', hex: '#FF0' },
+                { name: 'PINK', hex: '#F6B' },
+                { name: 'WHITE', hex: '#FFF' }
+            ];
+            
+            let colorIndex = 0;
+            
+            colorBtn.addEventListener('click', function() {
+                colorIndex = (colorIndex + 1) % colors.length;
+                const color = colors[colorIndex];
+                
+                if (window.setMatrixColor) {
+                    window.setMatrixColor(color.hex);
+                }
+                
+                colorBtn.innerHTML = '🎨 ' + color.name;
+                colorBtn.style.borderColor = color.hex;
+                colorBtn.style.color = color.hex;
+                colorBtn.style.boxShadow = `0 0 20px ${color.hex}80`;
+                
+                colorBtn.classList.add('pulse');
+                setTimeout(() => colorBtn.classList.remove('pulse'), 300);
+            });
         }
         
-        // Create icons
-        const icons = [];
-        iconsList.forEach((emoji, index) => {
-            icons.push(new FloatingIcon(emoji, index));
-        });
-        
-        // Mouse tracking
-        let mouseX = -1000;
-        let mouseY = -1000;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-        
-        // Animation loop
-        function animate() {
-            icons.forEach(icon => {
-                icon.update(mouseX, mouseY);
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(initControls, 600);
             });
-            requestAnimationFrame(animate);
+        } else {
+            setTimeout(initControls, 600);
         }
-        
-        animate();
-        
-        // Resize handler
-        window.addEventListener('resize', () => {
-            icons.forEach(icon => {
-                icon.x = Math.min(icon.x, window.innerWidth - 80);
-                icon.y = Math.min(icon.y, window.innerHeight - 80);
-            });
-        });
-    }
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFloatingIcons);
-    } else {
-        initFloatingIcons();
-    }
-})();
-</script> -->
+    })();
+    </script>
 
-<!-- Fireworks Effect on Click -->
-<script>
-(function() {
-    'use strict';
-    
-    function initFireworks() {
-        const canvas = document.createElement('canvas');
-        canvas.id = 'fireworks-canvas';
-        document.body.appendChild(canvas);
+    <!-- Fireworks Effect on Click -->
+    <script>
+    (function() {
+        'use strict';
         
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        const particles = [];
-        
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.velocity = {
-                    x: (Math.random() - 0.5) * 8,
-                    y: (Math.random() - 0.5) * 8
-                };
-                this.alpha = 1;
-                this.decay = Math.random() * 0.015 + 0.015;
-                this.size = Math.random() * 3 + 2;
-            }
+        function initFireworks() {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'fireworks-canvas';
+            document.body.appendChild(canvas);
             
-            update() {
-                this.velocity.x *= 0.98;
-                this.velocity.y *= 0.98;
-                this.velocity.y += 0.15;
-                
-                this.x += this.velocity.x;
-                this.y += this.velocity.y;
-                this.alpha -= this.decay;
-            }
-            
-            draw() {
-                ctx.save();
-                ctx.globalAlpha = this.alpha;
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-        
-        function createFirework(x, y) {
-            const colors = ['#00ff00', '#00ff41', '#39ff14', '#0ff', '#0f0', '#ff0', '#f0f'];
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                particles.push(new Particle(x, y, color));
-            }
-        }
-        
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                
-                if (particles[i].alpha <= 0) {
-                    particles.splice(i, 1);
-                }
-            }
-            
-            requestAnimationFrame(animate);
-        }
-        
-        animate();
-        
-        document.addEventListener('click', function(e) {
-            createFirework(e.clientX, e.clientY);
-        });
-        
-        window.addEventListener('resize', function() {
+            const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-        });
-    }
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initFireworks);
-    } else {
-        initFireworks();
-    }
-})();
-</script>
-
-
-<!-- Control Buttons - Fixed Position -->
-<style>
-.matrix-controls {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 10000;
-    display: flex;
-    gap: 15px;
-    flex-direction: row-reverse;
-}
-
-.matrix-btn {
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid #00ff00;
-    color: #00ff00;
-    padding: 12px 24px;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    user-select: none;
-    white-space: nowrap;
-}
-
-.matrix-btn:hover {
-    background: #00ff00;
-    color: #000;
-    box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
-    transform: translateY(-2px);
-}
-
-.matrix-btn:active {
-    transform: translateY(0);
-}
-
-.matrix-btn.paused {
-    border-color: #ff0000;
-    color: #ff0000;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-}
-
-.matrix-btn.paused:hover {
-    background: #ff0000;
-    box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
-}
-
-@keyframes btnPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-.matrix-btn.pulse {
-    animation: btnPulse 0.3s ease;
-}
-</style>
-
-<script>
-(function() {
-    'use strict';
-    
-    // Wait for all elements to load
-    function initControls() {
-        // Create container
-        const container = document.createElement('div');
-        container.className = 'matrix-controls';
-        document.body.appendChild(container);
-        
-        // === PAUSE/PLAY BUTTON ===
-        const pauseBtn = document.createElement('button');
-        pauseBtn.className = 'matrix-btn';
-        pauseBtn.innerHTML = '⏸ PAUSE';
-        pauseBtn.id = 'matrix-toggle';
-        container.appendChild(pauseBtn);
-        
-        let isRunning = true;
-        
-        pauseBtn.addEventListener('click', function() {
-            isRunning = !isRunning;
             
-            if (isRunning) {
-                if (window.resumeMatrix) window.resumeMatrix();
-                const canvas = document.getElementById('matrix-canvas');
-                if (canvas) canvas.style.opacity = '0.8';
-                pauseBtn.innerHTML = '⏸ PAUSE';
-                pauseBtn.classList.remove('paused');
-            } else {
-                if (window.pauseMatrix) window.pauseMatrix();
-                const canvas = document.getElementById('matrix-canvas');
-                if (canvas) canvas.style.opacity = '0';
-                pauseBtn.innerHTML = '▶ PLAY';
-                pauseBtn.classList.add('paused');
-            }
+            const particles = [];
             
-            pauseBtn.classList.add('pulse');
-            setTimeout(() => pauseBtn.classList.remove('pulse'), 300);
-        });
-        
-        // === COLOR BUTTON ===
-        const colorBtn = document.createElement('button');
-        colorBtn.className = 'matrix-btn';
-        colorBtn.innerHTML = '🎨 GREEN';
-        colorBtn.id = 'color-toggle';
-        container.appendChild(colorBtn);
-        
-        const colors = [
-            { name: 'GREEN', hex: '#0F0' },
-            { name: 'CYAN', hex: '#0FF' },
-            { name: 'BLUE', hex: '#08F' },
-            { name: 'PURPLE', hex: '#F0F' },
-            { name: 'RED', hex: '#F00' },
-            { name: 'ORANGE', hex: '#F80' },
-            { name: 'YELLOW', hex: '#FF0' },
-            { name: 'PINK', hex: '#F6B' },
-            { name: 'WHITE', hex: '#FFF' }
-        ];
-        
-        let colorIndex = 0;
-        let matrixColor = colors[0].hex;
-        
-        // Override canvas fillText to change color
-        const originalFillText = CanvasRenderingContext2D.prototype.fillText;
-        CanvasRenderingContext2D.prototype.fillText = function(text, x, y, maxWidth) {
-            if (this.canvas && this.canvas.id === 'matrix-canvas') {
-                // Force color change
-                const fs = this.fillStyle;
-                if (fs === '#0F0' || fs === '#0f0' || fs === 'rgb(0, 255, 0)' || fs.includes('255, 0')) {
-                    this.fillStyle = matrixColor;
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                    this.velocity = {
+                        x: (Math.random() - 0.5) * 8,
+                        y: (Math.random() - 0.5) * 8
+                    };
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.015 + 0.015;
+                    this.size = Math.random() * 3 + 2;
+                }
+                
+                update() {
+                    this.velocity.x *= 0.98;
+                    this.velocity.y *= 0.98;
+                    this.velocity.y += 0.15;
+                    
+                    this.x += this.velocity.x;
+                    this.y += this.velocity.y;
+                    this.alpha -= this.decay;
+                }
+                
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
                 }
             }
-            return originalFillText.call(this, text, x, y, maxWidth);
-        };
-        
-        colorBtn.addEventListener('click', function() {
-            colorIndex = (colorIndex + 1) % colors.length;
-            const color = colors[colorIndex];
-            matrixColor = color.hex;
             
-            colorBtn.innerHTML = '🎨 ' + color.name;
-            colorBtn.style.borderColor = color.hex;
-            colorBtn.style.color = color.hex;
-            colorBtn.style.boxShadow = `0 0 20px ${color.hex}80`;
+            function createFirework(x, y) {
+                const colors = ['#00ff00', '#00ff41', '#39ff14', '#0ff', '#0f0', '#ff0', '#f0f'];
+                const particleCount = 50;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    particles.push(new Particle(x, y, color));
+                }
+            }
             
-            colorBtn.classList.add('pulse');
-            setTimeout(() => colorBtn.classList.remove('pulse'), 300);
-        });
-    }
-    
-    // Execute after Matrix canvas is created
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(initControls, 500);
-        });
-    } else {
-        setTimeout(initControls, 500);
-    }
-})();
-</script>
-
-
-
-<!-- Custom Cursor
-<script>
-(function() {
-    'use strict';
-    
-    function initCustomCursor() {
-        // Create cursor element
-        const cursor = document.createElement('div');
-        cursor.id = 'custom-cursor';
-        
-        // Chọn 1 trong các icon sau:
-        // cursor.innerHTML = '🎯'; // Mục tiêu
-        // cursor.innerHTML = '⚔️'; // Kiếm
-        // cursor.innerHTML = '🔫'; // Súng
-        // cursor.innerHTML = '💀'; // Đầu lâu
-        // cursor.innerHTML = '👾'; // Space invader
-        // cursor.innerHTML = '🕷️'; // Nhện
-        // cursor.innerHTML = '🦂'; // Bọ cạp
-        // cursor.innerHTML = '⚡'; // Sét
-        // cursor.innerHTML = '🔥'; // Lửa
-        // cursor.innerHTML = '👁️'; // Con mắt
-        // cursor.innerHTML = '🧿'; // Evil eye
-        // cursor.innerHTML = '☠️'; // Skull & bones
-        
-        cursor.style.fontSize = '24px';
-        document.body.appendChild(cursor);
-        
-        // Track mouse position
-        let mouseX = 0;
-        let mouseY = 0;
-        
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    particles[i].update();
+                    particles[i].draw();
+                    
+                    if (particles[i].alpha <= 0) {
+                        particles.splice(i, 1);
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
             
-            // Update cursor position with smooth follow
-            cursor.style.left = mouseX + 'px';
-            cursor.style.top = mouseY + 'px';
-        });
+            animate();
+            
+            document.addEventListener('click', function(e) {
+                createFirework(e.clientX, e.clientY);
+            });
+            
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
         
-        // Click effect
-        document.addEventListener('mousedown', () => {
-            cursor.classList.add('clicking');
-        });
-        
-        document.addEventListener('mouseup', () => {
-            cursor.classList.remove('clicking');
-        });
-        
-        // Hide cursor when leaving window
-        document.addEventListener('mouseleave', () => {
-            cursor.style.opacity = '0';
-        });
-        
-        document.addEventListener('mouseenter', () => {
-            cursor.style.opacity = '1';
-        });
-    }
-    
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCustomCursor);
-    } else {
-        initCustomCursor();
-    }
-})();
-</script> -->
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFireworks);
+        } else {
+            initFireworks();
+        }
+    })();
+    </script>
+
+</body>
+</html>

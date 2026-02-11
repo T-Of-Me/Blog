@@ -1,7 +1,6 @@
 ---
 title: "About me"
 description: "Giới thiệu về bản thân và các dự án cá nhân"
-layout: "single"  # Sử dụng layout single để tránh lỗi Archives
 slug: "about"
 menu:
     main:

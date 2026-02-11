@@ -34,7 +34,7 @@ Nếu bạn muốn trao đổi về kỹ thuật hoặc hợp tác trong các d�
 
 * **Github:** [R4f3al0w](https://github.com/T-Of-Me)
 * **Email:** phantung2k4nd@gmail.com
-* **Facebook/LinkedIn:** [Phan Tung](https://www.facebook.com/thanh.tung.901453?locale=vi_VN)
+* **Facebook:** [Phan Tung](https://www.facebook.com/thanh.tung.901453?locale=vi_VN)
 * **Youtube:** [Youtube](https://www.youtube.com/@TungPhan-qf4tu)
 ---
 > *"Security is not a product, but a process."*

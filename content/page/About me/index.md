@@ -18,6 +18,7 @@ Tôi là một người đam mê An toàn thông tin và hiện là thành viên
 ### 🏆 Thành tích nổi bật
 
 * **Giải Ba** - Cuộc thi Sinh viên với An toàn thông tin (Student Information Security Contest) năm 2025.
+![alt text](image.png)
 
 ### 💻 Kỹ năng & Lĩnh vực nghiên cứu
 

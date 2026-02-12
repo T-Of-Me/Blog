@@ -11,7 +11,7 @@ weight: Medium
 ---
 
 
-# Gavel - Medium - linux 
+# Gavel - Medium - linuxx
 - Nmap thoi 
 ![image](https://hackmd.io/_uploads/r15FvGiv-x.png)
 

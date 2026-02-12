@@ -883,3 +883,8 @@ main, article, .article-content {
 .article-list .article-time--list {
     display: none !important;
 }
+/* Tag category nhỏ lại */
+.article-list .article-category a {
+    font-size: 0.7rem !important;
+    padding: 4px 10px !important;
+}

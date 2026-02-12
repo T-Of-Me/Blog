@@ -1,6 +1,6 @@
 ---
-title: Web security
-description: Học thuật tí
+title: CVE
+description: Bug Bounty  
 image: image.png
 
 # Badge style

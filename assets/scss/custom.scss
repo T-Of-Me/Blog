@@ -827,3 +827,28 @@ main, article, .article-content {
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
+
+/* Homepage 3-column grid layout */
+@media (min-width: 1024px) {
+    .article-list {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+    }
+    
+    .article-list article:first-child {
+        grid-column: unset !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .article-list {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+    
+    .article-list article:first-child {
+        grid-column: unset !important;
+    }
+}

@@ -839,6 +839,30 @@ main, article, .article-content {
     .article-list article:first-child {
         grid-column: unset !important;
     }
+
+    /* Ảnh cover to hơn */
+    .article-list article .article-image img {
+        height: 200px !important;
+        object-fit: cover !important;
+    }
+
+    /* Chữ nhỏ lại */
+    .article-list article .article-title {
+        font-size: 1.2rem !important;
+    }
+
+    .article-list article .article-subtitle,
+    .article-list article .article-details {
+        font-size: 0.85rem !important;
+    }
+
+    /* Giới hạn chiều cao card */
+    .article-list article .article-details .article-excerpt {
+        -webkit-line-clamp: 2 !important;
+        overflow: hidden !important;
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical !important;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {

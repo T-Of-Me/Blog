@@ -2,7 +2,7 @@
 title: Eighteen
 description: Chill trước khi về tết 
 date: 2026-01-01 00:00:00+0000
-image: image.jpg
+image: image.png
 categories:
     - HT
 tags:

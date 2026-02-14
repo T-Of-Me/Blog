@@ -1,6 +1,6 @@
 ---
 title: 0xfunCTF
-description: Web baby 
+description: Web babyyyy
 date: 2026-01-01 00:00:00+0000
 image: 1.png
 categories:
@@ -11,7 +11,7 @@ tags:
     - HTTP Request Smuggling
     - Path Traversal
     - RCE via Python .pth Injection
-weight: 0
+weight: 100
 ---
 
 

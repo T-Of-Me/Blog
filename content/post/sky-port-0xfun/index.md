@@ -1,5 +1,5 @@
 ---
-title: 0xfunCTF - WEB
+title: 0xfunCTF - WEB - SkyPort Ops
 description: Web babyyyy
 date: 2026-01-01 00:00:00+0000
 image: image.png

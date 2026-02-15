@@ -11,7 +11,7 @@ weight: 100
 ---
 # Drums - Forensics
 
-![alt text](image-1.png)
+ 
 
 ## Challenge
 
@@ -56,7 +56,7 @@ recover_data('Melodie.wav', 'recovered.bin', num_lsb=2, bytes_to_recover=10000)
 ```
 
 The extracted data immediately reveals the flag at offset 0.
-![alt text](image-2.png)
+ 
 ## Flag
 
 ```

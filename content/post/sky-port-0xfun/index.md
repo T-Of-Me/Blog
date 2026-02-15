@@ -16,7 +16,7 @@ weight: 100
 
 
 
-![alt text](11.png)
+
 
 ## Challenge Info
 

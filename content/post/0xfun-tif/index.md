@@ -22,12 +22,13 @@ The goal of this stage is to gain initial access to the system by bypassing the 
 
 **The Flaw**: The server accepts an untrusted jku (JWK Set URL) parameter from the JWT header without validation. It fetches "keys" from an attacker-controlled URL and stores them in the SSO_JWKS_CACHE.
 
-The "Algorithm Confusion": Even though the header claims to use `RS256` (Asymmetric), the backend uses `hmac.new` (Symmetric) to verify the signature.
+**The "Algorithm Confusion"**: Even though the header claims to use `RS256` (Asymmetric), the backend uses `hmac.new` (Symmetric) to verify the signature.
 
 - **Impact**: An attacker can sign a fake `JWT` using a simple string (e.g., "`exploit-key`"), host that string in a `jwks.json` file on their own server, and point the target to it. The server will use the attacker's "key" to verify the attacker's "token," granting them access as any user (in this case, nora.vale@drift.com
 ![alt text](image.png)
 
 ## Stage 2: Privilege Escalation via JWT Path Traversal
+
 Once logged in as a `Researcher`, the attacker needs higher privileges (`Reviewer`) to access sensitive reporting features.
 
 **Vulnerability Location**: The `verify_reviewer_grant` function.
@@ -36,12 +37,12 @@ Once logged in as a `Researcher`, the attacker needs higher privileges (`Reviewe
 
 **The Exploit**: The attacker uploads a file named key.pem containing a custom secret via the /review/material/upload endpoint. Then, they send a JWT with kid set to ../review-materials/key.
 
-**Impact**: The server is tricked into reading the attacker's uploaded file as the "Secret Key" for `HMAC` verification. This allows the attacker to forge a "`Reviewer`" grant and **upgrade their session role**.
+**Impact**: The server is tricked into reading the attacker's uploaded file as the "Secret Key" for `HMAC` verification. This allows the attacker to forge a "Reviewer" grant and **upgrade their session role**.
 ![alt text](image-1.png)
 
 ## Stage 3: Information Leak via BFCache (Stealing the Workspace Key)
 
-Administrative functions are protected by a dynamic `workspace_key`. Since this key is `randomized`, the attacker must `steal` it from a real ` Admin's session`.
+**Administrative** functions are protected by a dynamic `workspace_key`. Since this key is `randomized`, the attacker must `steal` it from a real ` Admin's session`.
 
 **Vulnerability Location**: The `admin.js` file and the browser's BFCache (Back-Forward Cache).
 
@@ -63,7 +64,8 @@ With the `workspace_key`, the attacker gains access to **Admin** import features
 
 **The Flaw**: The XML parser allows `XInclude`, enabling the server to read local files. Furthermore, the internal service performs Insecure Deserialization on the imported data.
 
-The Exploit: 1. The attacker uploads a Base64-encoded Python Pickle payload (designed to copy the flag).
+**The Exploit**: 
+1. The attacker uploads a Base64-encoded Python Pickle payload (designed to copy the flag).
 2. They send an XML import request using `<xi:include>` to point to the uploaded payload.
 3. The server reads the file, decodes it, and sends it to the internal sink.
 
@@ -71,7 +73,7 @@ The Exploit: 1. The attacker uploads a Base64-encoded Python Pickle payload (des
 ![alt text](image-4.png)
 
 
-PAYLOAD 
+**PAYLOAD** 
 
   
 ```py=

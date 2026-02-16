@@ -53,23 +53,6 @@ Administrative functions are protected by a dynamic `workspace_key`. Since this 
 Moving "Back" in history to the cached `/admin` page.
 
 **Impact**: The pageshow event triggers upon the "**Back**" navigation and leaks the sensitive `workspace_key` to the attacker’s collector URL.
-
-Gemini said
-Here is the comprehensive explanation of the exploit chain in English, broken down into 4 stages as requested:
-
-Stage 1: Identity Forgery via JWKS Poisoning (Algorithm Confusion)
-The goal of this stage is to gain initial access to the system by bypassing the Single Sign-On (SSO) authentication.
-
-Vulnerability Location: The verify_sso_id_token and refresh_sso_jwks_cache functions.
-
-The Flaw: The server accepts an untrusted jku (JWK Set URL) parameter from the JWT header without validation. It fetches "keys" from an attacker-controlled URL and stores them in the SSO_JWKS_CACHE.
-
-The "Algorithm Confusion": Even though the header claims to use RS256 (Asymmetric), the backend uses hmac.new (Symmetric) to verify the signature.
-
-Impact: An attacker can sign a fake JWT using a simple string (e.g., "exploit-key"), host that string in a jwks.json file on their own server, and point the target to it. The server will use the attacker's "key" to verify the attacker's "token," granting them access as any user (in this case, nora.vale@drift.com).
-
- 
- 
 ![alt text](image-3.png)
 
 

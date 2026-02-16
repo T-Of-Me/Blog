@@ -48,9 +48,7 @@ Administrative functions are protected by a dynamic `workspace_key`. Since this 
 **The Flaw**: The admin page contains a pageshow event listener that automatically redirects the browser to a callbackUrl provided in the query string if the page is restored from the cache.
 ![alt text](image-2.png)
  
-**The Exploit**: The attacker uses the` history.go(-2)` command. They trick the Admin's browser into: Loading the `/admin` page (caching the `workspace_key`).
-
-Moving "Back" in history to the cached `/admin` page.
+**The Exploit**: The attacker uses the` history.go(-2)` command. They trick the Admin's browser into: Loading the `/admin` page (caching the `workspace_key`). Moving "Back" in history to the cached `/admin` page.
 
 **Impact**: The pageshow event triggers upon the "**Back**" navigation and leaks the sensitive `workspace_key` to the attacker’s collector URL.
 ![alt text](image-3.png)

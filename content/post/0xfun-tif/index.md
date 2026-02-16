@@ -16,9 +16,9 @@ weight: 100
 
  
 ## Stage 1: Identity Forgery via JWKS Poisoning (Algorithm Confusion)
-- The goal of this stage is to gain initial access to the system by bypassing the Single Sign-On (SSO) authentication.
+The goal of this stage is to gain initial access to the system by bypassing the Single Sign-On (SSO) authentication.
 
-- **Vulnerability Location**: The `verify_sso_id_token` and `refresh_sso_jwks_cache` functions.
+**Vulnerability Location**: The `verify_sso_id_token` and `refresh_sso_jwks_cache` functions.
 
 **The Flaw**: The server accepts an untrusted jku (JWK Set URL) parameter from the JWT header without validation. It fetches "keys" from an attacker-controlled URL and stores them in the SSO_JWKS_CACHE.
 
@@ -68,33 +68,8 @@ The "Algorithm Confusion": Even though the header claims to use RS256 (Asymmetri
 
 Impact: An attacker can sign a fake JWT using a simple string (e.g., "exploit-key"), host that string in a jwks.json file on their own server, and point the target to it. The server will use the attacker's "key" to verify the attacker's "token," granting them access as any user (in this case, nora.vale@drift.com).
 
-Stage 2: Privilege Escalation via JWT Path Traversal
-Once logged in as a Researcher, the attacker needs higher privileges (Reviewer) to access sensitive reporting features.
-
-Vulnerability Location: The verify_reviewer_grant function.
-
-The Flaw: The kid (Key ID) parameter from the JWT header is used to construct a file path: KEYS_DIR / f"{kid}.pem". There is no sanitization, allowing for a Path Traversal attack.
-
-The Exploit: The attacker uploads a file named key.pem containing a custom secret via the /review/material/upload endpoint. Then, they send a JWT with kid set to ../review-materials/key.
-
-Impact: The server is tricked into reading the attacker's uploaded file as the "Secret Key" for HMAC verification. This allows the attacker to forge a "Reviewer" grant and upgrade their session role.
-
-Stage 3: Information Leak via BFCache (Stealing the Workspace Key)
-Administrative functions are protected by a dynamic workspace_key. Since this key is randomized, the attacker must steal it from a real Admin's session.
-
-Vulnerability Location: The admin.js file and the browser's BFCache (Back-Forward Cache).
-
-The Flaw: The admin page contains a pageshow event listener that automatically redirects the browser to a callbackUrl provided in the query string if the page is restored from the cache.
-
-The Exploit: The attacker uses the history.go(-2) command. They trick the Admin's browser into:
-
-Loading the /admin page (caching the workspace_key).
-
-Navigating away.
-
-Moving "Back" in history to the cached /admin page.
-
-Impact: The pageshow event triggers upon the "Back" navigation and leaks the sensitive workspace_key to the attacker’s collector URL.
+ 
+ 
 ![alt text](image-3.png)
 
 

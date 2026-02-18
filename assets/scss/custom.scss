@@ -2063,3 +2063,68 @@ main, article, .article-content {
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
+
+// ============================================
+// HOMEPAGE 3-COLUMN GRID LAYOUT
+// ============================================
+/* Homepage 3-column grid layout */
+@media (min-width: 1024px) {
+    .article-list {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+    }
+    
+    .article-list article:first-child {
+        grid-column: unset !important;
+    }
+
+    .article-list article .article-image img {
+        height: 150px !important;
+        object-fit: cover !important;
+    }
+
+    .article-list article .article-title {
+        font-size: 1rem !important;
+    }
+
+    .article-list article .article-subtitle,
+    .article-list article .article-details {
+        font-size: 0.8rem !important;
+    }
+
+    .article-list article .article-details .article-excerpt {
+        -webkit-line-clamp: 2 !important;
+        overflow: hidden !important;
+        display: -webkit-box !important;
+        -webkit-box-orient: vertical !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .article-list {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+    
+    .article-list article:first-child {
+        grid-column: unset !important;
+    }
+}
+
+/* Ẩn date + reading time trên tất cả card */
+.article-list .article-details footer,
+.article-list .article-details .article-time,
+.article-list .article-details .article-category + footer,
+.article-list footer.article-time,
+.article-list time,
+.article-list .article-time--list {
+    display: none !important;
+}
+
+/* Tag category nhỏ lại */
+.article-list .article-category a {
+    font-size: 0.7rem !important;
+    padding: 4px 10px !important;
+}

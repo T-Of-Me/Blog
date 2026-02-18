@@ -1583,6 +1583,48 @@ article, .article-content {
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-card);
     border-radius: var(--border-radius);
+    position: relative;
+    overflow: hidden;
+    
+    // Animated gradient border
+    &::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(
+            135deg,
+            var(--neon-cyan),
+            var(--neon-purple),
+            var(--neon-pink),
+            var(--terminal-green),
+            var(--neon-cyan)
+        );
+        background-size: 400% 400%;
+        border-radius: var(--border-radius);
+        z-index: -1;
+        animation: gradient-border 8s ease infinite;
+        opacity: 0.6;
+    }
+    
+    &:hover::before {
+        opacity: 1;
+        animation-duration: 4s;
+    }
+}
+
+@keyframes gradient-border {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 // ============================================
@@ -2127,4 +2169,56 @@ main, article, .article-content {
 .article-list .article-category a {
     font-size: 0.7rem !important;
     padding: 4px 10px !important;
+}
+
+/* Gradient border cho article cards */
+.article-list article {
+    position: relative;
+    background-color: var(--bg-card) !important;
+    border: 2px solid transparent !important;
+    background-clip: padding-box;
+    transition: all 0.3s ease;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 2px;
+        background: linear-gradient(
+            135deg,
+            var(--neon-cyan) 0%,
+            var(--neon-purple) 25%,
+            var(--neon-pink) 50%,
+            var(--terminal-green) 75%,
+            var(--neon-cyan) 100%
+        );
+        background-size: 300% 300%;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        animation: gradient-rotate 6s linear infinite;
+        pointer-events: none;
+    }
+    
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 40px rgba(0, 229, 255, 0.3) !important;
+        
+        &::before {
+            animation-duration: 2s;
+        }
+    }
+}
+
+@keyframes gradient-rotate {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }

@@ -9,5 +9,5 @@ menu:
             icon: user
 ---
 
-![alt text](image-1.png)
+![Đoạn này là chuẩn bị lên tết nè nó chán 2026](image-1.png)
 

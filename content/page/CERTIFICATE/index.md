@@ -1,7 +1,7 @@
 ---
 title: "CERTIFICATE"
 description: "1 chút thành quả"
-slug: "about"
+slug: "aboutt"
 menu:
     main:
         weight: 3

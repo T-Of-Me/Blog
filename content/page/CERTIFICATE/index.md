@@ -1,5 +1,5 @@
 ---
-title: "CERTIFICATE"
+title: "Certificate"
 description: "1 chút thành quả"
 slug: "aboutt"
 menu:

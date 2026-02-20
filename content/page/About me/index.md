@@ -4,7 +4,7 @@ description: "Giới thiệu về bản thân và các dự án cá nhân"
 slug: "about"
 menu:
     main:
-        weight: 1
+        weight: 2
         params: 
             icon: user
 ---

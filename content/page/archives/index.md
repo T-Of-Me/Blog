@@ -6,7 +6,7 @@ layout: "archives"     # Đây là dòng quan trọng để fix warning
 slug: "archives"
 menu:
     main:
-        weight: 3
+        weight: 4
         params: 
             icon: archives
 ---

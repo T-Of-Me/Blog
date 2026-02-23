@@ -111,7 +111,7 @@ default-src 'self'
 | `` $` `` | Everything **before** the match |
 | `$'` | Everything **after** the match |
 
-=> So if our content contains **$`**, it gets replaced with the entire chunk of HTML above `{paste}` — roughly 200+ characters of raw **template markup injected** inline.
+=> So if our content contains **$\`**, it gets replaced with the entire chunk of HTML above `{paste}` — roughly 200+ characters of raw **template markup injected** inline.
 
 ## Stage 2: DOMPurify Bypass via Attribute Breakout (mXSS)
 

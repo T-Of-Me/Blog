@@ -1,6 +1,6 @@
 ---
 title: BITSCTF - 2026
-description: A Complex Exploit Chain featuring Template Injection, DOMPurify mXSS Bypass, and Cookie Exfiltration via javascript: URI Trick
+description: A Complex Exploit Chain featuring Template Injection, DOMPurify mXSS Bypass, and Cookie Exfiltration via javascript URI Trick
 date: 2026-02-21 00:00:00+0000
 image: image.png
 categories:

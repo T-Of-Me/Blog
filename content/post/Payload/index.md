@@ -6,7 +6,6 @@ image: image.png
 categories:
     - CTF
 tags:
-    - payload
 weight: 100
 ---
 

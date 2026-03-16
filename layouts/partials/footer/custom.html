@@ -1,0 +1,123 @@
+<nav id="top-nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-blob nav-blob--left"></div>
+  <div class="nav-blob nav-blob--right"></div>
+
+  <div class="nav-inner">
+    <!-- Logo -->
+    <div class="nav-logo">
+      <a href="/" class="nav-logo__link" aria-label="Home">
+        <span class="nav-logo__text">{{ .Site.Title }}</span>
+      </a>
+    </div>
+
+    <!-- Desktop nav links -->
+    <div class="nav-links" id="nav-links" role="menubar">
+      <a href="/" class="nav-link" role="menuitem">
+        <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>Home</span>
+      </a>
+      <a href="/challenges" class="nav-link" role="menuitem">
+        <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+        </svg>
+        <span>Challenges</span>
+      </a>
+      <a href="/events" class="nav-link" role="menuitem">
+        <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+        </svg>
+        <span>Events</span>
+      </a>
+      <a href="/writeups" class="nav-link" role="menuitem">
+        <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+        </svg>
+        <span>Writeups</span>
+      </a>
+      <a href="/blogs" class="nav-link" role="menuitem">
+        <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        <span>blogs</span>
+      </a>
+      <a href="/team" class="nav-link" role="menuitem">
+        <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <span>Team</span>
+      </a>
+      <a href="/sponsors" class="nav-link" role="menuitem">
+        <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 019.591-3.676.56.56 0 00.818 0A5.49 5.49 0 0122 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 01-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+        </svg>
+        <span>Sponsors</span>
+      </a>
+    </div>
+
+    <!-- Auth actions -->
+    <div class="nav-actions">
+      <a href="/support" class="nav-btn nav-btn--support" title="Support the Project">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 019.591-3.676.56.56 0 00.818 0A5.49 5.49 0 0122 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 01-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+        </svg>
+        <span class="nav-btn__label">Support</span>
+      </a>
+      <a href="/auth/login" class="nav-btn nav-btn--login">Log In</a>
+      <a href="/auth/register" class="nav-btn nav-btn--signup">Sign Up</a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-mobile-menu">
+      <svg class="hamburger-icon hamburger-icon--open" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <svg class="hamburger-icon hamburger-icon--close" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="display:none">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile dropdown menu -->
+  <div class="nav-mobile-menu" id="nav-mobile-menu" aria-hidden="true">
+    <a href="/" class="nav-mobile-link">Home</a>
+    <a href="/challenges" class="nav-mobile-link">Challenges</a>
+    <a href="/events" class="nav-mobile-link">Events</a>
+    <a href="/writeups" class="nav-mobile-link">Writeups</a>
+    <a href="/blogs" class="nav-mobile-link">blogs</a>
+    <a href="/team" class="nav-mobile-link">Team</a>
+    <a href="/sponsors" class="nav-mobile-link">Sponsors</a>
+    <div class="nav-mobile-divider"></div>
+    <a href="/support" class="nav-mobile-link nav-mobile-link--support">Support</a>
+    <a href="/auth/login" class="nav-mobile-link">Log In</a>
+    <a href="/auth/register" class="nav-mobile-link nav-mobile-link--signup">Sign Up</a>
+  </div>
+</nav>
+
+<script>
+(function(){
+  'use strict';
+  var btn = document.getElementById('nav-hamburger');
+  var menu = document.getElementById('nav-mobile-menu');
+  if (!btn || !menu) return;
+  var iconOpen = btn.querySelector('.hamburger-icon--open');
+  var iconClose = btn.querySelector('.hamburger-icon--close');
+  btn.addEventListener('click', function(){
+    var isOpen = menu.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    if (iconOpen) iconOpen.style.display = isOpen ? 'none' : '';
+    if (iconClose) iconClose.style.display = isOpen ? '' : 'none';
+  });
+  document.addEventListener('click', function(e){
+    if (!document.getElementById('top-nav').contains(e.target)) {
+      menu.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      if (iconOpen) iconOpen.style.display = '';
+      if (iconClose) iconClose.style.display = 'none';
+    }
+  });
+})();
+</script>

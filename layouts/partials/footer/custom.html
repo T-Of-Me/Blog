@@ -34,7 +34,7 @@
 
     <!-- Desktop nav links -->
     <div class="nav-links" id="nav-links" role="menubar">
-      <a href="{{ "/" | relURL }}" class="nav-link" role="menuitem">
+      <a href="{{ $.Site.Home.RelPermalink }}" class="nav-link" role="menuitem">
         <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
         </svg>
@@ -64,13 +64,13 @@
         </svg>
         <span>Archives</span>
       </a>
-      <a href="{{ "certificate" | relURL }}" class="nav-link" role="menuitem">
+      <a href="{{ "aboutt" | relURL }}" class="nav-link" role="menuitem">
         <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
         </svg>
         <span>Certs</span>
       </a>
-      <a href="{{ "about-me" | relURL }}" class="nav-link" role="menuitem">
+      <a href="{{ "about" | relURL }}" class="nav-link" role="menuitem">
         <svg class="nav-link__icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
         </svg>
@@ -101,13 +101,13 @@
 
   <!-- Mobile dropdown menu -->
   <div class="nav-mobile-menu" id="nav-mobile-menu" aria-hidden="true">
-    <a href="{{ "/" | relURL }}" class="nav-mobile-link">Home</a>
+    <a href="{{ $.Site.Home.RelPermalink }}" class="nav-mobile-link">Home</a>
     <a href="{{ "categories/ctf" | relURL }}" class="nav-mobile-link">CTF</a>
     <a href="{{ "categories/cve" | relURL }}" class="nav-mobile-link">CVE</a>
     <a href="{{ "categories/htb" | relURL }}" class="nav-mobile-link">HTB</a>
     <a href="{{ "archives" | relURL }}" class="nav-mobile-link">Archives</a>
-    <a href="{{ "certificate" | relURL }}" class="nav-mobile-link">Certs</a>
-    <a href="{{ "about-me" | relURL }}" class="nav-mobile-link">About</a>
+    <a href="{{ "aboutt" | relURL }}" class="nav-mobile-link">Certs</a>
+    <a href="{{ "about" | relURL }}" class="nav-mobile-link">About</a>
     <div class="nav-mobile-divider"></div>
     <a href="https://github.com/T-Of-Me" target="_blank" rel="noopener" class="nav-mobile-link nav-mobile-link--support">GitHub</a>
   </div>

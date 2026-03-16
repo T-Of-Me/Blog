@@ -41,6 +41,62 @@ body {
 
 body {
   padding-top: calc(var(--nav-height) + var(--nav-top) + 24px) !important;
+  position: relative;
+  isolation: isolate;
+}
+
+// Background layer — fixed behind all content
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: var(--bg);
+  // Subtle dot grid
+  background-image:
+    radial-gradient(rgba(0, 229, 255, 0.07) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+// Animated gradient orbs
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 600px 400px at 10% 15%, rgba(0, 229, 255, 0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 500px at 90% 85%, rgba(124, 58, 237, 0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(236, 72, 153, 0.04) 0%, transparent 70%);
+  animation: bgOrbs 12s ease-in-out infinite alternate;
+}
+
+@keyframes bgOrbs {
+  0% {
+    background:
+      radial-gradient(ellipse 600px 400px at 10% 15%, rgba(0, 229, 255, 0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 500px at 90% 85%, rgba(124, 58, 237, 0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 300px at 50% 50%, rgba(236, 72, 153, 0.04) 0%, transparent 70%);
+  }
+  33% {
+    background:
+      radial-gradient(ellipse 600px 400px at 75% 20%, rgba(0, 229, 255, 0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 500px at 20% 70%, rgba(124, 58, 237, 0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 300px at 60% 40%, rgba(236, 72, 153, 0.05) 0%, transparent 70%);
+  }
+  66% {
+    background:
+      radial-gradient(ellipse 600px 400px at 30% 80%, rgba(0, 229, 255, 0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 500px at 70% 10%, rgba(124, 58, 237, 0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 300px at 45% 60%, rgba(236, 72, 153, 0.04) 0%, transparent 70%);
+  }
+  100% {
+    background:
+      radial-gradient(ellipse 600px 400px at 85% 60%, rgba(0, 229, 255, 0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 500px at 15% 30%, rgba(124, 58, 237, 0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 300px at 55% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 70%);
+  }
 }
 
 // =============================================
@@ -109,8 +165,8 @@ aside.sidebar.left-sidebar,
   top: var(--nav-top);
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 1280px;
+  width: calc(100% - 48px);
+  max-width: 1100px;
   z-index: 1000;
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -760,6 +816,7 @@ input[type="text"] {
 
   #top-nav {
     width: calc(100% - 24px);
+    max-width: calc(100% - 24px);
   }
 
   .article-list {

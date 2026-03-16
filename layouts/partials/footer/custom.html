@@ -1,3 +1,25 @@
+<!-- ========== CONSOLE SPLASH SCREEN ========== -->
+<div id="console-splash">
+  <div class="splash-terminal">
+    <!-- Title bar -->
+    <div class="splash-titlebar">
+      <span class="splash-dot splash-dot--red"></span>
+      <span class="splash-dot splash-dot--yellow"></span>
+      <span class="splash-dot splash-dot--green"></span>
+      <span class="splash-title-text">root@r4f3al0w:~</span>
+    </div>
+    <!-- Body -->
+    <div class="splash-body" id="splash-body">
+      <span id="splash-cursor-init" class="splash-cursor"></span>
+    </div>
+    <!-- Enter button -->
+    <div class="splash-enter-wrap" id="splash-enter-wrap">
+      <button id="splash-enter-btn" onclick="enterSite()">[ ENTER ]</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TOP NAV ========== -->
 <nav id="top-nav" role="navigation" aria-label="Main navigation">
   <div class="nav-blob nav-blob--left"></div>
   <div class="nav-blob nav-blob--right"></div>
@@ -98,26 +120,236 @@
 <script>
 (function(){
   'use strict';
+
+  // ── Helpers ──────────────────────────────────────────
+  var body = document.getElementById('splash-body');
+  var queue = [];
+  var running = false;
+
+  function run() {
+    if (running || !queue.length) return;
+    running = true;
+    var task = queue.shift();
+    task(function() { running = false; run(); });
+  }
+
+  function schedule(fn) { queue.push(fn); run(); }
+
+  // Append a line of text
+  function addLine(html, cls, delay, cb) {
+    schedule(function(done) {
+      setTimeout(function() {
+        // Remove init cursor if exists
+        var initCur = document.getElementById('splash-cursor-init');
+        if (initCur) initCur.remove();
+
+        var el = document.createElement('div');
+        if (cls) el.className = cls;
+        el.innerHTML = html;
+        body.appendChild(el);
+        body.scrollTop = body.scrollHeight;
+        if (cb) cb(el);
+        done();
+      }, delay || 0);
+    });
+  }
+
+  // Typewriter effect
+  function typeWriter(text, targetEl, speed, cb) {
+    var i = 0;
+    function next() {
+      if (i < text.length) {
+        targetEl.innerHTML = escHtml(text.slice(0, ++i)) + '<span class="splash-cursor"></span>';
+        setTimeout(next, speed || 45);
+      } else {
+        targetEl.innerHTML = escHtml(text);
+        if (cb) cb();
+      }
+    }
+    next();
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Animate a progress bar
+  function animateBar(barFill, pctEl, target, duration, cb) {
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var val = Math.round(progress * target);
+      barFill.style.width = val + '%';
+      if (pctEl) pctEl.textContent = val + '%';
+      if (progress < 1) requestAnimationFrame(step);
+      else if (cb) cb();
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ── Splash Sequence ──────────────────────────────────
+  function runSplash() {
+    // ASCII art
+    addLine(
+      '<pre class="splash-ascii">' +
+      ' ██████╗ ██╗  ██╗███████╗██╗  ██╗\n' +
+      ' ██╔══██╗██║  ██║██╔════╝╚██╗██╔╝\n' +
+      ' ██████╔╝███████║█████╗   ╚███╔╝ \n' +
+      ' ██╔══██╗╚════██║██╔══╝   ██╔██╗ \n' +
+      ' ██║  ██║     ██║██║     ██╔╝ ██╗\n' +
+      ' ╚═╝  ╚═╝     ╚═╝╚═╝     ╚═╝  ╚═╝\n' +
+      '            r4f3al0w — v2.0' +
+      '</pre>',
+      '', 300
+    );
+
+    // Log lines
+    var logs = [
+      { html: '> Initializing kernel modules...', cls: 'splash-log' },
+      { html: '<span class="splash-ok">Authentication bypass loaded</span>', cls: 'splash-log' },
+      { html: '<span class="splash-ok">Network scanner active</span>', cls: 'splash-log' },
+      { html: '<span class="splash-ok">Exploit framework ready</span>', cls: 'splash-log' },
+      { html: '<span class="splash-warn">⚠  2 vulnerabilities found in target</span>', cls: 'splash-log' },
+      { html: '<span class="splash-ok">Establishing encrypted tunnel...</span>', cls: 'splash-log' },
+    ];
+
+    logs.forEach(function(l, i) {
+      addLine(l.html, l.cls, 150 + i * 120);
+    });
+
+    // Progress bars
+    addLine('', 'splash-log', 200); // spacer
+
+    schedule(function(done) {
+      setTimeout(function() {
+        // Container for bars
+        var bars = [
+          { label: 'Decrypting ', target: 100, dur: 900 },
+          { label: 'Loading    ', target: 100, dur: 700 },
+          { label: 'Connecting ', target: 100, dur: 1100 },
+        ];
+
+        var pending = bars.length;
+
+        bars.forEach(function(b) {
+          var wrap = document.createElement('div');
+          wrap.className = 'splash-bar-wrap';
+
+          var lbl = document.createElement('span');
+          lbl.className = 'splash-bar-label';
+          lbl.textContent = b.label;
+
+          var barEl = document.createElement('div');
+          barEl.className = 'splash-bar';
+
+          var fill = document.createElement('div');
+          fill.className = 'splash-bar__fill';
+          barEl.appendChild(fill);
+
+          var pct = document.createElement('span');
+          pct.className = 'splash-bar-pct';
+          pct.textContent = '0%';
+
+          wrap.appendChild(lbl);
+          wrap.appendChild(barEl);
+          wrap.appendChild(pct);
+          body.appendChild(wrap);
+
+          animateBar(fill, pct, b.target, b.dur, function() {
+            pending--;
+            if (pending === 0) done();
+          });
+        });
+
+        body.scrollTop = body.scrollHeight;
+      }, 300);
+    });
+
+    // Spacer + typewriter echo
+    addLine('', 'splash-log', 200);
+    addLine('> <span id="tw-echo"></span>', 'splash-log splash-echo', 200, function(el) {
+      var twEl = el.querySelector('#tw-echo');
+      schedule(function(done) {
+        setTimeout(function() {
+          typeWriter('echo "From R4F3loww w1tH l0v3"', twEl, 55, function() {
+            // Print result
+            addLine(
+              '<span class="splash-signature">From R4F3loww w1tH l0v3</span>',
+              'splash-log', 300
+            );
+            // Show ENTER button
+            addLine('', 'splash-log', 400);
+            schedule(function(d2) {
+              setTimeout(function() {
+                document.getElementById('splash-enter-wrap').style.display = 'block';
+                d2();
+              }, 100);
+            });
+            done();
+          });
+        }, 200);
+      });
+    });
+  }
+
+  // ── Enter site ───────────────────────────────────────
+  window.enterSite = function() {
+    var splash = document.getElementById('console-splash');
+    if (!splash) return;
+    splash.classList.add('splash-fade-out');
+    setTimeout(function() {
+      splash.style.display = 'none';
+      animateNav();
+    }, 600);
+  };
+
+  function animateNav() {
+    var nav = document.getElementById('top-nav');
+    if (nav) {
+      nav.classList.add('nav-visible');
+    }
+    // Stagger nav links
+    var items = document.querySelectorAll('.nav-link, .nav-btn, .nav-logo__link');
+    items.forEach(function(el, i) {
+      setTimeout(function() { el.classList.add('nav-item-visible'); }, 80 + i * 60);
+    });
+    // Logo
+    var logo = document.querySelector('.nav-logo');
+    if (logo) setTimeout(function() { logo.classList.add('nav-item-visible'); }, 80);
+  }
+
+  // ── Mobile hamburger ─────────────────────────────────
   var btn = document.getElementById('nav-hamburger');
   var menu = document.getElementById('nav-mobile-menu');
-  if (!btn || !menu) return;
-  var iconOpen = btn.querySelector('.hamburger-icon--open');
-  var iconClose = btn.querySelector('.hamburger-icon--close');
-  btn.addEventListener('click', function(){
-    var isOpen = menu.classList.toggle('is-open');
-    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-    if (iconOpen) iconOpen.style.display = isOpen ? 'none' : '';
-    if (iconClose) iconClose.style.display = isOpen ? '' : 'none';
-  });
-  document.addEventListener('click', function(e){
-    if (!document.getElementById('top-nav').contains(e.target)) {
-      menu.classList.remove('is-open');
-      btn.setAttribute('aria-expanded', 'false');
-      menu.setAttribute('aria-hidden', 'true');
-      if (iconOpen) iconOpen.style.display = '';
-      if (iconClose) iconClose.style.display = 'none';
-    }
-  });
+  if (btn && menu) {
+    var iconOpen = btn.querySelector('.hamburger-icon--open');
+    var iconClose = btn.querySelector('.hamburger-icon--close');
+    btn.addEventListener('click', function() {
+      var isOpen = menu.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      if (iconOpen) iconOpen.style.display = isOpen ? 'none' : '';
+      if (iconClose) iconClose.style.display = isOpen ? '' : 'none';
+    });
+    document.addEventListener('click', function(e) {
+      var topNav = document.getElementById('top-nav');
+      if (topNav && !topNav.contains(e.target)) {
+        menu.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('aria-hidden', 'true');
+        if (iconOpen) iconOpen.style.display = '';
+        if (iconClose) iconClose.style.display = 'none';
+      }
+    });
+  }
+
+  // ── Start splash on DOM ready ─────────────────────────
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runSplash);
+  } else {
+    runSplash();
+  }
+
 })();
 </script>

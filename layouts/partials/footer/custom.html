@@ -302,17 +302,13 @@
 
   function animateNav() {
     var nav = document.getElementById('top-nav');
-    if (nav) {
-      nav.classList.add('nav-visible');
-    }
-    // Stagger nav links
-    var items = document.querySelectorAll('.nav-link, .nav-btn, .nav-logo__link');
-    items.forEach(function(el, i) {
-      setTimeout(function() { el.classList.add('nav-item-visible'); }, 80 + i * 60);
+    if (!nav) return;
+    // Small delay so CSS transition fires after display
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        nav.classList.add('nav-visible');
+      });
     });
-    // Logo
-    var logo = document.querySelector('.nav-logo');
-    if (logo) setTimeout(function() { logo.classList.add('nav-item-visible'); }, 80);
   }
 
   // ── Mobile hamburger ─────────────────────────────────

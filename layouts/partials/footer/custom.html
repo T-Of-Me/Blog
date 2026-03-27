@@ -338,9 +338,99 @@
 
   // ── Start splash on DOM ready ─────────────────────────
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', runSplash);
+    document.addEventListener('DOMContentLoaded', function() {
+      runSplash();
+      buildTOC();
+    });
   } else {
     runSplash();
+    buildTOC();
+  }
+
+  // ── Custom floating TOC ───────────────────────────────
+  function buildTOC() {
+    // Chỉ chạy trên trang bài viết
+    if (!document.body.classList.contains('article-page')) return;
+
+    var content = document.querySelector('.article-content');
+    if (!content) return;
+
+    var headings = content.querySelectorAll('h2, h3, h4');
+    if (headings.length < 2) return;
+
+    // Tạo container
+    var toc = document.createElement('div');
+    toc.id = 'custom-toc';
+
+    // Header
+    var header = document.createElement('div');
+    header.className = 'toc-header';
+    header.innerHTML =
+      '<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" ' +
+          'd="M4 6h16M4 10h16M4 14h10"/>' +
+      '</svg>' +
+      '<span>Table of Contents</span>';
+    toc.appendChild(header);
+
+    // List
+    var list = document.createElement('ul');
+    list.className = 'toc-list';
+
+    headings.forEach(function(h, idx) {
+      // Đảm bảo heading có id
+      if (!h.id) h.id = 'toc-heading-' + idx;
+
+      var tag = h.tagName.toLowerCase(); // h2 / h3 / h4
+      var li = document.createElement('li');
+      li.className = 'toc-item toc-item--' + tag;
+      li.dataset.id = h.id;
+
+      var a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent.replace(/\u00b6/g, '').trim(); // bỏ ¶ anchor
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+
+    toc.appendChild(list);
+    document.body.appendChild(toc);
+
+    // Scroll-spy
+    var items = list.querySelectorAll('.toc-item');
+    var headingEls = Array.from(headings);
+    var activeIdx = -1;
+
+    function onScroll() {
+      var scrollY = window.scrollY + 140;
+      var cur = 0;
+      for (var i = 0; i < headingEls.length; i++) {
+        if (headingEls[i].getBoundingClientRect().top + window.scrollY <= scrollY) {
+          cur = i;
+        }
+      }
+      if (cur !== activeIdx) {
+        activeIdx = cur;
+        items.forEach(function(it) { it.classList.remove('is-active'); });
+        if (items[cur]) {
+          items[cur].classList.add('is-active');
+          // Auto-scroll TOC nếu item ngoài view
+          var tocRect = toc.getBoundingClientRect();
+          var itemRect = items[cur].getBoundingClientRect();
+          if (itemRect.top < tocRect.top || itemRect.bottom > tocRect.bottom) {
+            items[cur].scrollIntoView({ block: 'nearest' });
+          }
+        }
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   }
 
 })();

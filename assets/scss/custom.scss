@@ -108,11 +108,9 @@ aside.sidebar.left-sidebar,
   display: none !important;
 }
 
-// Right sidebar — hiển thị trên trang bài viết (chứa TOC)
+// Right sidebar của theme — ẩn, dùng #custom-toc thay thế
 .right-sidebar {
-  display: flex !important;
-  flex-direction: column;
-  gap: 16px;
+  display: none !important;
 }
 
 .color-scheme-toggle,
@@ -682,7 +680,7 @@ article,
 }
 
 // =============================================
-// WIDGETS + TOC
+// WIDGETS (homepage sidebar)
 // =============================================
 
 .widget {
@@ -700,58 +698,113 @@ article,
   }
 }
 
-// TOC widget
-.widget--toc {
-  margin-top: 8px;
+// =============================================
+// CUSTOM FLOATING TOC (bên phải viewport)
+// =============================================
 
-  .toc-nav {
-    ul {
-      list-style: none;
-      padding-left: 0;
-      margin: 0;
+#custom-toc {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  width: 240px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  z-index: 500;
 
-      li {
-        padding-left: 0;
+  background: rgba(10, 15, 20, 0.85);
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 229, 255, 0.05);
 
-        a {
-          display: block;
-          padding: 5px 10px;
-          font-size: 13px;
-          font-family: 'Inter', monospace;
-          color: var(--muted) !important;
-          text-decoration: none !important;
-          border-left: 2px solid var(--border);
-          border-radius: 0 4px 4px 0;
-          transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-          line-height: 1.4;
+  // Chỉ hiện khi màn hình đủ rộng
+  display: none;
 
-          &:hover {
-            color: var(--primary) !important;
-            border-left-color: var(--primary);
-            background: rgba(0, 229, 255, 0.05);
-          }
-        }
+  @media (min-width: 1280px) {
+    display: block;
+  }
 
-        // Nested items (H3, H4)
-        ul {
-          padding-left: 14px;
+  // Scrollbar nhỏ gọn
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.2); border-radius: 2px; }
 
-          li a {
-            font-size: 12px;
-            padding: 4px 10px;
-            color: var(--muted-dim, rgba(255,255,255,0.3)) !important;
-          }
-        }
-      }
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+
+    svg {
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
     }
   }
 
-  // Active/highlighted heading
-  .active-class a,
-  li.active a {
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .toc-item a {
+    display: block;
+    padding: 5px 8px;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    color: rgba(255, 255, 255, 0.45) !important;
+    text-decoration: none !important;
+    border-left: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0 4px 4px 0;
+    line-height: 1.4;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover {
+      color: var(--primary) !important;
+      border-left-color: rgba(0, 229, 255, 0.5);
+      background: rgba(0, 229, 255, 0.05);
+    }
+  }
+
+  // H3 thụt vào
+  .toc-item--h3 a {
+    padding-left: 20px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  // H4 thụt vào hơn
+  .toc-item--h4 a {
+    padding-left: 32px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.22) !important;
+  }
+
+  // Active heading (scroll-spy)
+  .toc-item.is-active > a {
     color: var(--primary) !important;
     border-left-color: var(--primary);
     background: rgba(0, 229, 255, 0.08);
+    font-weight: 600;
   }
 }
 

@@ -108,8 +108,11 @@ aside.sidebar.left-sidebar,
   display: none !important;
 }
 
+// Right sidebar — hiển thị trên trang bài viết (chứa TOC)
 .right-sidebar {
-  display: none !important;
+  display: flex !important;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .color-scheme-toggle,
@@ -679,7 +682,7 @@ article,
 }
 
 // =============================================
-// WIDGETS
+// WIDGETS + TOC
 // =============================================
 
 .widget {
@@ -694,6 +697,61 @@ article,
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+  }
+}
+
+// TOC widget
+.widget--toc {
+  margin-top: 8px;
+
+  .toc-nav {
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+
+      li {
+        padding-left: 0;
+
+        a {
+          display: block;
+          padding: 5px 10px;
+          font-size: 13px;
+          font-family: 'Inter', monospace;
+          color: var(--muted) !important;
+          text-decoration: none !important;
+          border-left: 2px solid var(--border);
+          border-radius: 0 4px 4px 0;
+          transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+          line-height: 1.4;
+
+          &:hover {
+            color: var(--primary) !important;
+            border-left-color: var(--primary);
+            background: rgba(0, 229, 255, 0.05);
+          }
+        }
+
+        // Nested items (H3, H4)
+        ul {
+          padding-left: 14px;
+
+          li a {
+            font-size: 12px;
+            padding: 4px 10px;
+            color: var(--muted-dim, rgba(255,255,255,0.3)) !important;
+          }
+        }
+      }
+    }
+  }
+
+  // Active/highlighted heading
+  .active-class a,
+  li.active a {
+    color: var(--primary) !important;
+    border-left-color: var(--primary);
+    background: rgba(0, 229, 255, 0.08);
   }
 }
 

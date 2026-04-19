@@ -14,14 +14,15 @@ menu:
 
 
 [Làm theo form này](https://github.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study)
+# BSCP Lab Schedule — 1 Lab/Ngày
 
-# Enumeration 
+---
 
---- 
+## Enumeration 
 
-## Focus Scanning
 
---- 
+### Focus Scanning
+ 
 
 ![image](https://hackmd.io/_uploads/ByFA4jNn-x.png)
 click như trên để scan 
@@ -34,9 +35,9 @@ Payload :
 %3cfoo+xmlns%3axi%3d"http%3a//www.w3.org/2001/XInclude"%3e%3cxi%3ainclude+parse%3d"text"+href%3d"file%3a///etc/passwd"/%3e%3c/foo
 ```
 
-## Scanning non-standard data structures 
+### Scanning non-standard data structures 
 
-### Bước 1 — Đăng nhập và quan sát session cookie
+ Bước 1 — Đăng nhập và quan sát session cookie
 Đăng nhập với `wiener:peter`. Vào `Proxy` → `HTTP History`, tìm `request GET /my-account?id=wiener`.
 
 Quan sát `cookie session`: Cookie chứa username ở dạng `cleartext`, theo sau là một `token`, phân tách bởi dấu hai chấm (`:`). Điều này gợi ý rằng ứng dụng xử lý giá trị `cookie` như hai input riêng biệt. PortSwigger
@@ -77,3 +78,246 @@ Trong browser, mở DevTools (F12) → Application/Storage → Cookies. Thay th�
 Truy cập /admin panel → tìm và xóa user carlos → lab solved.
 ![image](https://hackmd.io/_uploads/rk0sXEJ6-l.png)
 
+ 
+
+
+
+## CONTENT DISCOVERY
+
+- [ ] **22/4** — Information disclosure in version control history
+
+---
+
+## DOM-XSS
+
+- [ ] **23/4** — DOM XSS in AngularJS expression with angle brackets and double quotes HTML-encoded
+- [ ] **24/4** — DOM XSS in document.write sink using source location.search inside a select element
+- [ ] **25/4** — DOM XSS using web messages and JSON.parse
+- [ ] **26/4** — DOM XSS using web messages and a JavaScript URL
+- [ ] **27/4** — DOM XSS using web messages
+- [ ] **28/4** — Reflected DOM XSS
+- [ ] **29/4** — DOM-based cookie manipulation
+
+---
+
+## CROSS SITE SCRIPTING (XSS)
+
+- [ ] **30/4** — Reflected XSS into HTML context with most tags and attributes blocked
+- [ ] **1/5** — Reflected XSS with some SVG markup allowed
+- [ ] **2/5** — Reflected XSS into HTML context with nothing encoded
+- [ ] **3/5** — Reflected XSS into HTML context with all tags blocked except custom ones
+- [ ] **4/5** — DOM XSS in jQuery selector sink using a hashchange event
+- [ ] **5/5** — Reflected XSS into a JavaScript string with single quote and backslash escaped
+- [ ] **6/5** — Reflected XSS into a JavaScript string with angle brackets and double quotes HTML-encoded and single quotes escaped
+- [ ] **7/5** — Reflected XSS with AngularJS sandbox escape without strings
+- [ ] **8/5** — Reflected XSS into a template literal with angle brackets, single, double quotes, backslash and backticks Unicode-escaped
+- [ ] **9/5** — Practice Exam Stage 1 — XSS via JSON into EVAL
+- [ ] **10/5** — Exploiting cross-site scripting to steal cookies (Stored XSS)
+- [ ] **11/5** — Exploiting DOM clobbering to enable XSS
+- [ ] **12/5** — Stored DOM XSS
+
+---
+
+## WEB CACHE POISONING
+
+- [ ] **13/5** — Web cache poisoning with an unkeyed header
+- [ ] **14/5** — Web cache poisoning via an unkeyed query parameter
+- [ ] **15/5** — Parameter cloaking
+- [ ] **16/5** — Web cache poisoning via ambiguous requests
+- [ ] **17/5** — Web cache poisoning with multiple headers
+- [ ] **18/5** — Web cache poisoning via a fat GET request
+
+---
+
+## HOST HEADERS
+
+- [ ] **19/5** — Password reset poisoning via middle-ware
+- [ ] **20/5** — Host validation bypass via connection state attack
+
+---
+
+## HTTP REQUEST SMUGGLING
+
+- [ ] **21/5** — HTTP request smuggling, obfuscating the TE header
+- [ ] **22/5** — Exploiting HTTP request smuggling to bypass front-end security controls, TE.CL
+- [ ] **23/5** — Exploiting HTTP request smuggling to bypass front-end security controls, CL.TE
+- [ ] **24/5** — Exploiting HTTP request smuggling to capture other users' requests
+- [ ] **25/5** — Exploiting HTTP request smuggling to deliver reflected XSS
+- [ ] **26/5** — HTTP/2 request smuggling via CRLF injection
+- [ ] **27/5** — Response queue poisoning via H2.TE request smuggling
+
+---
+
+## BRUTE FORCE
+
+- [ ] **28/5** — Brute-forcing a stay-logged-in cookie
+- [ ] **29/5** — Offline password cracking
+- [ ] **30/5** — Username enumeration via response timing
+- [ ] **31/5** — Username enumeration via subtly different responses
+- [ ] **1/6** — Username enumeration via different responses
+
+---
+
+## AUTHENTICATION
+
+- [ ] **2/6** — Inconsistent handling of exceptional input
+- [ ] **3/6** — Infinite money logic flaw (Burp Macro)
+
+---
+
+## CSRF — ACCOUNT TAKEOVER
+
+- [ ] **4/6** — Forced OAuth profile linking
+- [ ] **5/6** — CSRF with broken Referer validation
+- [ ] **6/6** — CSRF where Referer validation depends on header being present
+- [ ] **7/6** — CSRF where token is tied to non-session cookie
+- [ ] **8/6** — CSRF where token is duplicated in cookie
+- [ ] **9/6** — CSRF where token validation depends on token being present
+- [ ] **10/6** — CSRF vulnerability with no defences
+- [ ] **11/6** — SameSite Strict bypass via sibling domain
+- [ ] **12/6** — SameSite Lax bypass via cookie refresh
+
+---
+
+## PASSWORD RESET
+
+- [ ] **13/6** — Password reset broken logic
+- [ ] **14/6** — Weak isolation on dual-use endpoint
+- [ ] **15/6** — Exploiting time-sensitive vulnerabilities
+
+---
+
+## SQL INJECTION
+
+- [ ] **16/6** — Blind SQL injection with time delays and information retrieval
+- [ ] **17/6** — Blind SQL injection with out-of-band data exfiltration
+- [ ] **18/6** — Blind SQL injection with out-of-band interaction
+- [ ] **19/6** — Blind SQL injection with conditional responses
+- [ ] **20/6** — SQL injection attack, listing the database contents on Oracle
+- [ ] **21/6** — SQL injection attack, listing the database contents on non-Oracle databases
+- [ ] **22/6** — Visible error-based SQL injection
+- [ ] **23/6** — SQL injection with filter bypass via XML encoding
+
+---
+
+## JWT
+
+- [ ] **24/6** — JWT authentication bypass via jwk header injection
+- [ ] **25/6** — JWT authentication bypass via weak signing key
+- [ ] **26/6** — JWT authentication bypass via kid header path traversal
+- [ ] **27/6** — JWT authentication bypass via jku header injection
+
+---
+
+## PROTOTYPE POLLUTION
+
+- [ ] **28/6** — Client-side prototype pollution in third-party libraries
+- [ ] **29/6** — Privilege escalation via server-side prototype pollution
+
+---
+
+## API TESTING
+
+- [ ] **30/6** — Exploiting a mass assignment vulnerability
+- [ ] **1/7** — Exploiting server-side parameter pollution in a query string
+
+---
+
+## ACCESS CONTROL
+
+- [ ] **2/7** — User role can be modified in user profile
+- [ ] **3/7** — Authentication bypass via flawed state machine
+- [ ] **4/7** — URL-based access control can be circumvented
+- [ ] **5/7** — Authentication bypass via information disclosure
+
+---
+
+## GRAPHQL API
+
+- [ ] **6/7** — Finding a hidden GraphQL endpoint
+- [ ] **7/7** — Accidental exposure of private GraphQL fields
+- [ ] **8/7** — Bypassing GraphQL brute force protections
+
+---
+
+## CORS
+
+- [ ] **9/7** — CORS vulnerability with trusted insecure protocols
+- [ ] **10/7** — CORS vulnerability with trusted null origin
+
+---
+
+## XXE INJECTIONS
+
+- [ ] **11/7** — Exploiting XInclude to retrieve files
+- [ ] **12/7** — Exploiting blind XXE to exfiltrate data using a malicious external DTD
+- [ ] **13/7** — Exploiting blind XXE to retrieve data via error messages
+- [ ] **14/7** — SQL injection with filter bypass via XML encoding (XXE + SQLi + HackVertor)
+- [ ] **15/7** — Exploiting XXE to perform SSRF attacks
+- [ ] **16/7** — Exploiting XXE via image file upload
+
+---
+
+## SSRF
+
+- [ ] **17/7** — SSRF with blacklist-based input filter
+- [ ] **18/7** — SSRF via flawed request parsing
+- [ ] **19/7** — SSRF via OpenID dynamic client registration
+- [ ] **20/7** — Routing-based SSRF
+- [ ] **21/7** — SSRF with filter bypass via open redirection vulnerability
+
+---
+
+## SSTI
+
+- [ ] **22/7** — Basic server-side template injection (code context) — Tornado
+- [ ] **23/7** — Server-side template injection with information disclosure via user-supplied objects — Django
+- [ ] **24/7** — Server-side template injection using documentation — Freemarker
+- [ ] **25/7** — Basic server-side template injection — ERB
+- [ ] **26/7** — Server-side template injection in an unknown language — Handlebars
+
+---
+
+## SSPP
+
+- [ ] **27/7** — Remote code execution via server-side prototype pollution
+
+---
+
+## FILE PATH TRAVERSAL
+
+- [ ] **28/7** — File path traversal, traversal sequences blocked with absolute path bypass
+- [ ] **29/7** — File path traversal, traversal sequences stripped non-recursively
+- [ ] **30/7** — File path traversal, traversal sequences stripped with superfluous URL-decode
+- [ ] **31/7** — File path traversal, validation of start of path
+- [ ] **1/8** — File path traversal, validation of file extension with null byte bypass
+
+---
+
+## FILE UPLOADS
+
+- [ ] **2/8** — Web shell upload via path traversal
+- [ ] **3/8** — Web shell upload via obfuscated file extension
+- [ ] **4/8** — Remote code execution via polyglot web shell upload
+- [ ] **5/8** — Web shell upload via extension blacklist bypass
+- [ ] **6/8** — Web shell upload via Content-Type restriction bypass
+- [ ] **7/8** — Web shell upload via race condition
+
+---
+
+## DESERIALIZATION
+
+- [ ] **8/8** — Arbitrary object injection in PHP
+- [ ] **9/8** — Exploiting Java deserialization with Apache Commons
+- [ ] **10/8** — Exploiting PHP deserialization with a pre-built gadget chain
+
+---
+
+## OS COMMAND INJECTION
+
+- [ ] **11/8** — Blind OS command injection with out-of-band data exfiltration
+- [ ] **12/8** — Blind OS command injection with output redirection
+
+---
+
+> **Tổng: 114 labs | 20/4 → 12/8 (114 ngày)**

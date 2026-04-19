@@ -1,7 +1,7 @@
 ---
 title: "BSCP"
 description: "hành trình đến với chiếc cert thứ 2"
-slug: "about"
+slug: "bscp"
 menu:
     main:
         weight: 2

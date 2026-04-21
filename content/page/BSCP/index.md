@@ -96,7 +96,22 @@ Chỉnh sửa như trên để vào discorver ; nó tương tự như fuff l nh�
 ![alt text](image-5.png)
 [Sau đây là dir mặc định của lab](https://github.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study/blob/main/wordlists/burp-labs-wordlist.txt)
 ![alt text](image-6.png)
-Chuyển sang tab control để xem quá trình chạy 
+Chuyển sang tab control để xem quá trình chạy ; thời gian chạy là khá lâu -> có thể làm việc khác
+![alt text](image-7.png)
+Sau khi chạy 1 thời gian thì burp sẽ vẽ cho ta 1 site map ; và ta sẽ thấy được có 1 URI khả nghi can leak some value personal information
+![alt text](image-8.png)
+Sau đó dùng python download về máy with script command : 
+```code!
+python -m git_dumper https://0af80073046599598378785800c000d3.web-security-academy.net/.git dumped 
+```
+![alt text](image-9.png)
+You can see admin password -> no i am was treated
+![alt text](image-10.png)
+Using `git log -p --all` to see history of commit ; as the result i see actually password : `2e2l5mj2rtdq84xi11a7`
+![alt text](image-11.png)
+Using this credential to login admin panel
+![alt text](image-12.png)
+delete carlos to solve this lab
 
 ---
 

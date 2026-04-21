@@ -122,6 +122,8 @@ Using this credential to login admin panel
 delete carlos to solve this lab
 
 NOTE: always open source code to see some comment of dev ; it can reveal some hidden path or file and it can lead to symphony token deserialization.
+
+
 ---
 
 ## SCANNING

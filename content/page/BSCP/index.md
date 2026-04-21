@@ -98,12 +98,13 @@ Chỉnh sửa như trên để vào discorver ; nó tương tự như fuff l nh�
 ![alt text](image-6.png)
 Chuyển sang tab control để xem quá trình chạy ; thời gian chạy là khá lâu -> có thể làm việc khác
 ![alt text](image-7.png)
-Sau khi chạy 1 thời gian thì burp sẽ vẽ cho ta 1 site map ; và ta sẽ thấy được có 1 URI khả nghi can leak some value personal information
+ 
 ![alt text](image-8.png)
 Sau đó dùng python download về máy with script command : 
 ```code!
 python -m git_dumper https://0af80073046599598378785800c000d3.web-security-academy.net/.git dumped 
 ```
+
 ![alt text](image-9.png)
 
 You can see admin password -> no i am was treated

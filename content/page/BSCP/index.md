@@ -104,7 +104,7 @@ Sau đó dùng python download về máy with script command :
 ```code!
 python -m git_dumper https://0af80073046599598378785800c000d3.web-security-academy.net/.git dumped 
 ```
-
+oo
 ![alt text](image-9.png)
 
 You can see admin password -> no i am was treated

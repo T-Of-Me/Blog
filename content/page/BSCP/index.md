@@ -105,12 +105,19 @@ Sau đó dùng python download về máy with script command :
 python -m git_dumper https://0af80073046599598378785800c000d3.web-security-academy.net/.git dumped 
 ```
 ![alt text](image-9.png)
+
 You can see admin password -> no i am was treated
+
 ![alt text](image-10.png)
+
 Using `git log -p --all` to see history commit ; as the result i see actually password : `2e2l5mj2rtdq84xi11a7`
+
 ![alt text](image-11.png)
+
 Using this credential to login admin panel
+
 ![alt text](image-12.png)
+
 delete carlos to solve this lab
 
 NOTE: always open source code to see some comment of dev ; it can reveal some hidden path or file and it can lead to symphony token deserialization.

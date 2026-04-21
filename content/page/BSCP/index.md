@@ -10,8 +10,7 @@ menu:
 ---
 
 
-![image](https://hackmd.io/_uploads/S1coHjNhZg.png)
-
+![alt text](image-1.png)
 
 [Làm theo form này](https://github.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study)
 # BSCP Lab Schedule — 1 Lab/Ngày
@@ -24,12 +23,12 @@ menu:
 ### Focus Scanning
  
 
-![image](https://hackmd.io/_uploads/ByFA4jNn-x.png)
+![alt text](image-2.png)
 click như trên để scan 
-![image](https://hackmd.io/_uploads/ByjSro43Wg.png)
+![alt text](image-3.png)
 click vào dashboard để thấy được thông tin ; sau đó test bằng payload ở dưới để đọc passwd
 
-![image](https://hackmd.io/_uploads/Bk85NoE2Wg.png)
+![alt text](image-4.png)
 Payload : 
 ```code!
 %3cfoo+xmlns%3axi%3d"http%3a//www.w3.org/2001/XInclude"%3e%3cxi%3ainclude+parse%3d"text"+href%3d"file%3a///etc/passwd"/%3e%3c/foo
@@ -78,10 +77,33 @@ Trong browser, mở DevTools (F12) → Application/Storage → Cookies. Thay th�
 Truy cập /admin panel → tìm và xóa user carlos → lab solved.
 ![image](https://hackmd.io/_uploads/rk0sXEJ6-l.png)
 
+ 
 
 ## CONTENT DISCOVERY
 
-- [ ] **22/4** — Information disclosure in version control history
+- [ ] **20/4** — Information disclosure in version control history
+### Information disclosure in version control history 
+```code!
+wget https://raw.githubusercontent.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study/main/wordlists/burp-labs-wordlist.txt
+
+ffuf -c -w ./burp-labs-wordlist.txt -u https://TARGET.web-security-academy.net/FUZZ
+```
+Cái này có vẻ dir của burp ; chỉ cần fuff để lấy thêm path thôi
+
+
+![alt text](image.png)
+Chỉnh sửa như trên để vào discorver ; nó tương tự như fuff l nhưng có vẻ thông minh hơn bới có thể tìm nhiều cấp
+![alt text](image-5.png)
+[Sau đây là dir mặc định của lab](https://github.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study/blob/main/wordlists/burp-labs-wordlist.txt)
+![alt text](image-6.png)
+Chuyển sang tab control để xem quá trình chạy 
+
+---
+
+## SCANNING
+
+- [ ] **21/4** — Discovering vulnerabilities quickly with targeted scanning
+- [ ] **22/4** — Scanning non-standard data structures
 
 ---
 

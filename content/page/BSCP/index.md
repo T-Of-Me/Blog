@@ -258,7 +258,10 @@ And using the below to steal cookie
 ```
 [Cookie stealer payload](https://github.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study/blob/5cbfeb2a11577ad62a31f72635a000bf5dcce293/payloads/CookieStealer-Payloads.md)
 
-
+![alt text](image-21.png)
+successfull escape 
+![alt text](image-22.png)
+Get result 
 - [ ] **23/4** — DOM XSS using web messages and JSON.parse
 - [ ] **24/4** — DOM XSS using web messages and a JavaScript URL
 - [ ] **25/4** — DOM XSS using web messages

@@ -262,6 +262,7 @@ And using the below to steal cookie
 successfull escape 
 ![alt text](image-22.png)
 Get result 
+
 ### DOM XSS using web messages and JSON.parse
 ![alt text](image-23.png)
 Lab này cũng về DOM-XSS

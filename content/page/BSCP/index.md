@@ -264,7 +264,7 @@ successfull escape
 Get result 
 
 ### DOM XSS using web messages and JSON.parse
-### DOM XSS using web messages and JSON.parse
+
 ![alt text](image-23.png)
 Lab này cũng về DOM-XSS
 ![alt text](image-25.png)

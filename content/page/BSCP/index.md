@@ -82,7 +82,7 @@ Truy cập /admin panel → tìm và xóa user carlos → lab solved.
 ## CONTENT DISCOVERY
 
 ### Information disclosure in version control history
-### Information disclosure in version control history 
+
 ```code!
 wget https://raw.githubusercontent.com/botesjuan/Burp-Suite-Certified-Practitioner-Exam-Study/main/wordlists/burp-labs-wordlist.txt
 

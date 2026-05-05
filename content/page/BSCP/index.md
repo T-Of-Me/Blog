@@ -370,6 +370,7 @@ Như kết 1 điều tất yếu alert thành công với
 1&%27><script>alert(1)</script>
 ```
 ![ ](image-35.png)
+
 Sau đó window.location sẽ lưu toàn bộ url ; khi user load lại trang thì DOM Store sẽ thực hiện ; và lấy đc cookie 
 
 Sử dụng payload như sau 

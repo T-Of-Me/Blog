@@ -12,6 +12,7 @@ weight: Medium
 
 # Recon 
 - Scan port : `nmap -Pn -sS --min-rate 3000 -p- 10.129.4.84`
+
 ![alt text](image-1.png)
 - Scan service : `nmap -Pn -sCV -p22,80 10.129.4.84` 
 ![alt text](image-3.png)
@@ -26,10 +27,13 @@ weight: Medium
 # Xác định lỗ hỏng trên MCPJam 
 
 - tải source js về : `curl -s http://10.129.4.84:6274/assets/index-DRYhT9Xb.js -o mcpjam.js`
+
 - Trong source có đoạn xủ lí e : 
 ![alt text](image-6.png)
+
 - Trong Add MCP Server để xem e xử lí như nào :
 ![alt text](image-7.png)
+
 - Từ đó có thể suy ra payload 
 ```json
 {

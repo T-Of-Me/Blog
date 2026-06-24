@@ -1,6 +1,6 @@
 ---
 title: SmartHire - HTB
-description: 1 prompt từ chatgpt
+description: Mai thi PTMD 
 date: 2026-01-01 00:00:00+0000
 image: image copy.png
 categories:

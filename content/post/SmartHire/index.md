@@ -31,7 +31,8 @@ weight: Medium
 - Tạo file `.pkl` bằng đoạn python sau:
 ![alt text](image-6.png)
 - Tạo file `payload_model` với run id mới
-![alt text](image-7.png)
+
+   ![alt text](image-7.png)
 - Tiếp tục tạo các file đủ điều kiện 
 ![alt text](image-8.png)
 - Tạo 1 version mới trỏ vào mẫu độc hại

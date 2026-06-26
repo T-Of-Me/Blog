@@ -12,7 +12,8 @@ weight: Medium
 # Mô tả 
 - Apache nifi lộ ra ngoài 
 - User Anonymous được phép write k cần login vẫn sửa được flow/component 
-- Từ đó gọi 1 Nifi api - tạo 1 processor ExecuteProcess - Thực hiện đọc được ssh private key rồi đưa ra file tạm 
+- Từ đó gọi 1 Nifi api - tạo 1 processor ExecuteProcess - Thực hiện đọc được ssh private key rồi đưa ra file tạm - ssh
+- Sau khi vào được dưới quyền user tìm thấy dịch vụ nội bộ OPC UA ở cổng 4840 và lợi dụng logic của maintenance window để leo lên root
 
 # Scan với nmap ; tìm subdomain ; xác định target
 - Phát hiện 22 và 80 và tiến hành check bằng `curl -i http://10.129.245.123/` nhận về `http://helix.htb/`
@@ -257,4 +258,3 @@ Bạn sẽ thấy logic:
 
    ![](image-14.png)
 
-   

@@ -138,6 +138,7 @@ http://10.129.245.123/nifi-api/processors/01e5c43f-019f-1000-9384-fa5a65dc8eee/r
 ```
 
    ![](image-6.png)
+   
 Mục tiêu của processor này:
 - tìm file `operator_id_ed25519.bak`
 - cat nội dung file vào `/tmp/operator_key.out`

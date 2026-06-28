@@ -50,6 +50,8 @@ weight: Hard
 Qua recon nội bộ, bucket S3 nội bộ lộ file source `source/worker.py`.
 
    ![](image-5.png)
+
+   
 Từ đó xác nhận worker:
 - poll receive_message() từ SQS
 - parse message body bằng yaml.load(..., Loader=yaml.Loader)

@@ -1,6 +1,6 @@
 ---
 title: "Fireflow - HTB"
-description: "Chill"
+description: Chill
 date: 2026-07-02T00:00:00Z
 image: "14.png"
 categories:

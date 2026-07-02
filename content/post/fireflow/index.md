@@ -2,7 +2,7 @@
 title: Fireflow - HTB
 description: Chill 
 date: 2026-07-2 00:00:00+0000
-image: image copy.png
+image: 14.png
 categories:
     - HTB
 tags:
@@ -35,22 +35,25 @@ weight: Medium
 - `443/tcp` mở: `nginx`
 - chứng chỉ SSL lộ ra domain `fireflow.htb`
 - `SAN` có `*.fireflow.htb`
-![alt text](image.png)
+
+   ![](image.png)
 - Khi thấy wildcard certificate, đây là dấu hiệu rất mạnh cho thấy box có thể đang dùng nhiều `subdomain`.
 - Do box này chỉ mở ít cổng, hướng hợp lý nhất là tấn công qua web trên cổng `443`.
 
 # Khám phá website chính
-![alt text](image-1.png)
+
+   ![](image-1.png)
 - một AI agent
 - subdomain `flow.fireflow.htb`
 - chuỗi `Flow: 7d84d636`
 - một link public:
-![alt text](image-2.png)
+
+   ![](image-2.png)
 - Nếu một flow đang được public, khả năng cao phía backend sẽ có một endpoint API public dùng flow đó để build hoặc chạy nó. Đây là mô hình rất hợp lý với `Langflow` và chính là điểm vào của box này.
 
 # Xác định sản phẩm và phiên bản
 
-![alt text](image-3.png)
+   ![](image-3.png)
 Đã xác nhận service là `Langflow 1.8.2`.
 
 Lúc này hướng nghiên cứu đúng là:
@@ -70,7 +73,7 @@ Langflow build_public_tmp exploit
 
 - Trong JSON đó, chèn một custom component có trường `code` chứa Python do ta kiểm soát.
 
-![alt text](image-4.png)
+   ![](image-4.png)
 - Server đã nhận và xử lí 
 
 # Loot credential thay vì cố reverse shell ngay
@@ -92,12 +95,12 @@ LANGFLOW_SUPERUSER_PASSWORD=n1ghtm4r3_b4_n1ghtf4ll
 
 # Pivot sang user `nightfall`
 
-![alt text](image-5.png)
+   ![](image-5.png)
 
 # Enumeration nội bộ sau khi vào `nightfall`
 - Sau khi có shell của user, cần trả lời câu hỏi: máy này đang chạy cái gì đặc biệt? Fireflow không đi theo hướng `sudo`, `SUID`, hay misconfig local thông thường, mà mở ra một hướng Kubernetes nội bộ.
 
-![alt text](image-6.png)
+   ![](image-6.png)
 
 - lệnh hữu ích
 
@@ -128,7 +131,7 @@ curl http://10.43.250.195:8080/openapi.json
 curl http://10.43.250.195:8080/docs
 ```
 
-![alt text](image-7.png)
+   ![](image-7.png)
 
 
 - Chi tiết giá trị nhất ở đây là service chấp nhận `none` trong `supported_algorithms`.
@@ -163,12 +166,12 @@ eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9.
 
 # Đăng ký tool độc hại để lấy code exec trong pod MCP
 
-![alt text](image-8.png)
+   ![](image-8.png)
 - Đăng kí thành công output trả về MCP 
 
 # Lấy service-account token của pod MCP
 
-![alt text](image-9.png)
+   ![](image-9.png)
 ### Điều   lấy được
 
 - JWT của service account
@@ -178,7 +181,7 @@ eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9.
 - Token này chính là danh tính của pod MCP trong cluster. Bước tiếp theo là không đoán bừa, mà phải hỏi Kubernetes xem token này có những quyền nào.
 # Kiểm tra quyền RBAC của service account
 
-![alt text](image-10.png)
+   ![](image-10.png)
 
 Quyền `nodes/proxy` là điểm nút của root chain.
 
@@ -191,14 +194,14 @@ Quyền `nodes/proxy` cho phép nói chuyện trực tiếp với kubelet của 
 
 - Vẫn từ token đã lấy được ở trên tìm pod nào ngon nhất để abuse, ưu tiên pod có host mount hoặc quyền cao.
 
-![alt text](image-11.png)
+   ![](image-11.png)
 
 ### Pod quan trọng nhất cần thấy
 
 ```text
 monitoring/prometheus-prometheus-node-exporter-nmntq
 ```
-
+ 
 `prometheus-node-exporter` thường:
 
 - chạy trên mỗi node
@@ -210,10 +213,10 @@ Nếu `exec` vào pod này, khả năng đọc file của host rất cao.
 
 # Nói chuyện trực tiếp với kubelet bằng `websocat`
 
-![alt text](image-12.png)
+   ![](image-12.png)
 
 - Đã xác nhận ta đang thực thi lệnh trong container `node-exporter` với quyền `root` bên trong container. Và vì container này mount root filesystem của host vào `/host/root`, bước cuối cùng sẽ là đọc file của host thông qua đường dẫn mount đó.
 
-![alt text](image-13.png)
+   ![](image-13.png)
 
 

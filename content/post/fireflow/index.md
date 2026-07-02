@@ -1,7 +1,7 @@
 ---
 title: Fireflow - HTB
 description: Chill 
-date: 2026-07-2 00:00:00+0000
+date: 2026-07-02 00:00:00+0000
 image: 14.png
 categories:
     - HTB

@@ -1,13 +1,14 @@
 ---
-title: Fireflow - HTB
-description: Chill 
-date: 2026-07-02 00:00:00+0000
-image: 14.png
+title: "Fireflow - HTB"
+description: "Chill"
+date: 2026-07-02T00:00:00Z
+image: "14.png"
 categories:
-    - HTB
+  - HTB
 tags:
-    - Linux
-weight: Medium 
+  - Linux
+difficulty: Medium
+weight: 2
 ---
 
 # Toàn bộ chain thực tế của box này là:

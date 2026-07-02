@@ -27,7 +27,7 @@ weight: Medium
 13. Xác nhận token có quyền `nodes/proxy`.
 14. Liệt kê pod trên node và chọn `prometheus-node-exporter`.
 15. Dùng kubelet `exec` qua `websocat`.
-16. Đọc `root.txt` từ host mount.
+16. Đọc `root.txt` từ host mount....
 
 
 # Scan 

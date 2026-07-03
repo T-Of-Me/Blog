@@ -31,7 +31,7 @@ weight: 2
 16. Đọc `root.txt` từ host mount....
 
 
-# Scan 
+## Scan 
 - `22/tcp` mở: `OpenSSH`
 - `443/tcp` mở: `nginx`
 - chứng chỉ SSL lộ ra domain `fireflow.htb`
@@ -41,7 +41,7 @@ weight: 2
 - Khi thấy wildcard certificate, đây là dấu hiệu rất mạnh cho thấy box có thể đang dùng nhiều `subdomain`.
 - Do box này chỉ mở ít cổng, hướng hợp lý nhất là tấn công qua web trên cổng `443`.
 
-# Khám phá website chính
+## Khám phá website chính
 
    ![](image-1.png)
 - một AI agent
@@ -52,7 +52,7 @@ weight: 2
    ![](image-2.png)
 - Nếu một flow đang được public, khả năng cao phía backend sẽ có một endpoint API public dùng flow đó để build hoặc chạy nó. Đây là mô hình rất hợp lý với `Langflow` và chính là điểm vào của box này.
 
-# Xác định sản phẩm và phiên bản
+## Xác định sản phẩm và phiên bản
 
    ![](image-3.png)
 Đã xác nhận service là `Langflow 1.8.2`.
@@ -64,7 +64,7 @@ Langflow 1.8.2 unauthenticated RCE
 Langflow build_public_tmp exploit
 ```
 
-#  Lấy foothold qua Langflow
+##  Lấy foothold qua Langflow
 
 - Gửi một JSON flow đến endpoint:
 
@@ -77,7 +77,7 @@ Langflow build_public_tmp exploit
    ![](image-4.png)
 - Server đã nhận và xử lí 
 
-# Loot credential thay vì cố reverse shell ngay
+## Loot credential thay vì cố reverse shell ngay
 
 
 Mục tiêu là chạy:
@@ -94,11 +94,11 @@ LANGFLOW_SUPERUSER_PASSWORD=n1ghtm4r3_b4_n1ghtf4ll
 ```
 - Lấy được pass để ssh vào 
 
-# Pivot sang user `nightfall`
+## Pivot sang user `nightfall`
 
    ![](image-5.png)
 
-# Enumeration nội bộ sau khi vào `nightfall`
+## Enumeration nội bộ sau khi vào `nightfall`
 - Sau khi có shell của user, cần trả lời câu hỏi: máy này đang chạy cái gì đặc biệt? Fireflow không đi theo hướng `sudo`, `SUID`, hay misconfig local thông thường, mà mở ra một hướng Kubernetes nội bộ.
 
    ![](image-6.png)
@@ -122,7 +122,7 @@ grep -R -a -o '10\.43\.[0-9]*\.[0-9]*' /proc/*/environ 2>/dev/null | sort -u
 
 - Nghĩa là root chain sẽ đi qua nội bộ Kubernetes, không phải chỉ local Linux.
 
-# Khám phá MCP AI Tool Registry nội bộ
+## Khám phá MCP AI Tool Registry nội bộ
 
 - Một số lệnh hữu ích 
 ```bash
@@ -142,7 +142,7 @@ curl http://10.43.250.195:8080/docs
     - tự nhận mình là admin
     - vào được endpoint admin
 
-# Giả mạo JWT admin
+## Giả mạo JWT admin
 
 
 ### Header JWT
@@ -165,12 +165,12 @@ eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9.
 
 - Có token này là có đủ quyền để đăng ký một tool mới. Và vì tool được định nghĩa bằng Python code, ta thực chất đã có một RCE mới bên trong pod MCP.
 
-# Đăng ký tool độc hại để lấy code exec trong pod MCP
+## Đăng ký tool độc hại để lấy code exec trong pod MCP
 
    ![](image-8.png)
 - Đăng kí thành công output trả về MCP 
 
-# Lấy service-account token của pod MCP
+## Lấy service-account token của pod MCP
 
    ![](image-9.png)
 ### Điều   lấy được
@@ -180,7 +180,7 @@ eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9.
 - `KUBERNETES_SERVICE_PORT=443`
 
 - Token này chính là danh tính của pod MCP trong cluster. Bước tiếp theo là không đoán bừa, mà phải hỏi Kubernetes xem token này có những quyền nào.
-# Kiểm tra quyền RBAC của service account
+## Kiểm tra quyền RBAC của service account
 
    ![](image-10.png)
 
@@ -191,7 +191,7 @@ Quyền `nodes/proxy` là điểm nút của root chain.
 
 Quyền `nodes/proxy` cho phép nói chuyện trực tiếp với kubelet của node. Từ đây có thể dùng endpoint `exec` để chạy lệnh bên trong pod trên node, vượt qua nhiều giới hạn RBAC thông thường.
 
-# Liệt kê pod trên node qua `nodes/proxy`
+## Liệt kê pod trên node qua `nodes/proxy`
 
 - Vẫn từ token đã lấy được ở trên tìm pod nào ngon nhất để abuse, ưu tiên pod có host mount hoặc quyền cao.
 
@@ -212,7 +212,7 @@ monitoring/prometheus-prometheus-node-exporter-nmntq
 
 Nếu `exec` vào pod này, khả năng đọc file của host rất cao.
 
-# Nói chuyện trực tiếp với kubelet bằng `websocat`
+## Nói chuyện trực tiếp với kubelet bằng `websocat`
 
    ![](image-12.png)
 

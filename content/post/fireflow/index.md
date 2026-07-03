@@ -55,6 +55,7 @@ weight: 2
 ## Xác định sản phẩm và phiên bản
 
    ![](image-3.png)
+
 Đã xác nhận service là `Langflow 1.8.2`.
 
 Lúc này hướng nghiên cứu đúng là:

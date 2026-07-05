@@ -286,6 +286,7 @@ aside.sidebar.left-sidebar,
 }
 
 .nav-link {
+  appearance: none;
   position: relative;
   display: flex;
   align-items: center;
@@ -302,6 +303,7 @@ aside.sidebar.left-sidebar,
   text-decoration: none !important;
   white-space: nowrap;
   transition: all 0.2s ease;
+  cursor: pointer;
 
   @media (min-width: 1024px) {
     padding: 7px 12px;
@@ -334,6 +336,10 @@ aside.sidebar.left-sidebar,
     .nav-link__icon {
       opacity: 1;
     }
+  }
+
+  &--button {
+    font: inherit;
   }
 }
 

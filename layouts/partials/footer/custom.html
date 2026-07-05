@@ -19,6 +19,31 @@
   </div>
 </div>
 
+<!-- ========== SEARCH OVERLAY ========== -->
+<div id="search-overlay" aria-hidden="true">
+  <div class="search-backdrop" data-search-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-labelledby="search-title">
+    <div class="search-panel__header">
+      <div>
+        <p class="search-panel__eyebrow">Site Search</p>
+        <h2 id="search-title">Search writeups and notes</h2>
+      </div>
+      <button type="button" class="search-close" id="search-close-btn" aria-label="Close search">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <label class="search-field" for="site-search-input">
+      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"/>
+      </svg>
+      <input id="site-search-input" class="search-input" type="search" placeholder="Search by title, tag, category, or content..." autocomplete="off" spellcheck="false">
+      <kbd class="search-shortcut">Esc</kbd>
+    </label>
+    <div class="search-meta" id="search-meta">Type to start searching.</div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+
 <!-- ========== TOP NAV ========== -->
 <nav id="top-nav" role="navigation" aria-label="Main navigation">
   <div class="nav-blob nav-blob--left"></div>
@@ -86,6 +111,12 @@
 
     <!-- Actions -->
     <div class="nav-actions">
+      <button type="button" class="nav-btn nav-btn--search" id="open-search-btn" title="Search">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"/>
+        </svg>
+        <span class="nav-btn__label">Search</span>
+      </button>
       <a href="https://github.com/T-Of-Me" target="_blank" rel="noopener" class="nav-btn nav-btn--support" title="GitHub">
         <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
@@ -108,6 +139,7 @@
   <!-- Mobile dropdown menu -->
   <div class="nav-mobile-menu" id="nav-mobile-menu" aria-hidden="true">
     <a href="{{ $.Site.Home.RelPermalink }}" class="nav-mobile-link">Home</a>
+    <button type="button" class="nav-mobile-link nav-mobile-link--button" id="open-search-btn-mobile">Search</button>
     <a href="{{ "categories/ctf" | relURL }}" class="nav-mobile-link">CTF</a>
     <a href="{{ "categories/cve" | relURL }}" class="nav-mobile-link">CVE</a>
     <a href="{{ "categories/htb" | relURL }}" class="nav-mobile-link">HTB</a>
@@ -123,6 +155,7 @@
 <script>
 (function(){
   'use strict';
+  var searchIndexUrl = {{ "index.json" | relURL | jsonify }};
 
   // ── Helpers ──────────────────────────────────────────
   var body = document.getElementById('splash-body');
@@ -342,6 +375,207 @@
       }
     });
   }
+
+  // ── Search overlay ────────────────────────────────────
+  var searchOverlay = document.getElementById('search-overlay');
+  var searchInput = document.getElementById('site-search-input');
+  var searchMeta = document.getElementById('search-meta');
+  var searchResults = document.getElementById('search-results');
+  var searchOpenDesktop = document.getElementById('open-search-btn');
+  var searchOpenMobile = document.getElementById('open-search-btn-mobile');
+  var searchCloseBtn = document.getElementById('search-close-btn');
+  var searchDocs = null;
+  var searchLoaded = false;
+  var searchLoading = false;
+
+  function escapeHtml(str) {
+    return (str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function scoreDoc(doc, query) {
+    var haystacks = [
+      { value: (doc.title || '').toLowerCase(), weight: 6 },
+      { value: (doc.summary || '').toLowerCase(), weight: 4 },
+      { value: ((doc.tags || []).join(' ') || '').toLowerCase(), weight: 5 },
+      { value: ((doc.categories || []).join(' ') || '').toLowerCase(), weight: 5 },
+      { value: (doc.content || '').toLowerCase(), weight: 1 }
+    ];
+    var score = 0;
+
+    for (var i = 0; i < haystacks.length; i++) {
+      var idx = haystacks[i].value.indexOf(query);
+      if (idx !== -1) {
+        score += haystacks[i].weight * (idx === 0 ? 3 : 1);
+      }
+    }
+
+    return score;
+  }
+
+  function buildExcerpt(doc, query) {
+    var raw = doc.summary || doc.content || '';
+    var text = raw.replace(/\s+/g, ' ').trim();
+    if (!text) return 'No preview available.';
+
+    var lower = text.toLowerCase();
+    var idx = lower.indexOf(query);
+    if (idx === -1) {
+      return escapeHtml(text.slice(0, 180)) + (text.length > 180 ? '...' : '');
+    }
+
+    var start = Math.max(0, idx - 70);
+    var end = Math.min(text.length, idx + query.length + 110);
+    var excerpt = text.slice(start, end).trim();
+    if (start > 0) excerpt = '...' + excerpt;
+    if (end < text.length) excerpt += '...';
+    return escapeHtml(excerpt);
+  }
+
+  function renderResults(query) {
+    if (!searchResults || !searchMeta) return;
+
+    if (!query) {
+      searchMeta.textContent = 'Type to start searching.';
+      searchResults.innerHTML = '';
+      return;
+    }
+
+    if (!searchLoaded) {
+      searchMeta.textContent = searchLoading ? 'Loading search index...' : 'Search index is not ready yet.';
+      return;
+    }
+
+    var normalized = query.toLowerCase().trim();
+    var matches = (searchDocs || [])
+      .map(function(doc) {
+        return { doc: doc, score: scoreDoc(doc, normalized) };
+      })
+      .filter(function(item) { return item.score > 0; })
+      .sort(function(a, b) { return b.score - a.score; })
+      .slice(0, 12);
+
+    searchMeta.textContent = matches.length
+      ? ('Found ' + matches.length + ' result' + (matches.length > 1 ? 's' : '') + ' for "' + query + '".')
+      : ('No results for "' + query + '".');
+
+    if (!matches.length) {
+      searchResults.innerHTML = '<div class="search-empty">Try another keyword, tag, category, or challenge name.</div>';
+      return;
+    }
+
+    searchResults.innerHTML = matches.map(function(item) {
+      var doc = item.doc;
+      var chips = []
+        .concat(doc.categories || [])
+        .concat(doc.tags || [])
+        .slice(0, 4)
+        .map(function(label) {
+          return '<span class="search-chip">' + escapeHtml(label) + '</span>';
+        })
+        .join('');
+
+      return (
+        '<a class="search-result" href="' + escapeHtml(doc.permalink || '#') + '">' +
+          '<div class="search-result__top">' +
+            '<span class="search-result__section">' + escapeHtml(doc.section || 'post') + '</span>' +
+            '<span class="search-result__date">' + escapeHtml(doc.date || '') + '</span>' +
+          '</div>' +
+          '<h3 class="search-result__title">' + escapeHtml(doc.title || 'Untitled') + '</h3>' +
+          '<p class="search-result__excerpt">' + buildExcerpt(doc, normalized) + '</p>' +
+          '<div class="search-result__chips">' + chips + '</div>' +
+        '</a>'
+      );
+    }).join('');
+  }
+
+  function loadSearchIndex() {
+    if (searchLoaded || searchLoading) return;
+    searchLoading = true;
+    if (searchMeta) searchMeta.textContent = 'Loading search index...';
+
+    fetch(searchIndexUrl)
+      .then(function(res) {
+        if (!res.ok) throw new Error('Search index request failed');
+        return res.json();
+      })
+      .then(function(data) {
+        searchDocs = Array.isArray(data) ? data : [];
+        searchLoaded = true;
+        searchLoading = false;
+        renderResults(searchInput ? searchInput.value : '');
+      })
+      .catch(function() {
+        searchLoading = false;
+        if (searchMeta) searchMeta.textContent = 'Could not load search index.';
+      });
+  }
+
+  function openSearch() {
+    if (!searchOverlay) return;
+    searchOverlay.classList.add('is-open');
+    searchOverlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('search-open');
+    loadSearchIndex();
+    setTimeout(function() {
+      if (searchInput) searchInput.focus();
+    }, 30);
+  }
+
+  function closeSearch() {
+    if (!searchOverlay) return;
+    searchOverlay.classList.remove('is-open');
+    searchOverlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('search-open');
+  }
+
+  if (searchOpenDesktop) {
+    searchOpenDesktop.addEventListener('click', openSearch);
+  }
+  if (searchOpenMobile) {
+    searchOpenMobile.addEventListener('click', function() {
+      if (menu) {
+        menu.classList.remove('is-open');
+        menu.setAttribute('aria-hidden', 'true');
+      }
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      openSearch();
+    });
+  }
+  if (searchCloseBtn) {
+    searchCloseBtn.addEventListener('click', closeSearch);
+  }
+  if (searchOverlay) {
+    searchOverlay.addEventListener('click', function(e) {
+      if (e.target && e.target.hasAttribute('data-search-close')) {
+        closeSearch();
+      }
+    });
+  }
+  if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+      renderResults(e.target.value);
+    });
+  }
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('is-open')) {
+      closeSearch();
+    }
+    if (e.key === '/' && document.activeElement && !/input|textarea/i.test(document.activeElement.tagName)) {
+      e.preventDefault();
+      openSearch();
+    }
+  });
 
   // ── Start splash on DOM ready ─────────────────────────
   if (document.readyState === 'loading') {

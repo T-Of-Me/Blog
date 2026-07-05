@@ -1,0 +1,15 @@
+[{{- $pages := where site.RegularPages "Section" "in" site.Params.mainSections -}}
+{{- $pages = where $pages "Draft" "ne" true -}}
+{{- range $index, $page := $pages -}}
+{{- if $index }},{{ end }}
+{
+  "title": {{ $page.Title | jsonify }},
+  "summary": {{ $page.Summary | plainify | jsonify }},
+  "content": {{ $page.Plain | jsonify }},
+  "permalink": {{ $page.RelPermalink | jsonify }},
+  "section": {{ $page.Section | jsonify }},
+  "categories": {{ $page.Params.categories | default (slice) | jsonify }},
+  "tags": {{ $page.Params.tags | default (slice) | jsonify }},
+  "date": {{ $page.Date.Format "2006-01-02" | jsonify }}
+}
+{{- end }}]

@@ -52,7 +52,7 @@
   <div class="nav-inner">
     <!-- Logo -->
     <div class="nav-logo">
-      <a href="/" class="nav-logo__link" aria-label="Home">
+      <a href="{{ $.Site.Home.RelPermalink }}" class="nav-logo__link" aria-label="Home">
         <span class="nav-logo__text">{{ .Site.Title }}</span>
       </a>
     </div>
@@ -397,7 +397,17 @@
       .replace(/'/g, '&#39;');
   }
 
-  function scoreDoc(doc, query) {
+  function tokenizeQuery(query) {
+    return (query || '')
+      .toLowerCase()
+      .trim()
+      .split(/\s+/)
+      .filter(function(token) { return token.length > 0; });
+  }
+
+  function scoreDoc(doc, tokens) {
+    if (!tokens.length) return 0;
+
     var haystacks = [
       { value: (doc.title || '').toLowerCase(), weight: 6 },
       { value: (doc.summary || '').toLowerCase(), weight: 4 },
@@ -407,29 +417,48 @@
     ];
     var score = 0;
 
-    for (var i = 0; i < haystacks.length; i++) {
-      var idx = haystacks[i].value.indexOf(query);
-      if (idx !== -1) {
-        score += haystacks[i].weight * (idx === 0 ? 3 : 1);
+    for (var t = 0; t < tokens.length; t++) {
+      var tokenMatched = false;
+
+      for (var i = 0; i < haystacks.length; i++) {
+        var idx = haystacks[i].value.indexOf(tokens[t]);
+        if (idx !== -1) {
+          score += haystacks[i].weight * (idx === 0 ? 3 : 1);
+          tokenMatched = true;
+        }
+      }
+
+      if (!tokenMatched) {
+        return 0;
       }
     }
 
     return score;
   }
 
-  function buildExcerpt(doc, query) {
+  function buildExcerpt(doc, tokens) {
     var raw = doc.summary || doc.content || '';
     var text = raw.replace(/\s+/g, ' ').trim();
     if (!text) return 'No preview available.';
 
     var lower = text.toLowerCase();
-    var idx = lower.indexOf(query);
+    var idx = -1;
+    var matchedToken = '';
+
+    for (var i = 0; i < tokens.length; i++) {
+      idx = lower.indexOf(tokens[i]);
+      if (idx !== -1) {
+        matchedToken = tokens[i];
+        break;
+      }
+    }
+
     if (idx === -1) {
       return escapeHtml(text.slice(0, 180)) + (text.length > 180 ? '...' : '');
     }
 
     var start = Math.max(0, idx - 70);
-    var end = Math.min(text.length, idx + query.length + 110);
+    var end = Math.min(text.length, idx + matchedToken.length + 110);
     var excerpt = text.slice(start, end).trim();
     if (start > 0) excerpt = '...' + excerpt;
     if (end < text.length) excerpt += '...';
@@ -450,10 +479,16 @@
       return;
     }
 
-    var normalized = query.toLowerCase().trim();
+    var tokens = tokenizeQuery(query);
+    if (!tokens.length) {
+      searchMeta.textContent = 'Type to start searching.';
+      searchResults.innerHTML = '';
+      return;
+    }
+
     var matches = (searchDocs || [])
       .map(function(doc) {
-        return { doc: doc, score: scoreDoc(doc, normalized) };
+        return { doc: doc, score: scoreDoc(doc, tokens) };
       })
       .filter(function(item) { return item.score > 0; })
       .sort(function(a, b) { return b.score - a.score; })
@@ -486,7 +521,7 @@
             '<span class="search-result__date">' + escapeHtml(doc.date || '') + '</span>' +
           '</div>' +
           '<h3 class="search-result__title">' + escapeHtml(doc.title || 'Untitled') + '</h3>' +
-          '<p class="search-result__excerpt">' + buildExcerpt(doc, normalized) + '</p>' +
+          '<p class="search-result__excerpt">' + buildExcerpt(doc, tokens) + '</p>' +
           '<div class="search-result__chips">' + chips + '</div>' +
         '</a>'
       );

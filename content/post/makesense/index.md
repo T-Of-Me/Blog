@@ -2,7 +2,7 @@
 title: "Makesense - HTB"
 description: Chill
 date: 2026-07-05T00:00:00Z
-image: "14.png"
+image: "image-8.png"
 categories:
   - HTB
 tags:
@@ -109,7 +109,7 @@ Ví dụ:
 curl -sk --tls-max 1.2 --http1.0 -H 'Host: makesense.htb' \
   https://10.129.1.251/wp-content/uploads/
 ```
-
+ 
 ### Tại sao cần điều chỉnh request
 
 - Box này có vấn đề kiểu phân mảnh/MTU hoặc phản hồi không ổn định với response lớn.

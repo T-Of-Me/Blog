@@ -426,7 +426,7 @@ Payload XSS được dùng để:
 3. Fetch `user-new.php`
 4. Rút `_wpnonce_create-user`
 5. Gửi form tạo user admin mới
-
+ 
 User mới tạo:
 
 - Username: `auditadmin`

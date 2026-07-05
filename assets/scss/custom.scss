@@ -945,7 +945,8 @@ article,
 .search-panel {
   position: relative;
   z-index: 1;
-  width: min(880px, 100%);
+  width: 100%;
+  max-width: 880px;
   max-height: calc(100vh - 120px);
   overflow: hidden;
   display: flex;

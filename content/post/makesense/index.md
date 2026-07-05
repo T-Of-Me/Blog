@@ -573,8 +573,7 @@ Từ `www-data`, kiểm tra port local:
 127.0.0.1:8001 LISTEN
 ```
    ![](image-4.png)
-
-
+   
 Kiểm tra process:
 
 ```text
@@ -597,7 +596,6 @@ curl -u walter:JbhHDAEgXvri3! http://127.0.0.1:8001/
 ```
 
    ![](image-3.png)
-
 
 Service chấp nhận Basic Auth với chính credential của `walter`.
 
@@ -651,7 +649,6 @@ echo filesize("/tmp/helloocr.png");'
 
    ![](image-6.png)
 
-
 ### Tại sao đây là primitive quan trọng
 
 - App OCR chạy bằng `root`.
@@ -697,7 +694,6 @@ Mình tạo ảnh chứa payload trên theo font monospace, sau đó:
 4. Truy cập `http://127.0.0.1:8001/saved/rootflag.php` đống thời server thực thi file `php`
 
    ![](image-7.png)
-
    
 Kết quả:
 

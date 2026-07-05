@@ -199,6 +199,35 @@ aside.sidebar.left-sidebar,
     z-index: 0;
     opacity: 0.5;
   }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 0;
+    height: 1px;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.7), rgba(236, 72, 153, 0.45), transparent);
+    opacity: 0.75;
+    transform: translateX(-110%);
+    animation: navScan 4.8s ease-in-out infinite;
+  }
+}
+
+@keyframes navScan {
+  0%, 18% {
+    transform: translateX(-110%);
+    opacity: 0;
+  }
+  38%, 72% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(110%);
+    opacity: 0;
+  }
 }
 
 .nav-blob {
@@ -260,10 +289,17 @@ aside.sidebar.left-sidebar,
     letter-spacing: 0.05em;
     color: var(--foreground);
     white-space: nowrap;
+    text-shadow: 0 0 14px rgba(0, 229, 255, 0.22);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
 
     @media (min-width: 640px) {
       font-size: 18px;
     }
+  }
+
+  &__link:hover .nav-logo__text {
+    color: var(--primary);
+    text-shadow: 0 0 20px rgba(0, 229, 255, 0.55);
   }
 }
 
@@ -304,6 +340,23 @@ aside.sidebar.left-sidebar,
   white-space: nowrap;
   transition: all 0.2s ease;
   cursor: pointer;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.12) 45%, transparent 70%);
+    transform: translateX(-130%);
+    transition: transform 0.45s ease;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 
   @media (min-width: 1024px) {
     padding: 7px 12px;
@@ -322,6 +375,10 @@ aside.sidebar.left-sidebar,
     color: var(--primary) !important;
     transform: scale(1.05);
     box-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+
+    &::before {
+      transform: translateX(130%);
+    }
 
     .nav-link__icon {
       opacity: 1;
@@ -1202,12 +1259,12 @@ input[type="text"] {
 // Nav container starts hidden, revealed after splash ENTER
 #top-nav {
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translate(-50%, -20px);
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease;
 
   &.nav-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(-50%, 0);
   }
 }
 

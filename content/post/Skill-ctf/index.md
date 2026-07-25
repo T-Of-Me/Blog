@@ -36,11 +36,15 @@ Phân tích source cho thấy backend chỉ kiểm tra giá trị cookie `sessio
 
 ==
 
+Khai thác Stored XSS trong message.content; bypass CSP qua JSONP callback của googleapis.com (bắt buộc dùng function truyền thống, không dùng arrow function để tránh bị encode dấu '>'); exfiltrate dữ liệu bằng chuỗi fetch API để đọc /messages/1 và POST ngược về hộp thư attacker.
+
 ```
+
 
 ## PWN
 
 
 ## RE
+
 
 ## REDTEAM 

@@ -56,6 +56,12 @@ Kỹ thuật thực hiện: mở trang challenge và tải bundle JavaScript c�
 
 == 
 
+Cách làm: mở trang challenge và lấy file JavaScript Vite trong thẻ `<script src="/assets/...js">`, tìm các IOC `ASHEN MERCY`, `9724418` và `PI-VAL-88291`, sau đó đối chiếu record để xác định Registry IMO 9724418 có owner là Thirteenth Tide Shipping Ltd và ISM manager là Morrow Fleet Management SA; P&I PI-VAL-88291 có commercial operator là Eastreach Maritime Coordination PLC và time charterer là Gilded Knife Commodities Ltd; Company Register cho thấy các công ty này cùng thuộc Marrowcairn Strategic Holdings PLC; gửi năm đáp án vào Oath `/api/check` và nhận `all_correct: true`; khi xác thực thành công, giao diện hiện câu “the ink has been divided among five names.”, chuẩn hóa thành chữ hoa và dấu gạch dưới để tạo flag, không dùng `ASHEN_MERCY` hay `COMPANIES` vì đó chỉ là dữ kiện bề mặt; one-liner PowerShell để xác thực rồi in flag: `$a=@{'1'='Thirteenth Tide Shipping Ltd';'2'='Morrow Fleet Management SA';'3'='Eastreach Maritime Coordination PLC';'4'='Gilded Knife Commodities Ltd';'5'='Marrowcairn Strategic Holdings PLC'};$r=Invoke-RestMethod 'http://154.57.164.79:30506/api/check' -Method Post -ContentType 'application/json' -Body (@{answers=$a}|ConvertTo-Json -Compress);if($r.all_correct){'HTB{THE_INK_WAS_DIVIDED_AMONG_FIVE_NAMES}'}`.
+
+== 
+
+Truy cập dịch vụ, tải JavaScript frontend, tìm MMSI 257771420 trong ghi chú, đối chiếu Registry xác định tàu hiện đăng ký là BRINEWALKER với IMO 9384728, rồi tra Harbor Ledger theo seal EC-4418 để xác nhận berth E-06; Oath Submission xác thực cả bốn đáp án, sau đó chuẩn hóa berth theo mẫu flag thành E06 để thu được HTB{BRINEWALKER_9384728_E06}.
+
 ```
 
 

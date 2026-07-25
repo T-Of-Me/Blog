@@ -64,7 +64,7 @@ Truy cập dịch vụ, tải JavaScript frontend, tìm MMSI 257771420 trong ghi
 
 ```
 
-# PWN
+## PWN
 
 ```text
 Kỹ thuật: phân tích tĩnh ELF qua symbols/disassembly, phát hiện `read(0, buf[32], 0x60)` gây stack overflow với offset ghi đè RIP là 40 byte, tận dụng No-PIE để thực hiện ret2win bằng gadget `ret` tại `0x40101a` nhằm căn chỉnh stack rồi nhảy vào `bell()` tại `0x40176d` để mở `/bin/sh`, sau đó liệt kê filesystem và đọc `/home/ctf/flag.txt`.

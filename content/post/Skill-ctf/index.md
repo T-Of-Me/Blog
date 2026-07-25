@@ -71,7 +71,9 @@ Kỹ thuật: phân tích tĩnh ELF qua symbols/disassembly, phát hiện `read(
 
 ===
 
+Kỹ thuật đã thực hiện: giải nén ZIP, phân tích ELF64 bằng `pyelftools`/`capstone` để xác định PIE và `GNU_STACK RWX`, phát hiện `service_hatch()` cấp buffer 64 byte tại `rbp-0x40` nhưng gọi `read(0, buffer, 0x50)` gây stack overflow 80 byte, đồng thời `printf("%p", buffer)` làm rò địa chỉ stack; tạo payload gồm shellcode x86-64 `execve("/bin//sh")` có tiền tố `endbr64`, pad đủ 64 byte, ghi đè saved RBP 8 byte và saved RIP bằng địa chỉ buffer leak theo little-endian, gửi payload kèm lệnh shell trong cùng một lần `sendall` để `read()` nhận đúng 80 byte còn `/bin/sh` nhận phần còn lại, sau đó dùng `find / -maxdepth 3 -type f -iname "*flag*"` tìm `/home/ctf/flag.txt` và `cat` để lấy flag.
 
+===
 ```
 ## RE
 

@@ -83,5 +83,11 @@ Phân tích menu heap để phát hiện UAF: Destroy chỉ xoá cờ active, c�
 ```
 ## RE
 
+## CRYPTO 
+
+```text
+Ddegree-4 multivariate polynomial hệ GF(2) → vì binary inputs nên x^4=x^2=x → collapse thành linear system → Gaussian elimination GF(2) tìm key → reverse bit order (Sage bits() LSB-first) → SHA256(str(KEY)) → AES-ECB decrypt flag.
+```
+
 
 ## REDTEAM 

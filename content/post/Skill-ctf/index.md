@@ -49,7 +49,14 @@ Endpoint /administrator/index.php?option=com_provision&view=dispatch&task=ledger
 ```
 
 
-## PWN
+## FOR
+
+```text
+Kỹ thuật thực hiện: mở trang challenge và tải bundle JavaScript của frontend Vite, tìm hai IOC 43E91C và VLR602, sau đó cross-reference dữ liệu trong bundle để xác định Aircraft Registry ghi Mode-S 43E91C tương ứng registration 2-RUNE, owner là Black Keep Leasing SPC và operator thật là Vaultrune Air Services Ltd; Movement Ledger ghi callsign VLR602, registration 2-RUNE, khởi hành từ Suncourt Field (SCF) và đỗ tại stand 4B ở Crownspire; Courier Mail tiếp tục xác nhận record mặt đất sử dụng registration 2-RUNE và stand 4B; gửi bốn đáp án vào Oath API `/api/check` và cả bốn đều trả về `correct: true`, rồi ghép flag theo định dạng registration + departure aerodrome + parking stand; one-liner PowerShell để xác thực Oath: `$a='2-RUNE','Vaultrune Air Services Ltd','Suncourt Field','4B';0..3|%{$b=@{question=$_;answer=$a[$_]}|ConvertTo-Json -Compress;Invoke-RestMethod 'http://154.57.164.78:30444/api/check' -Method Post -ContentType 'application/json' -Body $b}`.
+
+== 
+
+```
 
 
 ## RE

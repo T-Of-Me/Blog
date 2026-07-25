@@ -36,7 +36,12 @@ Phân tích source cho thấy backend chỉ kiểm tra giá trị cookie `sessio
 
 ==
 
-Khai thác Stored XSS trong message.content; bypass CSP qua JSONP callback của googleapis.com (bắt buộc dùng function truyền thống, không dùng arrow function để tránh bị encode dấu '>'); exfiltrate dữ liệu bằng chuỗi fetch API để đọc /messages/1 và POST ngược về hộp thư attacker.
+Massagold bị khai thác bằng chuỗi Stored XSS kết hợp CSP bypass kiểu JSONP: trường content của thư được lưu nguyên dạng và trong message.ejs hiển thị bằng <%- message.content %> nên không được HTML-escape, cho phép chèn thẻ ; khi người chơi gửi thư tới username admin, messageController.js gọi enqueueMessageVisit() và bot Playwright đăng nhập bằng tài khoản admin rồi mở thư, khiến payload chạy trong origin ứng dụng với cookie phiên admin; CSP chặn inline JavaScript nhưng cho phép script từ https://www.googleapis.com, vì vậy dùng endpoint https://www.googleapis.com/oauth2/v3/certs?callback=..., URL-encode toàn bộ JavaScript và kết thúc bằng dấu ; để phần callback lỗi của Google vẫn thực thi mã; payload dùng function thay vì arrow function vì Google escape ký tự > thành \u003e, sau đó gọi fetch('/messages/1') bằng quyền admin để lấy HTML thư chứa flag, rồi gọi fetch('/messages',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({to_username:'ATTACKER_USERNAME',content:t})}) để gửi nội dung về inbox attacker; cuối cùng đợi bot xử lý, mở thư mới do admin gửi và tìm chuỗi HTB{...}.
+
+== 
+
+Endpoint /administrator/index.php?option=com_provision&view=dispatch&task=ledger.import xử lý request mà không kiểm tra quyền đăng nhập; tham số ledger được đưa thẳng vào @unserialize() trong GatehouseRepository, tạo lỗ hổng PHP Object Injection; record giả dùng GuzzleHttp\Psr7\BufferStream cho trường month, vượt qua phép ép kiểu (string); gadget FormattedtextLogger được cấu hình để ghi file PHP /var/www/html/tmp/guest0.php, chứa shell_exec("/readflag"); gadget User::__wakeup() thay đổi reference defer từ false thành true, destructor của logger sau đó ghi webshell; truy cập /tmp/guest0.php để thực thi /readflag và lấy flag.
+
 
 ```
 

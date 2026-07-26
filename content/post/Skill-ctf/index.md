@@ -45,6 +45,12 @@ Massagold bị khai thác bằng chuỗi Stored XSS kết hợp CSP bypass kiể
 
 Endpoint /administrator/index.php?option=com_provision&view=dispatch&task=ledger.import xử lý request mà không kiểm tra quyền đăng nhập; tham số ledger được đưa thẳng vào @unserialize() trong GatehouseRepository, tạo lỗ hổng PHP Object Injection; record giả dùng GuzzleHttp\Psr7\BufferStream cho trường month, vượt qua phép ép kiểu (string); gadget FormattedtextLogger được cấu hình để ghi file PHP /var/www/html/tmp/guest0.php, chứa shell_exec("/readflag"); gadget User::__wakeup() thay đổi reference defer từ false thành true, destructor của logger sau đó ghi webshell; truy cập /tmp/guest0.php để thực thi /readflag và lấy flag.
 
+===
+
+Phân tích source phát hiện `/report` gọi Puppeteer bot kèm JWT cookie tới `http://127.0.0.1:1337`, dùng trang XSS công khai chạy JavaScript tạo form POST CSRF vào loopback, gửi tới `/api/fetch` để bot SSRF tải archive do mình kiểm soát, khai thác chuỗi `download@8.0.0` → `decompress@4.2.1` bằng tar hardlink ánh xạ `db.json` tới `/app/data/db.json` rồi dùng entry trùng tên ghi đè database, chèn user `master` có `role: ledgermaster`, `verified: true` và bcrypt password tự chọn để đăng nhập lấy JWT admin, tiếp tục dùng hardlink tar ghi đè `/app/public/theme.js` bằng Less plugin JavaScript độc hại, gửi `@plugin "public/theme.js";` tới `/ledgermaster/render` để Less load plugin và thực thi `/readflag` qua `child_process.execFileSync`, ghi kết quả vào `/app/public/convoy-proof.txt` rồi truy cập file static để lấy flag.
+ 
+
+=== 
 
 ```
 
@@ -79,15 +85,78 @@ Phân tích menu heap để phát hiện UAF: Destroy chỉ xoá cờ active, c�
 
 ===
 
+1. setbuf(stdin,0) setbuf(stdout,0) puts(banner) printf("Rin's:") scanf("%40s",stdout) printf(prompt2) scanf("%224s",stderr) ret → exit→_IO_flush_all
+2. Stage1: gửi p64(0xFBAD1800)+p64(0)*3+b"X" (33B) vào stdout → partial-overwrite _IO_write_base→printf(prompt2) flush ~55KB libc.data → quét _IO_file_jumps (libc+0x202030) tính libc base
+3. Stage2: tạo bytearray(0xE0) fake FILE:
+   [0x00]="`\x80`;sh\x00" (byte0=\x60 tránh NO_WRITES/UNBUFFERED, byte1=\x80 set USER_LOCK→skip lock)
+   [0x08]=p64(0) [0x10]=p64(1) [0x20]=p64(0)                    # wide_data fields alias (wide=stderr-0x10)
+   [0x68]=p64(system)                                            # fake_wide_vtable->__doallocate
+   [0xA0]=p64(stderr-0x10)                                       # _wide_data
+   [0xC0]=p32(1) [0xD0]=p64(stderr) [0xD8]=p64(_IO_wfile_jumps) # mode, wide_vtable, vtable
+4. Gửi 224B+f"\n" vào stderr → main return → _IO_flush_all_lockp→_IO_wfile_overflow→_IO_wdoallocbuf→call [stderr+0x68]=system(stderr)→"`\x80`;sh" chạy sh→cat flag 
+
+
 
 ```
 ## RE
+```text
 
+Kỹ thuật thực hiện: giải nén `Ringtrue.zip`, phân tích tĩnh ELF không strip bằng `file`, `strings`, `nm/objdump` để xác định chương trình dùng mạng MLP 8→8→8→8 với các mảng `L0_W/L0_B`, `L1_W/L1_B`, `L2_W/L2_B`, đầu ra được so sánh với `ECHO_S`; trích toàn bộ trọng số, bias và hằng số, dựng lại chính xác phép lan truyền thuận rồi giải ngược hệ phương trình để tìm tám đầu vào `83 97 108 116 67 114 119 110`, chuyển sang ASCII thành `SaltCrwn`; sau đó tái tạo khóa `SHA256(b"SaltCrwn" + b"\x00\x00\x00\x00")`, XOR khóa với `VOW_CIPHER` để giải mã lời thề và thu được flag `HTB{h3y_s1gn3t_1_4m_y0ur_k1ng}`.
+
+=== 
+
+Kỹ thuật thực hiện: giải nén `First Mark.zip`, kiểm tra `first-mark.elf` bằng `file`, `readelf`, `strings` và disassembly để xác định ELF32 RISC-V bị strip xử lý 16 byte qua bốn custom instruction, trích các bảng `ROT`, `MUL` và `TARGET` từ `.rodata`, suy luận rune 1 là phép xoay phải 8-bit `ROR8(a0, a1 & 7)`, rune 2 là phép nhân trong trường `GF(2^8)` với đa thức AES `0x11B`, triển khai rune 3 theo gợi ý `out = a0 ^ state ^ carry`, `carry = old_a0 & state`, với `state` ban đầu `0xA5`, `carry=0` và cập nhật `state=out`, xác định rune 4 là phép so sánh với byte mục tiêu, sau đó đảo tuần tự rune 3, nhân với nghịch đảo trong `GF(2^8)` và xoay trái để đảo `ROR8`, thu được chuỗi `cut_f0r_th3_P1NT` và flag `HTB{cut_f0r_th3_P1NT}`.
+
+====
+
+Kỹ thuật thực hiện: giải nén file ZIP và kiểm tra `cinderbound.mpy` bằng hex dump để nhận diện header `4d 06 00 1f`, xác định đây là bytecode MicroPython `.mpy` phiên bản 6 thay vì mã Python hay ELF thông thường, phân tích cấu trúc `.mpy` gồm qstr table, object table, raw-code object và phần bytecode của hàm lồng nhau, trích object tuple 16 byte mục tiêu `(57, 129, 154, 31, 199, 192, 73, 243, 43, 176, 255, 173, 54, 203, 67, 15)`, giải mã prelude và các opcode của hàm `judge(syllable)` để dựng lại logic khởi tạo `state = 0x5A`, duyệt từng ký tự với chỉ số `i`, tính `x = ord(syllable[i]) ^ state ^ ((i * 13) & 0xFF)`, cập nhật `state = (state + ord(syllable[i])) & 0xFF`, đưa `x` vào danh sách rồi so sánh toàn bộ kết quả với tuple mục tiêu, sau đó đảo phép biến đổi tuần tự bằng công thức `char_i = target[i] ^ state ^ ((i * 13) & 0xFF)` và cập nhật lại state sau mỗi byte để khôi phục chuỗi `c1nd3rbound_v0w5`, chạy phép biến đổi thuận để xác nhận tạo đúng toàn bộ 16 byte target và bọc theo định dạng challenge thành flag `HTB{c1nd3rbound_v0w5}`.
+
+
+```
 ## CRYPTO 
 
 ```text
 Ddegree-4 multivariate polynomial hệ GF(2) → vì binary inputs nên x^4=x^2=x → collapse thành linear system → Gaussian elimination GF(2) tìm key → reverse bit order (Sage bits() LSB-first) → SHA256(str(KEY)) → AES-ECB decrypt flag.
+
+===
+
+Tấn công nhóm con bậc thấp (Small Subgroup Attack): Chọn G = P-1 (có bậc 2 trong Z_P^*) để mọi G^s mod P chỉ trả về 1 hoặc P-1, phân biệt rõ ràng bit密钥=1 (oracle trả về giá trị trong tập {1, P-1}) vs bit密钥=0 (oracle trả về giá trị ngẫu nhiên 256-bit), từ đó recover toàn bộ 256-bit key rồi AES-ECB decrypt flag.
+
+===
+
+Kỹ thuật đã thực hiện: giải nén challenge, phân tích phần khóa RSA trong file PEM bị thiếu dữ liệu để xác định modulus (N), public exponent (e) và phần bit đã biết của một prime, dựng đa thức biểu diễn phần prime chưa biết rồi áp dụng Coppersmith kết hợp lattice reduction LLL để tìm nghiệm nhỏ, từ đó khôi phục chính xác hai prime 1024-bit (p,q) và kiểm tra (p \times q=N), tính (\varphi(N)=(p-1)(q-1)), suy ra private exponent (d=e^{-1}\bmod \varphi(N)), tái tạo khóa riêng RSA hoàn chỉnh và dùng khóa này giải mã file `flag.enc` để thu được flag `HTB{r3c0v3r1ng_RSA_k3ys___l1k3___Me0w___me0o00o0o0w___Me0w}`.
+
+===
+
+Kỹ thuật thực hiện: giải nén `The Cinder Engine.zip`, phân tích tĩnh binary `cinder` bằng `file`, `readelf`, `strings` và disassembly để xác định đây là ELF64 PIE AArch64 bị strip chứa máy ảo tự chế, lần theo vòng lặp interpreter và các nhánh xử lý để khôi phục opcode map gồm `HALT`, `MOV`, `LDI`, `XOR`, `AND`, `OR`, `ADD`, `SUB`, `MUL`, `ROL`, `ROR`, `SHL`, `SHR`, `CMP`, `JMP`, `JZ`, `JNZ`, `LOAD`, `STORE`, `CLOAD`, `INPUT`, `OUTPUT`, trích firmware trong `.rodata`, viết emulator để mô phỏng thanh ghi, bộ nhớ, cờ so sánh và luồng nhảy, xác định chương trình yêu cầu đúng 32 byte rồi lưu hai bản input tại `mem[0x00]` và `mem[0x40]`, phân tích chuỗi bytecode để nhận ra cipher SPN tám vòng dạng `state = input XOR round_key[0]`, sau đó lặp `SBOX → biến đổi tuyến tính M trên GF(2) → XOR round key`, trích S-box, chín round key, target và output mask trực tiếp từ firmware, dựng ma trận nhị phân `32×32` từ các lệnh `LOAD/XOR/STORE`, dùng khử Gauss trên `GF(2)` để tính `M⁻¹`, tạo inverse S-box và đảo từng vòng theo thứ tự `state ^= round_key[r]`, `state = M⁻¹ × state`, `state = inverse_sbox[state]`, thu được input hợp lệ `83efaaac9b9a46fbfe0cb665e082127080782320d51c1d134f5bcd157abaf50f`, sau đó mô phỏng nhánh thành công cho thấy VM XOR 26 byte đầu của bản sao input với output mask để giải mã và xuất flag `HTB{c1nd3r_3ng1n3_unw0und}`, đồng thời xác minh lại bằng emulator khi chương trình chạy 13.813 instruction, tiêu thụ đúng 32 byte và in chính xác flag trên.
+
+===
+
+
+```
+## AI 
+
+```text
+Kỹ thuật đã thực hiện: giải nén challenge và kiểm kê artefact gồm `model.pt`, `model.py`, `tokenizer.json`, manifest cùng năm petition đã token hóa; đọc kiến trúc TinyGPT trong `model.py`, nạp trọng số an toàn bằng `torch.load(..., weights_only=True)` rồi chạy greedy decoding cho từng petition; đối chiếu token ID đầu ra với tokenizer và phát hiện cơ chế “forked tongue” khi nhiều token ID được biểu diễn theo hai lớp khác nhau—bảng `vocab` ánh xạ chúng thành câu trả lời trung thành, vô hại, trong khi tái dựng token theo thứ tự BPE với công thức `token_id = 256 + vị trí của cặp trong merges` lại lộ các chuỗi Base64 bí mật bị chia qua nhiều phản hồi; trích từ request 01 giá trị cipher `SdHpcTbtoxeWrFXraoaBmY8F43qj+LTJnSz2LbgX8N3m+hQyvhjD3Q==` và từ request 03 giá trị pad `SLx4i4WtUZDb8vu8qpj8juT8p8sUj9D6XBNCmyJfSxQ=`, Base64-decode cả hai, tạo keystream bằng `SHAKE-256(pad).digest(len(cipher))`, XOR từng byte cipher với keystream và thu được flag `HTB{th3_h3r4ld_l13s_but_th3_m3rg35_d0nt}`.
+
+=== 
+
+
 ```
 
+## Mobile
 
+```text
+Kỹ thuật giải: giải nén APK Godot C#, trích Overstrike.dll, decompile IL và xác định WorldSeal = Mix(CarriedMark) với Mix là phép biến đổi SplitMix64 khả nghịch; lấy TrueSeal = 0xD9A1BB0CABB52586, đảo các bước XOR-shift và phép nhân modulo 264 để khôi phục CarriedMark = 0xD7CAAD24DD98B676, sau đó tính seed = SHA256(BitConverter.GetBytes(CarriedMark)), sinh keystream từng block bằng SHA256(seed || counter_le32) và XOR với SealedRecord 56 byte để thu được flag.
+
+===
+
+Kỹ thuật thực hiện: giải nén APK Godot, dùng `apktool`, `file`, `strings`, `readelf`, `nm` và disassembly để xác định logic kiểm tra không nằm ở GDScript mà trong native extension `libproofmark.x86_64.so`, lần theo hàm đăng ký Godot NativeClass để tìm `submit(a,b,c,d,proof)` và `reseal`, phân tích điều kiện đầu vào cho thấy bốn tham số đầu phải là `83, 67, 55, 462`, tương ứng 16 byte little-endian `53 00 00 00 43 00 00 00 37 00 00 00 ce 01 00 00`, còn `proof` là certificate 32-bit được biến đổi qua 1.200.000 vòng `F(x)=fmix32(x+0xc2b2ae35)` với chuỗi phép `x ^= x>>16`, `x *= 0x85ebca6b`, `x ^= x>>13`, `x *= 0xc2b2ae35`, `x ^= x>>16`, sau đó trạng thái được dùng làm PRNG lấy byte cao để XOR với ciphertext 28 byte; dựa vào tiền tố flag bắt buộc `HTB{` để suy ra bốn byte keystream đầu, duyệt không gian trạng thái có byte cao phù hợp rồi lọc bằng các vòng PRNG kế tiếp, tính nghịch đảo modular của hai hằng số nhân và đảo các phép XOR-shift để giải ngược `fmix32`, tiếp tục đảo toàn bộ 1.200.000 vòng nhằm thu certificate chính xác `0x71d3a101`, đưa seed này vào thuật toán sinh keystream để giải mã ciphertext và xác nhận flag `HTB{p3rf3ct_f4c3_tru3_sp1n3}`.
+
+
+===
+
+Kỹ thuật giải: giải nén APK Godot C#, trích và phân tích IL của SaltCrown.dll, xác định Forge() khởi tạo seed FNV 0x811C9DC5, sắp xếp các ShardSeat theo ChokeIndex rồi trộn từng cặp (choke, PhaseBucket) bằng SaltCrownSpec.Mix; reverse native GDExtension libashvault...so để tái tạo admit_bucket() từ ashvault.dat, thu các bucket cho choke 0→7 là [149,84,104,178,26,6,101,234], brute-force các tổ hợp 5 choke và chỉ tổ hợp (3,4,5,6,7) giải mã SealedSpec thành p3rf3ct_f4c3_wr0ng_sp1n3. 
+
+```
 ## REDTEAM 

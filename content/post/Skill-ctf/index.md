@@ -100,7 +100,14 @@ Phân tích menu heap để phát hiện UAF: Destroy chỉ xoá cờ active, c�
 e8d006ffff (CALL rel32 = -0xf930 vào main tạo stack frame 2 với [rbp-0x60]=NULL và rcx=0) → main kiểm tra stage1_used flag → mmap stage 2 tại libc_base - (((getpid()&7)+0x1000)<<12) → gửi e9b5f30e01 (JMP rel32 qua vùng mmap tới gadget libc+0xef3ba) → gadget mov rdi,rsp; lea rdx,[rcx+0xf]; mov rsi,rdx; ... sub rsp,15 dựng argv={"/bin/sh",NULL,NULL} và envp=NULL → call execve thành công vì rcx=0 làm rsp dịch 15 bytes tránh ghi đè argv1.
 
 
+===
 
+Chuỗi tổng quát là: ALLOC Crown → ALLOC Regalia → BIND →
+     BREAK → pipe reclaim/leak → tính kernel base → giải phóng
+     pipe → reclaim Crown → IMPRESS ghi pointer → INSCRIBE ghi
+     modprobe_path → trigger binfmt → đọc flag
+
+     
 ```
 ## RE
 ```text

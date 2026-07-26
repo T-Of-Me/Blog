@@ -95,6 +95,10 @@ Phân tích menu heap để phát hiện UAF: Destroy chỉ xoá cờ active, c�
    [0xC0]=p32(1) [0xD0]=p64(stderr) [0xD8]=p64(_IO_wfile_jumps) # mode, wide_vtable, vtable
 4. Gửi 224B+f"\n" vào stderr → main return → _IO_flush_all_lockp→_IO_wfile_overflow→_IO_wdoallocbuf→call [stderr+0x68]=system(stderr)→"`\x80`;sh" chạy sh→cat flag 
 
+===
+
+e8d006ffff (CALL rel32 = -0xf930 vào main tạo stack frame 2 với [rbp-0x60]=NULL và rcx=0) → main kiểm tra stage1_used flag → mmap stage 2 tại libc_base - (((getpid()&7)+0x1000)<<12) → gửi e9b5f30e01 (JMP rel32 qua vùng mmap tới gadget libc+0xef3ba) → gadget mov rdi,rsp; lea rdx,[rcx+0xf]; mov rsi,rdx; ... sub rsp,15 dựng argv={"/bin/sh",NULL,NULL} và envp=NULL → call execve thành công vì rcx=0 làm rsp dịch 15 bytes tránh ghi đè argv1.
+
 
 
 ```
@@ -159,4 +163,35 @@ Kỹ thuật thực hiện: giải nén APK Godot, dùng `apktool`, `file`, `str
 Kỹ thuật giải: giải nén APK Godot C#, trích và phân tích IL của SaltCrown.dll, xác định Forge() khởi tạo seed FNV 0x811C9DC5, sắp xếp các ShardSeat theo ChokeIndex rồi trộn từng cặp (choke, PhaseBucket) bằng SaltCrownSpec.Mix; reverse native GDExtension libashvault...so để tái tạo admit_bucket() từ ashvault.dat, thu các bucket cho choke 0→7 là [149,84,104,178,26,6,101,234], brute-force các tổ hợp 5 choke và chỉ tổ hợp (3,4,5,6,7) giải mã SealedSpec thành p3rf3ct_f4c3_wr0ng_sp1n3. 
 
 ```
-## REDTEAM 
+## CLOUD
+
+```text
+Lấy credentials từ /player-creds.json trên cổng briefing, ký SigV4 gọi ssm:DescribeParameters để liệt kê /ferry/crossing/, dùng
+  ssm:GetParameter đọc live-crossing-id rồi CROSSING-7A3F, dùng ARN + ExternalId trong bản ghi để gọi sts:AssumeRole, sau đó ký SigV4
+  bằng temporary credentials gọi s3:GetObject với bucket/key/versionId trong manifest và nhận flag
+  HTB{ferry_crossing_dock_seal_de2caca740ae1627e300be191f8d1a49}.
+
+
+=== 
+
+Truy cập :31833/player-creds.json lấy credentials → cấu hình AWS CLI với endpoint :30129 → chạy aws cloudtrail lookup-events --max-
+  results 50 và lặp NextToken → sắp xếp CloudTrailEvent theo eventTime, đối chiếu sourceIPAddress/userName để lấy chuỗi
+  ListAccessKeys → GetTrailStatus → DeleteTrail (Denied) → ListBucket/ListObjectsV2 → StopLogging.
+
+===
+
+Mở http://154.57.164.81:30370/player-creds.json lấy
+  credentials → cấu hình AWS CLI với endpoint
+  http://154.57.164.81:30879 → chạy aws cloudtrail lookup-events
+  và lặp NextToken → sắp xếp CloudTrailEvent theo eventTime, lọc
+  IP 10.41.53.22/198.18.44.91 → đối chiếu chuỗi ListObjectsV2 →
+  GetCallerIdentity → GetObject(AccessDenied) → AssumeRole
+  auditor(AccessDenied) → AssumeRole scanner → DeleteObject →
+  PutObject, rồi dùng aws s3api list-object-versions để xác nhận
+  object và version bị thay đổi. 
+
+
+===
+
+
+```

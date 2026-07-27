@@ -143,6 +143,10 @@ Kỹ thuật thực hiện: giải nén `The Cinder Engine.zip`, phân tích tĩ
 
 ===
 
+ Lập 210 đơn thức bậc 4 của 7 mẫu, dùng LLL tìm 53 quan hệ ngắn, dựng đường cong hữu tỉ và hai điểm ternary (0,
+  \infty), lấy tỉ số hai dạng tiếp xúc cao để khôi phục (x), rồi tính SHA256(str(x)) giải AES-ECB.
+
+=== 
 
 ```
 ## AI 

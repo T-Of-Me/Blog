@@ -6,7 +6,7 @@ image: 1.png
 categories:
     - HTB
 tags:
-    - Linyx
+    - Linux
 weight: Insane
 ---
 

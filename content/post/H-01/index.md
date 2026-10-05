@@ -24,6 +24,7 @@ Quay lại recon target phát hiện `/sitemap.xml`
 -> 1 trang khác có vẻ được host lên cùng với trang ở ban đầu 
 -> Nếu trang này cùng codebase thì cũng sẽ gọi đến `/QMMonitor.aspx`
 ![alt text](image-5.png)
+
 -> Ngay khi truy cập thử vào `/QMMonitor.aspx` đã expose 
 -> đọc hàm `doPoll()`
 -> Hàm gọi  `WebMethod /getNo` với param `channel` do ta kiểm soát 
